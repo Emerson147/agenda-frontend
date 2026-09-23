@@ -1,4 +1,23 @@
 @import "tailwindcss";
 
-/* You can add global styles to this file, and also import other style files */
+@theme {
+  /* Paleta Zen / Orgánica basada en tu diseño */
+  --color-zen-bg: #FDFCF9;       /* Fondo crema principal */
+  --color-zen-surface: #F5F3EC;  /* Fondo un toque más oscuro para el sidebar */
+  --color-zen-accent: #3A4D39;   /* Verde musgo/bosque para botones y el aro */
+  --color-zen-text: #333333;     /* Texto principal suave, no negro puro */
+  --color-zen-text-light: #9CA3AF; /* Texto secundario gris claro */
+  
+  /* Fuentes limpias */
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
 
+@layer base {
+  body {
+    background-color: var(--color-zen-bg);
+    color: var(--color-zen-text);
+    font-family: var(--font-sans);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+}

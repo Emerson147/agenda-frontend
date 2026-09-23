@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-[#f8f7f5] flex items-center justify-center p-4 sm:p-8">
+  <div class="w-full max-w-6xl h-[85vh] min-h-[600px] bg-white rounded-3xl flex overflow-hidden border border-gray-100 shadow-xl relative">
+    
+    <!-- Left Side: Form -->
+    <div class="w-full lg:w-1/2 flex flex-col p-8 sm:p-12 lg:p-16 overflow-y-auto">
+      
+      <!-- Top Navigation / Header -->
+      <div class="flex justify-between items-center mb-12">
+        <!-- Logo -->
+        <div class="text-2xl font-bold cursor-pointer text-gray-900">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="6" height="6" fill="currentColor"/>
+            <rect x="4" y="14" width="6" height="6" fill="currentColor"/>
+            <rect x="14" y="14" width="6" height="6" fill="currentColor"/>
+            <rect x="14" y="4" width="6" height="6" fill="currentColor"/>
+          </svg>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex gap-2">
+           <button class="w-9 h-9 rounded-md border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors text-gray-600">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                 <path d="M1 1L13 13M1 13L13 1"></path>
+              </svg>
+           </button>
+           <button class="w-9 h-9 rounded-md border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors text-gray-600">
+              <!-- Github Icon -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"></path></svg>
+           </button>
+           <button class="px-4 py-1.5 rounded-md border border-gray-200 text-sm font-medium hover:bg-gray-50 transition-colors text-gray-700">
+              Get Started
+           </button>
+        </div>
+      </div>
+
+      <!-- Main Form Area -->
+      <div class="flex-grow flex flex-col justify-center w-full max-w-[400px]">
+        <p class="text-gray-400 text-sm mb-4">10 / Login</p>
+        <h1 class="text-5xl font-medium text-gray-900 tracking-tight mb-4">Welcome back</h1>
+        <p class="text-gray-500 mb-10 text-sm leading-relaxed">
+          Enter your email and password to access your account.<br>
+          Don't have an account? <a href="#" class="underline hover:text-black">Sign up</a>.
+        </p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          
+          <div class="space-y-1 relative group">
+            <label class="block text-xs text-gray-500 font-medium group-focus-within:text-gray-900 transition-colors">Email</label>
+            <input type="email" formControlName="email" placeholder="you@example.com" 
+                   class="w-full bg-transparent border-b border-gray-200 py-2.5 text-sm focus:outline-none focus:border-black transition-colors placeholder:text-gray-300">
+            <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-red-500 text-xs absolute -bottom-4">Valid email is required</p>
+          </div>
+
+          <div class="space-y-1 relative mt-8 group">
+            <label class="block text-xs text-gray-500 font-medium group-focus-within:text-gray-900 transition-colors">Password</label>
+            <input type="password" formControlName="password" placeholder="••••••••" 
+                   class="w-full bg-transparent border-b border-gray-200 py-2.5 text-sm focus:outline-none focus:border-black transition-colors placeholder:text-gray-300">
+            <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500 text-xs absolute -bottom-4">Password is required</p>
+          </div>
+
+          <div class="pt-8">
+             <div *ngIf="errorMessage" class="mb-4 text-red-500 text-sm p-3 bg-red-50 rounded-md">
+               {{ errorMessage }}
+             </div>
+             <button type="submit" [disabled]="isLoading"
+                     class="w-full sm:w-auto bg-[#1c1c1c] text-white px-7 py-3 rounded-lg text-sm font-medium hover:bg-black transition-colors disabled:opacity-50">
+                <span *ngIf="!isLoading">Log in</span>
+                <span *ngIf="isLoading">Cargando...</span>
+             </button>
+          </div>
+        </form>
+
+        <div class="mt-8 flex items-center text-gray-400 text-xs">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Secure login with industry standard encryption.
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Right Side: Image -->
+    <div class="hidden lg:block w-1/2 p-2 relative bg-[#f8f7f5]">
+       <div class="w-full h-full rounded-2xl overflow-hidden relative">
+          <img src="assets/images/login-bg.jpg" alt="Focus Sanctuary" class="w-full h-full object-cover">
+       </div>
+    </div>
+  </div>
+</div>
