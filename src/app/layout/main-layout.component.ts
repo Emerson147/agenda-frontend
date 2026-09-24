@@ -36,7 +36,7 @@ import { AuthService } from '../core/services/auth.service';
         <div class="px-2 mb-2">
           <p class="text-xs font-medium text-stone-400 mb-2 px-2">YOUR SPACES</p>
         </div>
-        <nav class="flex flex-col gap-1 flex-grow px-2">
+        <nav class="flex flex-col gap-1 grow px-2">
           
           <a routerLink="/" class="flex items-center gap-3 px-3 py-2 bg-stone-100 rounded-md text-stone-900 text-sm font-medium cursor-pointer transition-colors">
             <span class="material-symbols-rounded text-[20px] text-zen-accent" style="font-variation-settings: 'FILL' 1;">spa</span>
@@ -79,7 +79,7 @@ import { AuthService } from '../core/services/auth.service';
       </aside>
 
       <!-- ÁREA PRINCIPAL DINÁMICA -->
-      <main class="flex-grow flex flex-col relative bg-zen-bg overflow-y-auto">
+      <main class="grow flex flex-col relative bg-zen-bg overflow-y-auto">
         
         <!-- Top Bar -->
         <header class="w-full flex items-center justify-between px-8 py-6">

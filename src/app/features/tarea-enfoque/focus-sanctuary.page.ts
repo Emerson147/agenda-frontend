@@ -70,7 +70,7 @@ type CycleMode = 'FOCUS' | 'SHORT_BREAK' | 'LONG_BREAK';
       </div>
 
       <!-- Temporizador Circular (Organismo SVG con GSAP) -->
-      <div class="relative flex items-center justify-center w-[340px] h-[340px]">
+      <div class="relative flex items-center justify-center w-85 h-85">
         <svg class="absolute inset-0 w-full h-full -rotate-90">
           <!-- Aro de fondo -->
           <circle cx="170" cy="170" r="166" stroke="#EAE8E1" stroke-width="3.5" fill="none"></circle>

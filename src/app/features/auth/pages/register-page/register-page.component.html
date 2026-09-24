@@ -4,13 +4,13 @@
   <div class="hidden lg:flex flex-1 relative">
     <div 
       #mediaFrame 
-      class="relative w-full h-full min-h-[640px] rounded-[32px] overflow-hidden border border-stone-200/80 shadow-sm bg-stone-100 flex flex-col justify-between p-8 xl:p-10 vt-media">
+      class="relative w-full h-full min-h-160 rounded-4xl overflow-hidden border border-stone-200/80 shadow-sm bg-stone-100 flex flex-col justify-between p-8 xl:p-10 vt-media">
       
       <!-- Background Image -->
       <img src="assets/images/zen-sanctuary-art.jpg" alt="Focus Sanctuary" class="absolute inset-0 w-full h-full object-cover">
       
       <!-- Subtle Ambient Gradient -->
-      <div class="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/20 to-black/10 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-linear-to-t from-stone-950/85 via-stone-950/20 to-black/10 pointer-events-none"></div>
 
       <!-- Top Overlay Tag (M3 Filter Chip) -->
       <div class="relative z-10 flex justify-start">
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Center: Form Section (Centrado Verticalmente con my-auto) -->
-    <div #formContainer class="my-auto py-4 w-full max-w-[440px] mx-auto vt-form">
+    <div #formContainer class="my-auto py-4 w-full max-w-110 mx-auto vt-form">
       
       <!-- M3 Assist Chip -->
       <div class="anim-stagger inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-100 border border-stone-200 text-xs font-medium text-stone-700 mb-4">
@@ -84,7 +84,7 @@
           <div class="space-y-1.5">
             <label class="block text-xs font-medium text-stone-700">First name</label>
             <div 
-              class="group/field relative flex items-center bg-white/90 border rounded-2xl px-3.5 py-2.5 transition-all duration-200 shadow-2xs focus-within:ring-2"
+              class="relative flex items-center bg-white/90 border rounded-2xl px-3.5 py-2.5 transition-all duration-200 shadow-2xs focus-within:ring-2"
               [ngClass]="getFieldClasses('nombres')">
               
               <span class="material-symbols-rounded text-stone-400 text-[20px] mr-2.5 shrink-0 select-none">
@@ -94,16 +94,16 @@
                 type="text" 
                 formControlName="nombres" 
                 placeholder="John" 
-                class="w-full bg-transparent text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none"
+                class="w-full bg-transparent text-sm text-stone-900 placeholder-stone-400 focus:outline-none"
               />
 
               <!-- Trailing Warning Icon & Micro-Tooltip (M3 Expressive) -->
               <div *ngIf="registerForm.get('nombres')?.invalid && registerForm.get('nombres')?.touched" 
-                   class="relative flex items-center group/tooltip ml-1.5 cursor-help">
+                   class="relative flex items-center group ml-1.5 cursor-help">
                 <span class="material-symbols-rounded text-rose-500 text-[20px] animate-pulse">
                   error
                 </span>
-                <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover/tooltip:opacity-100 group-focus-within/field:opacity-100 transition-all duration-150 transform translate-y-1 group-hover/tooltip:translate-y-0 group-focus-within/field:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
+                <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover:opacity-100 transition-all duration-150 transform translate-y-1 group-hover:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
                   <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
                   <span>First name is required</span>
                   <div class="absolute -bottom-1 right-2.5 w-2 h-2 bg-stone-900 rotate-45 border-r border-b border-stone-700/60"></div>
@@ -116,7 +116,7 @@
           <div class="space-y-1.5">
             <label class="block text-xs font-medium text-stone-700">Last name</label>
             <div 
-              class="group/field relative flex items-center bg-white/90 border rounded-2xl px-3.5 py-2.5 transition-all duration-200 shadow-2xs focus-within:ring-2"
+              class="relative flex items-center bg-white/90 border rounded-2xl px-3.5 py-2.5 transition-all duration-200 shadow-2xs focus-within:ring-2"
               [ngClass]="getFieldClasses('apellidos')">
               
               <span class="material-symbols-rounded text-stone-400 text-[20px] mr-2.5 shrink-0 select-none">
@@ -126,16 +126,16 @@
                 type="text" 
                 formControlName="apellidos" 
                 placeholder="Doe" 
-                class="w-full bg-transparent text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none"
+                class="w-full bg-transparent text-sm text-stone-900 placeholder-stone-400 focus:outline-none"
               />
 
               <!-- Trailing Warning Icon & Micro-Tooltip (M3 Expressive) -->
               <div *ngIf="registerForm.get('apellidos')?.invalid && registerForm.get('apellidos')?.touched" 
-                   class="relative flex items-center group/tooltip ml-1.5 cursor-help">
+                   class="relative flex items-center group ml-1.5 cursor-help">
                 <span class="material-symbols-rounded text-rose-500 text-[20px] animate-pulse">
                   error
                 </span>
-                <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover/tooltip:opacity-100 group-focus-within/field:opacity-100 transition-all duration-150 transform translate-y-1 group-hover/tooltip:translate-y-0 group-focus-within/field:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
+                <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover:opacity-100 transition-all duration-150 transform translate-y-1 group-hover:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
                   <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
                   <span>Last name is required</span>
                   <div class="absolute -bottom-1 right-2.5 w-2 h-2 bg-stone-900 rotate-45 border-r border-b border-stone-700/60"></div>
@@ -149,7 +149,7 @@
         <div class="anim-stagger space-y-1.5">
           <label class="block text-xs font-medium text-stone-700">Email address</label>
           <div 
-            class="group/field relative flex items-center bg-white/90 border rounded-2xl px-4 py-3 transition-all duration-200 shadow-2xs focus-within:ring-2"
+            class="relative flex items-center bg-white/90 border rounded-2xl px-4 py-3 transition-all duration-200 shadow-2xs focus-within:ring-2"
             [ngClass]="getFieldClasses('email')">
             
             <span class="material-symbols-rounded text-stone-400 text-[22px] mr-3 shrink-0 select-none">
@@ -159,16 +159,16 @@
               type="email" 
               formControlName="email" 
               placeholder="you@example.com" 
-              class="w-full bg-transparent text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none"
+              class="w-full bg-transparent text-sm text-stone-900 placeholder-stone-400 focus:outline-none"
             />
 
             <!-- Trailing Warning Icon & Micro-Tooltip (M3 Expressive) -->
             <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" 
-                 class="relative flex items-center group/tooltip ml-2 cursor-help">
+                 class="relative flex items-center group ml-2 cursor-help">
               <span class="material-symbols-rounded text-rose-500 text-[20px] animate-pulse">
                 error
               </span>
-              <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover/tooltip:opacity-100 group-focus-within/field:opacity-100 transition-all duration-150 transform translate-y-1 group-hover/tooltip:translate-y-0 group-focus-within/field:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
+              <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover:opacity-100 transition-all duration-150 transform translate-y-1 group-hover:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
                 <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
                 <span>Valid email is required</span>
                 <div class="absolute -bottom-1 right-2.5 w-2 h-2 bg-stone-900 rotate-45 border-r border-b border-stone-700/60"></div>
@@ -181,7 +181,7 @@
         <div class="anim-stagger space-y-1.5">
           <label class="block text-xs font-medium text-stone-700">Password</label>
           <div 
-            class="group/field relative flex items-center bg-white/90 border rounded-2xl px-4 py-3 transition-all duration-200 shadow-2xs focus-within:ring-2"
+            class="relative flex items-center bg-white/90 border rounded-2xl px-4 py-3 transition-all duration-200 shadow-2xs focus-within:ring-2"
             [ngClass]="getFieldClasses('password')">
             
             <span class="material-symbols-rounded text-stone-400 text-[22px] mr-3 shrink-0 select-none">
@@ -191,16 +191,16 @@
               [type]="showPassword ? 'text' : 'password'" 
               formControlName="password" 
               placeholder="••••••••" 
-              class="w-full bg-transparent text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none pr-1"
+              class="w-full bg-transparent text-sm text-stone-900 placeholder-stone-400 focus:outline-none pr-1"
             />
 
             <!-- Trailing Warning Icon & Micro-Tooltip (M3 Expressive) -->
             <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" 
-                 class="relative flex items-center group/tooltip ml-1.5 cursor-help">
+                 class="relative flex items-center group ml-1.5 cursor-help">
               <span class="material-symbols-rounded text-rose-500 text-[20px] animate-pulse">
                 error
               </span>
-              <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover/tooltip:opacity-100 group-focus-within/field:opacity-100 transition-all duration-150 transform translate-y-1 group-hover/tooltip:translate-y-0 group-focus-within/field:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
+              <div class="pointer-events-none absolute right-0 -top-8 z-30 opacity-0 group-hover:opacity-100 transition-all duration-150 transform translate-y-1 group-hover:translate-y-0 bg-stone-900 text-stone-100 text-[11px] font-medium px-2.5 py-1 rounded-lg shadow-lg whitespace-nowrap flex items-center gap-1.5 border border-stone-700/60">
                 <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
                 <span>8+ chars, uppercase, number & symbol</span>
                 <div class="absolute -bottom-1 right-2.5 w-2 h-2 bg-stone-900 rotate-45 border-r border-b border-stone-700/60"></div>

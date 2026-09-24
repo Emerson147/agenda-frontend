@@ -16,7 +16,8 @@ export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
   `,
   host: {
     '[class]': 'hostClasses()',
-    '[disabled]': 'disabled() || loading()',
+    '[attr.disabled]': '(disabled() || loading()) ? true : null',
+    '[attr.aria-disabled]': 'disabled() || loading()',
     '(click)': 'handleClick($event)'
   }
 })
@@ -50,8 +51,11 @@ export class UiButtonComponent {
   });
 
   protected handleClick(event: MouseEvent) {
-    if (!this.disabled() && !this.loading()) {
-      this.btnClick.emit(event);
+    if (this.disabled() || this.loading()) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
     }
+    this.btnClick.emit(event);
   }
 }
