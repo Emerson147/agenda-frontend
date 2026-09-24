@@ -6,35 +6,34 @@ import { gsap } from 'gsap';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-register-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css']
+  templateUrl: './register-page.component.html',
+  styleUrl: './register-page.component.css'
 })
-export class LoginPageComponent implements AfterViewInit {
+export class RegisterPageComponent implements AfterViewInit {
   @ViewChild('formContainer') formContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('mediaFrame') mediaFrame!: ElementRef<HTMLDivElement>;
   @ViewChild('quoteCard') quoteCard!: ElementRef<HTMLDivElement>;
-
-  loginForm: FormGroup;
-  isLoading = false;
-  errorMessage = '';
-  showPassword = false;
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  constructor() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+  registerForm: FormGroup = this.fb.group({
+    nombres: ['', Validators.required],
+    apellidos: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_!]).{8,}$')]]
+  });
+
+  isLoading = false;
+  errorMessage = '';
+  showPassword = false;
 
   getFieldClasses(controlName: string): string {
-    const control = this.loginForm.get(controlName);
+    const control = this.registerForm.get(controlName);
     const isError = !!(control?.invalid && control?.touched);
     return isError
       ? 'border-rose-400 focus-within:border-rose-500 focus-within:ring-rose-500/20 bg-rose-50/20'
@@ -71,25 +70,36 @@ export class LoginPageComponent implements AfterViewInit {
     });
   }
 
-
-  onSubmit() {
-    if (this.loginForm.valid) {
+  onSubmit(): void {
+    if (this.registerForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
-      
-      this.authService.login(this.loginForm.value).subscribe({
+
+      const formValues = this.registerForm.value;
+
+      const payload = {
+        nombre: formValues.nombres + ' ' + formValues.apellidos,
+        email: formValues.email,
+        password: formValues.password
+      }
+
+      this.authService.register(payload).subscribe({
         next: () => {
-          this.isLoading = false;
-          this.router.navigate(['/']);
+          this.router.navigate(['/login']);
         },
         error: (err) => {
+          console.error('Error al registrarse:', err);
+          this.errorMessage = err.error?.message || 'Error al registrarse. Intente nuevamente.';
           this.isLoading = false;
-          this.errorMessage = 'Credenciales inválidas o error de conexión.';
-          console.error('Login error', err);
         }
       });
     } else {
-      this.loginForm.markAllAsTouched();
+      Object.keys(this.registerForm.controls).forEach(key => {
+        const control = this.registerForm.get(key);
+        if (control) {
+          control.markAsTouched();
+        }
+      });
     }
   }
 }

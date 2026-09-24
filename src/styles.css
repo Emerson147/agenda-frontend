@@ -2,12 +2,17 @@
 
 @theme {
   /* Paleta Zen / Orgánica basada en tu diseño */
-  --color-zen-bg: #FDFCF9;       /* Fondo crema principal */
-  --color-zen-surface: #F5F3EC;  /* Fondo un toque más oscuro para el sidebar */
-  --color-zen-accent: #3A4D39;   /* Verde musgo/bosque para botones y el aro */
-  --color-zen-text: #333333;     /* Texto principal suave, no negro puro */
-  --color-zen-text-light: #9CA3AF; /* Texto secundario gris claro */
-  
+  --color-zen-bg: #FDFCF9;
+  /* Fondo crema principal */
+  --color-zen-surface: #F5F3EC;
+  /* Fondo un toque más oscuro para el sidebar */
+  --color-zen-accent: #3A4D39;
+  /* Verde musgo/bosque para botones y el aro */
+  --color-zen-text: #333333;
+  /* Texto principal suave, no negro puro */
+  --color-zen-text-light: #9CA3AF;
+  /* Texto secundario gris claro */
+
   /* Fuentes limpias */
   --font-sans: 'Inter', system-ui, sans-serif;
 }
@@ -20,4 +25,60 @@
     margin: 0;
     -webkit-font-smoothing: antialiased;
   }
+}
+
+/* View Transitions & Shared Elements (Ultra 120Hz ProMotion Calibration) */
+@layer utilities {
+  .vt-brand {
+    view-transition-name: auth-brand;
+    contain: layout paint;
+  }
+  .vt-media {
+    view-transition-name: auth-media;
+    contain: paint;
+    will-change: transform;
+  }
+  .vt-form {
+    view-transition-name: auth-form;
+    contain: layout paint;
+    will-change: transform;
+  }
+  .vt-footer {
+    view-transition-name: auth-footer;
+    contain: layout paint;
+  }
+}
+
+::view-transition-group(auth-media),
+::view-transition-group(auth-form),
+::view-transition-group(auth-brand),
+::view-transition-group(auth-footer) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-image-pair(auth-media),
+::view-transition-image-pair(auth-form) {
+  isolation: isolate;
+}
+
+::view-transition-old(auth-media),
+::view-transition-new(auth-media) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  mix-blend-mode: normal;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+::view-transition-old(auth-form),
+::view-transition-new(auth-form) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  mix-blend-mode: normal;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }

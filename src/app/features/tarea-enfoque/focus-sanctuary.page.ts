@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { gsap } from 'gsap';
 
-import { TareaEnfoqueService } from '../../../core/services/tarea-enfoque.service';
-import { UiButtonComponent } from '../../../shared/ui/ui-button/ui-button.component';
-import { UiInputComponent } from '../../../shared/ui/ui-input/ui-input.component';
-import { UiBadgeComponent } from '../../../shared/ui/ui-badge/ui-badge.component';
+import { TareaEnfoqueService } from '../../core/services/tarea-enfoque.service';
+import { UiButtonComponent } from '../../shared/ui/ui-button/ui-button.component';
+import { UiInputComponent } from '../../shared/ui/ui-input/ui-input.component';
+import { UiBadgeComponent } from '../../shared/ui/ui-badge/ui-badge.component';
 
 type CycleMode = 'FOCUS' | 'SHORT_BREAK' | 'LONG_BREAK';
 
@@ -163,7 +163,7 @@ type CycleMode = 'FOCUS' | 'SHORT_BREAK' | 'LONG_BREAK';
 })
 export class FocusSanctuaryPage implements OnInit, OnDestroy {
   public readonly tareaService = inject(TareaEnfoqueService);
-  
+
   @ViewChild('progressCircle', { static: true }) progressCircle!: ElementRef<SVGCircleElement>;
 
   activeMode = signal<CycleMode>('FOCUS');
@@ -217,7 +217,7 @@ export class FocusSanctuaryPage implements OnInit, OnDestroy {
     let duration = 45 * 60;
     if (mode === 'SHORT_BREAK') duration = 5 * 60;
     if (mode === 'LONG_BREAK') duration = 15 * 60;
-    
+
     this.maxTime.set(duration);
     this.timeLeft.set(duration);
   }
@@ -261,7 +261,7 @@ export class FocusSanctuaryPage implements OnInit, OnDestroy {
   private startLocalTimer() {
     if (this.timeLeft() <= 0) return;
     this.stopLocalTimer();
-    
+
     this.timerInterval = setInterval(() => {
       const current = this.timeLeft();
       if (current > 0) {

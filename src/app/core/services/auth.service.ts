@@ -27,6 +27,16 @@ export class AuthService {
     );
   }
 
+  register(userData: any): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.API_URL}/registro`, userData).pipe(
+      tap(response => {
+        if (response && response.token) {
+          this.setToken(response.token);
+        }
+      })
+    );
+  }
+
   setToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
