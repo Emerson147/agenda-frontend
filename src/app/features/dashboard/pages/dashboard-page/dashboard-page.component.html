@@ -1,345 +1,275 @@
-<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-28">
+<div class="h-full w-full flex flex-col bg-zen-bg overflow-hidden">
   
-  <!-- TOP BENTO BAR: Executive Context & Quick Actions -->
-  <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 p-4 sm:p-5 rounded-3xl bg-white/80 backdrop-blur-md border border-stone-200/80 shadow-2xs">
+  <!-- TOP TOOLBAR (Sunsama style controls) -->
+  <header class="h-12 border-b border-stone-200/80 px-6 flex items-center justify-between bg-white/50 backdrop-blur-xs shrink-0 select-none">
     
-    <!-- Left: Date Navigator -->
+    <!-- Left: Today Switcher & Views -->
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-stone-100 border border-stone-200/80 flex items-center justify-center text-zen-accent shadow-xs">
-        <span class="material-symbols-rounded text-2xl" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
-      </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-stone-900 leading-tight">Today</h1>
-          <span class="px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600 text-xs font-medium border border-stone-200/70">
-            Sep 24, 2026
-          </span>
-        </div>
-        <p class="text-xs text-stone-500 font-normal">Mindful timeboxing & daily intentions</p>
-      </div>
-    </div>
-
-    <!-- Center: Executive Metrics Chip (Sunsama / M3 Style) -->
-    <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs">
-      <!-- Time Progress -->
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-50 border border-stone-200/80 text-stone-700">
-        <span class="material-symbols-rounded text-base text-zen-accent">schedule</span>
-        <span class="font-medium">{{ completedMinutes() / 60 | number:'1.1-1' }}h</span>
-        <span class="text-stone-400">/</span>
-        <span class="text-stone-500">{{ totalPlannedMinutes() / 60 | number:'1.1-1' }}h planned</span>
-      </div>
-
-      <!-- Pomodoro Count -->
-      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50/60 border border-rose-200/60 text-stone-800">
-        <span class="text-xs">🍅</span>
-        <span class="font-medium text-stone-900">{{ completedMinutes() / 25 }}</span>
-        <span class="text-stone-500">/ {{ totalPlannedMinutes() / 25 }} pomodoros</span>
-      </div>
-
-      <!-- Streak -->
-      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50/70 border border-amber-200/70 text-amber-900">
-        <span>🔥</span>
-        <span class="font-semibold">5 days</span>
-      </div>
-    </div>
-
-    <!-- Right: Jump to Sanctuary Fullscreen Button -->
-    <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+      <!-- Today Pill Button -->
       <button 
         type="button"
-        (click)="enterSanctuary()"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zen-accent text-white text-xs font-medium shadow-xs hover:bg-stone-800 hover:shadow-md active:scale-[0.98] transition-all cursor-pointer">
-        <span class="material-symbols-rounded text-[18px]">timer</span>
-        <span>Enter Sanctuary</span>
+        class="flex items-center gap-1.5 px-3 py-1 bg-white border border-stone-200/90 rounded-lg text-xs font-semibold text-stone-800 shadow-2xs hover:bg-stone-50 cursor-pointer transition-colors">
+        <span class="material-symbols-rounded text-sm text-stone-500">calendar_today</span>
+        <span>Today</span>
+      </button>
+
+      <!-- View Selector -->
+      <div class="flex items-center bg-stone-100 p-0.5 rounded-lg border border-stone-200/70 text-xs">
+        <button 
+          type="button"
+          class="flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white shadow-2xs text-stone-900 font-medium">
+          <span class="material-symbols-rounded text-sm text-stone-600">view_kanban</span>
+          <span>Board</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center / Right: Quick Calendar Dropdown & Search -->
+    <div class="flex items-center gap-3">
+      <!-- Calendars Button -->
+      <button 
+        type="button"
+        class="flex items-center gap-1.5 px-3 py-1 bg-white border border-stone-200/90 rounded-lg text-xs font-medium text-stone-700 shadow-2xs hover:bg-stone-50 cursor-pointer transition-colors">
+        <span class="material-symbols-rounded text-sm text-stone-500">tune</span>
+        <span>Calendars</span>
+      </button>
+
+      <!-- Search Icon Button -->
+      <button 
+        type="button"
+        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-700 transition-colors cursor-pointer"
+        title="Search">
+        <span class="material-symbols-rounded text-lg">search</span>
       </button>
     </div>
+
   </header>
 
-  <!-- MOBILE TABS (visible only on small screens) -->
-  <div class="flex lg:hidden items-center justify-center p-1 bg-stone-100 rounded-full border border-stone-200/80 mb-6 max-w-xs mx-auto">
-    <button 
-      type="button"
-      (click)="activeMobileTab.set('tasks')"
-      [class.bg-white]="activeMobileTab() === 'tasks'"
-      [class.shadow-xs]="activeMobileTab() === 'tasks'"
-      [class.text-stone-900]="activeMobileTab() === 'tasks'"
-      [class.text-stone-500]="activeMobileTab() !== 'tasks'"
-      class="flex-1 py-1.5 text-xs font-medium rounded-full transition-all">
-      Tasks ({{ tasks().length }})
-    </button>
-    <button 
-      type="button"
-      (click)="activeMobileTab.set('timeline')"
-      [class.bg-white]="activeMobileTab() === 'timeline'"
-      [class.shadow-xs]="activeMobileTab() === 'timeline'"
-      [class.text-stone-900]="activeMobileTab() === 'timeline'"
-      [class.text-stone-500]="activeMobileTab() !== 'timeline'"
-      class="flex-1 py-1.5 text-xs font-medium rounded-full transition-all">
-      Timebox Timeline
-    </button>
-  </div>
-
-  <!-- DUAL-COLUMN TIMEBOXING CANVAS (Sunsama / Akiflow Style) -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- MAIN DUAL-VIEW WORKSPACE: KANBAN COLUMNS + CALENDAR TIMELINE -->
+  <div class="flex-1 flex overflow-hidden">
     
-    <!-- LEFT / CENTER COLUMN: TASK PIPELINE (7 cols on desktop) -->
-    <section 
-      [class.hidden]="activeMobileTab() !== 'tasks'"
-      class="lg:block lg:col-span-7 flex flex-col gap-4">
+    <!-- KANBAN MULTI-DAY COLUMNS (Horizontally scrollable if many days) -->
+    <div class="flex-1 flex gap-6 p-6 overflow-x-auto overflow-y-hidden border-r border-stone-200/80">
       
-      <!-- Day Planning Header Card -->
-      <div class="p-5 rounded-3xl bg-white/90 border border-stone-200/80 shadow-2xs">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-sm font-semibold text-stone-900 tracking-tight">Today's Focus Intentions</span>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
-              {{ totalCompletedTasks() }} of {{ tasks().length }} done
+      @for (col of columns(); track col.id) {
+        <div class="w-80 flex flex-col shrink-0 h-full">
+          
+          <!-- Column Header: Day name + Date + Progress Bar -->
+          <div class="flex flex-col mb-4">
+            <h2 class="text-xl font-bold text-stone-900 tracking-tight leading-tight">
+              {{ col.dayName }}
+            </h2>
+            <span class="text-xs text-stone-400 font-medium mt-0.5">
+              {{ col.dateLabel }}
             </span>
+
+            <!-- Progress Bar -->
+            <div class="w-full h-1 bg-stone-200/70 rounded-full overflow-hidden mt-2.5">
+              <div 
+                class="h-full bg-stone-400 rounded-full transition-all duration-300"
+                [style.width.%]="col.progressPercent">
+              </div>
+            </div>
+
+            <!-- Add Task Bar with Total Rollup Time on Right -->
+            <div class="flex items-center justify-between mt-3 px-2 py-1.5 rounded-lg border border-dashed border-stone-200 bg-white/60 hover:bg-white transition-all focus-within:border-stone-400 focus-within:bg-white shadow-2xs">
+              <div class="flex items-center gap-1.5 flex-1 mr-2">
+                <span class="material-symbols-rounded text-stone-400 text-base select-none">add</span>
+                <input 
+                  type="text" 
+                  [value]="newTitles()[col.id] || ''"
+                  (input)="onInputTask(col.id, $event)"
+                  (keydown.enter)="addTask(col.id)"
+                  placeholder="Add task"
+                  class="w-full bg-transparent text-xs text-stone-800 placeholder-stone-400 focus:outline-none"
+                />
+              </div>
+
+              <!-- Column Rollup Total -->
+              <span class="text-[11px] font-semibold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded">
+                {{ col.totalEstimatedTime }}
+              </span>
+            </div>
           </div>
-          <span class="text-xs font-medium text-stone-500">{{ progressPercentage() }}% flow</span>
-        </div>
 
-        <!-- Progress Bar -->
-        <div class="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden mb-4">
-          <div 
-            class="h-full bg-zen-accent rounded-full transition-all duration-500 ease-out" 
-            [style.width.%]="progressPercentage()">
-          </div>
-        </div>
+          <!-- Cards Stack (Vertical Scrollable within Column) -->
+          <div class="flex-1 flex flex-col gap-2.5 overflow-y-auto pr-1">
+            @for (task of col.tasks; track task.id) {
+              <div 
+                class="group relative flex flex-col p-3 rounded-xl bg-white border border-stone-200/80 shadow-2xs hover:shadow-xs hover:border-stone-300 transition-all duration-150 select-none"
+                [class.opacity-60]="task.completed"
+                [class.bg-stone-50]="task.completed">
+                
+                <!-- Scheduled Time Badge (if fixed event) -->
+                @if (task.timeBadge) {
+                  <div class="mb-1.5 flex items-center">
+                    <span class="inline-flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500 text-white">
+                      {{ task.timeBadge }}
+                    </span>
+                  </div>
+                }
 
-        <!-- Quick Add Task Input (Inline M3 Outlined) -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-stone-100">
-          <div class="relative flex-1 flex items-center bg-stone-50/70 border border-stone-200 hover:border-stone-300 focus-within:border-zen-accent focus-within:ring-2 focus-within:ring-zen-accent/20 rounded-2xl px-3.5 py-2 transition-all">
-            <span class="material-symbols-rounded text-stone-400 text-lg mr-2 select-none">add_circle</span>
-            <input 
-              type="text" 
-              [value]="newTaskTitle()"
-              (input)="onTitleInput($event)"
-              (keydown.enter)="addTask()"
-              placeholder="Add an intention for today & press Enter..." 
-              class="w-full bg-transparent text-xs text-stone-900 placeholder-stone-400 focus:outline-none"
-            />
-          </div>
-
-          <!-- Pomodoro Selector & Tag Pills -->
-          <div class="flex items-center gap-2 justify-end">
-            <!-- Pomodoro Count Selector -->
-            <select 
-              [value]="newTaskPomodoros()"
-              (change)="onPomodorosChange($event)"
-              class="bg-stone-50/70 border border-stone-200 text-stone-700 text-xs rounded-xl px-2.5 py-2 focus:outline-none focus:border-zen-accent cursor-pointer">
-              <option [value]="1">🍅 1 (25m)</option>
-              <option [value]="2">🍅 2 (50m)</option>
-              <option [value]="3">🍅 3 (75m)</option>
-              <option [value]="4">🍅 4 (100m)</option>
-            </select>
-
-            <button 
-              type="button"
-              (click)="addTask()" 
-              [disabled]="!newTaskTitle().trim()"
-              class="px-3.5 py-2 rounded-xl bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 disabled:opacity-40 transition-all cursor-pointer">
-              Add
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Task Cards List (Sunsama style cards with Pomodoros & Subtasks) -->
-      <div class="flex flex-col gap-3">
-        @for (task of tasks(); track task.id) {
-          <div 
-            class="group relative flex flex-col p-4 sm:p-5 rounded-2xl bg-white/90 border border-stone-200/80 shadow-2xs hover:shadow-xs hover:border-stone-300 transition-all duration-200"
-            [class.opacity-60]="task.completed"
-            [class.bg-stone-50]="task.completed">
-            
-            <!-- Top Line: Checkbox + Title + Pomodoros + Actions -->
-            <div class="flex items-start justify-between gap-3">
-              
-              <!-- Checkbox + Title -->
-              <div class="flex items-start gap-3 flex-1">
-                <!-- Circular M3 Checkbox -->
-                <button 
-                  type="button"
-                  (click)="toggleTask(task.id)"
-                  class="mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-150 cursor-pointer shrink-0 hover:border-stone-500"
-                  [class.bg-zen-accent]="task.completed"
-                  [class.border-zen-accent]="task.completed"
-                  [class.text-white]="task.completed"
-                  [class.border-stone-300]="!task.completed">
-                  @if (task.completed) {
-                    <span class="material-symbols-rounded text-sm">check</span>
-                  }
-                </button>
-
-                <!-- Title & Meta -->
-                <div class="flex-1">
-                  <h3 
-                    class="text-sm font-medium text-stone-900 leading-snug transition-colors"
+                <!-- Title & Estimated Duration -->
+                <div class="flex items-start justify-between gap-2">
+                  <span 
+                    class="text-xs font-medium text-stone-900 leading-snug"
                     [class.line-through]="task.completed"
                     [class.text-stone-400]="task.completed">
                     {{ task.title }}
-                  </h3>
+                  </span>
 
-                  <!-- Badges / Tags -->
-                  <div class="flex flex-wrap items-center gap-2 mt-2">
-                    <!-- Pomodoros Pill -->
-                    <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200/70">
-                      <span>🍅</span>
-                      <span>{{ task.pomodorosCompleted }}/{{ task.pomodoros }} ({{ task.pomodoros * 25 }}m)</span>
-                    </span>
+                  <span class="text-[10px] font-medium text-stone-400 bg-stone-50 px-1.5 py-0.5 rounded border border-stone-200/60 shrink-0">
+                    {{ task.durationLabel }}
+                  </span>
+                </div>
 
-                    <!-- Category Tag -->
-                    <span 
-                      class="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-full border"
-                      [ngClass]="task.tagColor">
-                      {{ task.tag }}
-                    </span>
+                <!-- Subtasks Checklist (Sunsama Nested Checklist) -->
+                @if (task.subtasks && task.subtasks.length > 0) {
+                  <div class="flex flex-col gap-1.5 mt-2 pt-2 border-t border-stone-100 pl-1">
+                    @for (st of task.subtasks; track st.id) {
+                      <div 
+                        (click)="toggleSubtask(col.id, task.id, st.id)"
+                        class="flex items-center gap-2 cursor-pointer group/sub">
+                        <button 
+                          type="button" 
+                          class="w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-colors shrink-0 hover:border-stone-500"
+                          [class.border-emerald-600]="st.completed"
+                          [class.bg-emerald-600]="st.completed"
+                          [class.text-white]="st.completed"
+                          [class.border-stone-300]="!st.completed">
+                          @if (st.completed) {
+                            <span class="material-symbols-rounded text-[10px]">check</span>
+                          }
+                        </button>
+                        <span 
+                          class="text-[11px] text-stone-600"
+                          [class.line-through]="st.completed"
+                          [class.text-stone-400]="st.completed">
+                          {{ st.title }}
+                        </span>
+                      </div>
+                    }
+                  </div>
+                }
 
-                    <!-- Scheduled Slot -->
-                    @if (task.timeSlot) {
-                      <span class="inline-flex items-center gap-1 text-[11px] text-stone-500">
-                        <span class="material-symbols-rounded text-[13px]">schedule</span>
-                        <span>{{ task.timeSlot }}</span>
+                <!-- Bottom Meta Row: Checkbox + Origin Icon + Tag + Start Focus Button -->
+                <div class="flex items-center justify-between mt-2 pt-1">
+                  <div class="flex items-center gap-2">
+                    <!-- Task Completion Circle Checkbox -->
+                    <button 
+                      type="button"
+                      (click)="toggleTask(col.id, task.id)"
+                      class="w-4 h-4 rounded-full border flex items-center justify-center transition-all cursor-pointer shrink-0 hover:border-stone-500"
+                      [class.bg-emerald-600]="task.completed"
+                      [class.border-emerald-600]="task.completed"
+                      [class.text-white]="task.completed"
+                      [class.border-stone-300]="!task.completed">
+                      @if (task.completed) {
+                        <span class="material-symbols-rounded text-xs">check</span>
+                      }
+                    </button>
+
+                    <!-- Origin Icon (if connected) -->
+                    @if (task.originIcon) {
+                      <span class="material-symbols-rounded text-stone-400 text-sm">
+                        {{ task.originIcon }}
                       </span>
                     }
                   </div>
-                </div>
-              </div>
 
-              <!-- Quick Focus Trigger Button (Play Icon) -->
-              @if (!task.completed) {
-                <button 
-                  type="button"
-                  (click)="startFocusSession(task)"
-                  title="Start Pomodoro on this task"
-                  class="w-8 h-8 rounded-full border border-stone-200 bg-stone-50 hover:bg-zen-accent hover:border-zen-accent text-stone-600 hover:text-white flex items-center justify-center transition-all shadow-2xs group-hover:scale-105 cursor-pointer shrink-0">
-                  <span class="material-symbols-rounded text-lg">play_arrow</span>
-                </button>
-              }
-            </div>
-
-            <!-- Subtasks Checklist (Sunsama style nested checklist) -->
-            @if (task.subtasks && task.subtasks.length > 0) {
-              <div class="mt-3.5 pt-3 border-t border-stone-100/80 flex flex-col gap-2 pl-8">
-                @for (subtask of task.subtasks; track subtask.title; let sIndex = $index) {
-                  <label class="flex items-center gap-2.5 text-xs text-stone-600 cursor-pointer group/sub">
-                    <input 
-                      type="checkbox" 
-                      [checked]="subtask.completed"
-                      (change)="toggleSubtask(task.id, sIndex)"
-                      class="w-3.5 h-3.5 rounded text-zen-accent accent-zen-accent focus:ring-0 cursor-pointer"
-                    />
-                    <span 
-                      class="transition-all"
-                      [class.line-through]="subtask.completed"
-                      [class.text-stone-400]="subtask.completed">
-                      {{ subtask.title }}
+                  <!-- Tag and Quick Run Pomodoro -->
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-semibold {{ task.tagColorClass }}">
+                      {{ task.tag }}
                     </span>
-                  </label>
-                }
+
+                    <!-- Quick Focus Run Button on Hover -->
+                    @if (!task.completed) {
+                      <button 
+                        type="button"
+                        (click)="startFocusSession(task)"
+                        title="Start Focus on this intention"
+                        class="opacity-0 group-hover:opacity-100 w-5 h-5 rounded-full bg-zen-accent text-white flex items-center justify-center transition-opacity shadow-2xs hover:scale-110 cursor-pointer">
+                        <span class="material-symbols-rounded text-[13px]">play_arrow</span>
+                      </button>
+                    }
+                  </div>
+                </div>
+
               </div>
             }
-
           </div>
-        }
+
+        </div>
+      }
+
+    </div>
+
+    <!-- CALENDAR TIMELINE PANEL (Sunsama Right Timeline) -->
+    <aside class="w-80 bg-white/40 flex flex-col shrink-0 select-none overflow-hidden">
+      
+      <!-- Calendar Header: MON 24 indicator -->
+      <div class="h-16 border-b border-stone-200/80 px-6 flex items-center justify-between bg-white/70">
+        <div class="flex flex-col">
+          <span class="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Mon</span>
+          <span class="text-xl font-bold text-stone-900 leading-none">24</span>
+        </div>
+        <span class="text-xs text-stone-500 font-medium bg-stone-100 px-2 py-0.5 rounded-full border border-stone-200/60 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Schedule</span>
+        </span>
       </div>
 
-    </section>
-
-    <!-- RIGHT COLUMN: SUNSAMA/AKIFLOW TIMEBOXING CALENDAR (5 cols on desktop) -->
-    <section 
-      [class.hidden]="activeMobileTab() !== 'timeline'"
-      class="lg:block lg:col-span-5 flex flex-col gap-4">
-      
-      <!-- Timeline Card Container -->
-      <div class="p-5 rounded-3xl bg-white/90 border border-stone-200/80 shadow-2xs">
-        
-        <!-- Timeline Header -->
-        <div class="flex items-center justify-between pb-3 border-b border-stone-100 mb-4">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-rounded text-lg text-zen-accent">view_timeline</span>
-            <h2 class="text-sm font-semibold text-stone-900 tracking-tight">Flow Timeline</h2>
-          </div>
-          <span class="text-xs text-stone-500 font-medium bg-stone-50 px-2.5 py-1 rounded-full border border-stone-200/80 flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Live Schedule</span>
-          </span>
-        </div>
-
-        <!-- Vertical Time Grid Canvas (07:00 to 19:00) -->
-        <div class="relative w-full h-[832px] overflow-hidden select-none">
+      <!-- Hourly Timeline Grid Canvas (6 AM to 6 PM) -->
+      <div class="flex-1 overflow-y-auto relative p-4">
+        <div class="relative w-full h-[768px]">
           
-          <!-- Background Hour Lines -->
+          <!-- Horizontal Hour Grid Lines -->
           @for (hour of hours; track hour; let idx = $index) {
             <div 
               class="absolute left-0 right-0 flex items-start border-t border-stone-100"
               [style.top.px]="idx * 64">
               <!-- Hour Label -->
-              <span class="text-[11px] font-medium text-stone-400 w-12 shrink-0 -translate-y-2.5 select-none">
+              <span class="text-[10px] font-semibold text-stone-400 w-12 shrink-0 -translate-y-2 select-none">
                 {{ hour }}
               </span>
               <!-- Grid line -->
-              <div class="flex-1 h-full border-b border-dashed border-stone-100/80"></div>
+              <div class="flex-1 border-b border-dashed border-stone-100"></div>
             </div>
           }
 
-          <!-- Real-Time Current Time Marker (e.g. 09:45 AM) -->
+          <!-- Live Real-Time Current Time Indicator (09:45 AM) -->
           <div 
-            class="absolute left-12 right-0 flex items-center z-20 pointer-events-none"
-            style="top: 176px;">
-            <div class="w-2.5 h-2.5 rounded-full bg-emerald-600 shadow-sm -ml-1.5 ring-2 ring-emerald-300"></div>
-            <div class="flex-1 h-0.5 bg-emerald-500/80 shadow-2xs"></div>
-            <span class="text-[10px] font-semibold text-emerald-800 bg-emerald-100/90 px-1.5 py-0.5 rounded ml-1">
-              09:45
-            </span>
+            class="absolute left-10 right-0 flex items-center z-20 pointer-events-none"
+            style="top: 240px;">
+            <div class="w-2 h-2 rounded-full bg-red-500 shadow-sm -ml-1 ring-2 ring-red-200"></div>
+            <div class="flex-1 h-0.5 bg-red-400/80"></div>
           </div>
 
-          <!-- Positioned Timeblock Event Cards (Sunsama style scheduled items) -->
-          <div class="absolute left-14 right-2 top-0 bottom-0 pointer-events-auto">
+          <!-- Positioned Timeblock Event Cards (Sunsama colored blocks) -->
+          <div class="absolute left-12 right-2 top-0 bottom-0 pointer-events-auto">
             @for (block of timeBlocks(); track block.id) {
               <div 
                 [ngStyle]="getBlockStyle(block)"
-                [ngClass]="getCategoryClasses(block.category)"
-                class="absolute left-0 right-0 rounded-2xl border px-3.5 py-2 flex flex-col justify-between transition-all duration-150 hover:z-30 cursor-pointer overflow-hidden group">
+                [ngClass]="getBlockColorClasses(block.colorTheme)"
+                (click)="enterSanctuary()"
+                class="absolute left-0 right-0 rounded-lg px-2.5 py-1.5 flex flex-col justify-between hover:brightness-95 hover:shadow-sm transition-all duration-150 cursor-pointer overflow-hidden leading-tight">
                 
-                <!-- Card Header -->
-                <div class="flex items-start justify-between gap-1">
-                  <div class="flex items-center gap-1.5 min-w-0">
-                    <span class="material-symbols-rounded text-sm shrink-0">
-                      {{ getCategoryIcon(block.category) }}
-                    </span>
-                    <span class="text-xs font-semibold tracking-tight truncate leading-tight">
-                      {{ block.title }}
-                    </span>
-                  </div>
-
-                  <!-- Start Focus Trigger for Deep Work blocks -->
-                  @if (block.category === 'deep-work') {
-                    <button 
-                      type="button"
-                      (click)="enterSanctuary()"
-                      class="opacity-0 group-hover:opacity-100 w-5 h-5 rounded-full bg-zen-accent text-white flex items-center justify-center transition-opacity shadow-2xs shrink-0"
-                      title="Run in Sanctuary">
-                      <span class="material-symbols-rounded text-[14px]">play_arrow</span>
-                    </button>
-                  }
-                </div>
-
-                <!-- Card Footer: Time Span & Duration -->
-                <div class="flex items-center justify-between text-[11px] opacity-80 pt-1">
-                  <span>{{ block.startTime }} - {{ block.endTime }}</span>
-                  <span class="font-medium">{{ block.durationMinutes }}m</span>
-                </div>
+                <span class="text-[11px] font-semibold tracking-tight truncate">
+                  {{ block.title }}
+                </span>
+                
+                <span class="text-[10px] opacity-90 font-medium">
+                  {{ block.timeSpan }}
+                </span>
               </div>
             }
           </div>
 
         </div>
-
       </div>
 
-    </section>
+    </aside>
 
   </div>
 
