@@ -201,11 +201,11 @@
               
               <!-- Checkbox + Title -->
               <div class="flex items-start gap-3.5 flex-1">
-                <!-- Circular M3 Checkbox -->
+                <!-- Canonical M3 Checkbox (Rounded Squircle 6px) -->
                 <button 
                   type="button"
                   (click)="toggleTask(task.id)"
-                  class="mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-150 cursor-pointer shrink-0 hover:border-stone-500"
+                  class="mt-0.5 w-5 h-5 rounded-[6px] border flex items-center justify-center transition-all duration-150 cursor-pointer shrink-0 hover:border-stone-500"
                   [class.bg-zen-accent]="task.completed"
                   [class.border-zen-accent]="task.completed"
                   [class.text-white]="task.completed"
@@ -224,25 +224,25 @@
                     {{ task.title }}
                   </h3>
 
-                  <!-- Badges / Tags -->
+                  <!-- M3 Assist Chips -->
                   <div class="flex flex-wrap items-center gap-2 mt-2.5">
-                    <!-- Pomodoros Pill -->
-                    <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-200/70">
+                    <!-- Pomodoros Chip -->
+                    <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-rose-50 text-rose-900 border border-rose-200/80 text-xs font-medium shadow-2xs">
                       <span>🍅</span>
                       <span>{{ task.pomodorosCompleted }}/{{ task.pomodoros }} ({{ task.durationLabel }})</span>
                     </span>
 
-                    <!-- Category Tag -->
+                    <!-- Category Tag Chip -->
                     <span 
-                      class="inline-flex items-center text-[10px] font-medium px-2.5 py-0.5 rounded-full border"
+                      class="inline-flex items-center gap-1 h-7 px-2.5 rounded-lg border text-xs font-medium shadow-2xs"
                       [ngClass]="task.tagColorClass">
                       {{ task.tag }}
                     </span>
 
-                    <!-- Scheduled Slot -->
+                    <!-- Scheduled Slot Chip -->
                     @if (task.timeSlot) {
-                      <span class="inline-flex items-center gap-1 text-[11px] text-stone-500">
-                        <span class="material-symbols-rounded text-[14px]">schedule</span>
+                      <span class="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg bg-stone-100/80 text-stone-600 text-xs font-medium">
+                        <span class="material-symbols-rounded text-[15px]">schedule</span>
                         <span>{{ task.timeSlot }}</span>
                       </span>
                     }
@@ -250,38 +250,38 @@
                 </div>
               </div>
 
-              <!-- Quick Focus Trigger Button (Play Icon) -->
+              <!-- Quick Focus Trigger Button (M3 Tonal Icon Button) -->
               @if (!task.completed) {
                 <button 
                   type="button"
                   (click)="startFocusSession(task)"
                   title="Start Pomodoro on this intention"
-                  class="w-8 h-8 rounded-full border border-stone-200 bg-stone-50 hover:bg-zen-accent hover:border-zen-accent text-stone-600 hover:text-white flex items-center justify-center transition-all shadow-2xs group-hover:scale-105 cursor-pointer shrink-0">
-                  <span class="material-symbols-rounded text-lg">play_arrow</span>
+                  class="w-9 h-9 rounded-2xl border border-stone-200/80 bg-stone-50 hover:bg-zen-accent hover:border-zen-accent text-stone-700 hover:text-white flex items-center justify-center transition-all shadow-2xs hover:scale-105 active:scale-95 cursor-pointer shrink-0">
+                  <span class="material-symbols-rounded text-xl">play_arrow</span>
                 </button>
               }
             </div>
 
-            <!-- Subtasks Checklist (Nested M3 Checklist) -->
+            <!-- Subtasks Checklist (Canonical M3 Checklist) -->
             @if (task.subtasks && task.subtasks.length > 0) {
-              <div class="mt-4 pt-3 border-t border-stone-100 flex flex-col gap-2 pl-8">
+              <div class="mt-4 pt-3.5 border-t border-stone-100 flex flex-col gap-2.5 pl-8">
                 @for (subtask of task.subtasks; track subtask.id) {
                   <div 
                     (click)="toggleSubtask(task.id, subtask.id)"
                     class="flex items-center gap-2.5 text-xs text-stone-600 cursor-pointer group/sub">
                     <button 
                       type="button"
-                      class="w-3.5 h-3.5 rounded-full border flex items-center justify-center transition-colors shrink-0 hover:border-stone-500"
+                      class="w-4 h-4 rounded-[4px] border flex items-center justify-center transition-colors shrink-0 hover:border-stone-500"
                       [class.bg-zen-accent]="subtask.completed"
                       [class.border-zen-accent]="subtask.completed"
                       [class.text-white]="subtask.completed"
                       [class.border-stone-300]="!subtask.completed">
                       @if (subtask.completed) {
-                        <span class="material-symbols-rounded text-[10px]">check</span>
+                        <span class="material-symbols-rounded text-[11px]">check</span>
                       }
                     </button>
                     <span 
-                      class="transition-all"
+                      class="transition-all text-xs"
                       [class.line-through]="subtask.completed"
                       [class.text-stone-400]="subtask.completed">
                       {{ subtask.title }}
