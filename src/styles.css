@@ -25,6 +25,10 @@
     margin: 0;
     -webkit-font-smoothing: antialiased;
   }
+
+  .icon-filled {
+    font-variation-settings: 'FILL' 1;
+  }
 }
 
 /* View Transitions & Shared Elements (Ultra 120Hz ProMotion Calibration) */

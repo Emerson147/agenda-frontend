@@ -33,6 +33,8 @@ export interface TimeBlock {
   categoryLabel: string;
 }
 
+export type FilterCategory = 'all' | 'deep-work' | 'quick' | 'completed';
+
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
@@ -43,6 +45,9 @@ export interface TimeBlock {
 export class DashboardPageComponent {
   private tareaService = inject(TareaEnfoqueService);
   private router = inject(Router);
+
+  // Active filter tab (Material 3 Segmented Button)
+  activeFilter = signal<FilterCategory>('all');
 
   // Intentions state
   newTaskTitle = signal<string>('');
@@ -63,7 +68,7 @@ export class DashboardPageComponent {
       completed: false,
       subtasks: [
         { id: 'st-1', title: 'Material 3 Expressive Bento canvas', completed: true },
-        { id: 'st-2', title: 'Floating Bottom Pill Dock navigation', completed: true },
+        { id: 'st-2', title: 'Canonical M3 Navigation Rail implementation', completed: true },
         { id: 'st-3', title: 'Visual hourly timebox timeline synchronization', completed: false }
       ]
     },
@@ -105,6 +110,16 @@ export class DashboardPageComponent {
       completed: false
     }
   ]);
+
+  // Filtered tasks via M3 Segmented Buttons
+  filteredTasks = computed(() => {
+    const f = this.activeFilter();
+    const all = this.tasks();
+    if (f === 'completed') return all.filter(t => t.completed);
+    if (f === 'deep-work') return all.filter(t => t.tag === '#architecture' || t.tag === '#deep-work');
+    if (f === 'quick') return all.filter(t => t.pomodoros <= 1);
+    return all;
+  });
 
   // Scheduled time blocks for the daily visual calendar grid
   timeBlocks = signal<TimeBlock[]>([
@@ -189,6 +204,10 @@ export class DashboardPageComponent {
     if (total === 0) return 0;
     return Math.min(100, Math.round((this.completedMinutes() / total) * 100));
   });
+
+  setFilter(filter: FilterCategory): void {
+    this.activeFilter.set(filter);
+  }
 
   onTitleInput(event: Event): void {
     const input = event.target as HTMLInputElement;

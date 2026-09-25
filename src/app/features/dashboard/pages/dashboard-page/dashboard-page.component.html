@@ -1,4 +1,4 @@
-<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
   
   <!-- TOP BENTO BAR: Executive Context & Quick Sanctuary Trigger -->
   <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 p-5 sm:p-6 rounded-3xl bg-white/80 backdrop-blur-md border border-stone-200/80 shadow-2xs">
@@ -56,6 +56,71 @@
 
   </header>
 
+  <!-- MATERIAL 3 SEGMENTED BUTTON BAR (Inspired directly by m3.material.io tab design) -->
+  <div class="flex items-center justify-between gap-4 mb-6">
+    <div class="inline-flex p-1 bg-stone-100/90 rounded-full border border-stone-200/80 shadow-2xs">
+      
+      <!-- Segment: All -->
+      <button 
+        type="button"
+        (click)="setFilter('all')"
+        [class.bg-white]="activeFilter() === 'all'"
+        [class.shadow-2xs]="activeFilter() === 'all'"
+        [class.text-stone-900]="activeFilter() === 'all'"
+        [class.text-stone-500]="activeFilter() !== 'all'"
+        class="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer">
+        <span class="material-symbols-rounded text-base">apps</span>
+        <span>All Intentions</span>
+        <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-stone-100 text-stone-600 font-bold">
+          {{ tasks().length }}
+        </span>
+      </button>
+
+      <!-- Segment: Deep Work -->
+      <button 
+        type="button"
+        (click)="setFilter('deep-work')"
+        [class.bg-white]="activeFilter() === 'deep-work'"
+        [class.shadow-2xs]="activeFilter() === 'deep-work'"
+        [class.text-stone-900]="activeFilter() === 'deep-work'"
+        [class.text-stone-500]="activeFilter() !== 'deep-work'"
+        class="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer">
+        <span class="material-symbols-rounded text-base text-emerald-600">spa</span>
+        <span>Deep Work</span>
+      </button>
+
+      <!-- Segment: Quick Tasks -->
+      <button 
+        type="button"
+        (click)="setFilter('quick')"
+        [class.bg-white]="activeFilter() === 'quick'"
+        [class.shadow-2xs]="activeFilter() === 'quick'"
+        [class.text-stone-900]="activeFilter() === 'quick'"
+        [class.text-stone-500]="activeFilter() !== 'quick'"
+        class="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer">
+        <span class="material-symbols-rounded text-base text-amber-500">bolt</span>
+        <span>Quick (≤1🍅)</span>
+      </button>
+
+      <!-- Segment: Completed -->
+      <button 
+        type="button"
+        (click)="setFilter('completed')"
+        [class.bg-white]="activeFilter() === 'completed'"
+        [class.shadow-2xs]="activeFilter() === 'completed'"
+        [class.text-stone-900]="activeFilter() === 'completed'"
+        [class.text-stone-500]="activeFilter() !== 'completed'"
+        class="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer">
+        <span class="material-symbols-rounded text-base text-stone-400">check_circle</span>
+        <span>Done</span>
+        <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-stone-100 text-stone-600 font-bold">
+          {{ totalCompletedTasks() }}
+        </span>
+      </button>
+
+    </div>
+  </div>
+
   <!-- DUAL-COLUMN TIMEBOXING CANVAS (Zen Sanctuary Bento) -->
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
     
@@ -67,7 +132,7 @@
         
         <div class="flex items-center justify-between mb-3.5">
           <div class="flex items-center gap-2">
-            <span class="material-symbols-rounded text-lg text-zen-accent">check_circle</span>
+            <span class="material-symbols-rounded text-lg text-zen-accent">task_alt</span>
             <span class="text-sm font-semibold text-stone-900 tracking-tight">Today's Focus Intentions</span>
             <span class="text-xs px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
               {{ totalCompletedTasks() }} of {{ tasks().length }} done
@@ -125,7 +190,7 @@
 
       <!-- Task Intentions Stack (Sunsama depth with Zen elegance) -->
       <div class="flex flex-col gap-3.5">
-        @for (task of tasks(); track task.id) {
+        @for (task of filteredTasks(); track task.id) {
           <div 
             class="group relative flex flex-col p-5 rounded-3xl bg-white/90 border border-stone-200/80 shadow-2xs hover:shadow-xs hover:border-stone-300 transition-all duration-200"
             [class.opacity-60]="task.completed"
