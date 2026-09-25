@@ -1,4 +1,4 @@
-import { Component, signal, inject, ApplicationRef } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
@@ -9,244 +9,130 @@ import { TareaEnfoqueService } from '../core/services/tarea-enfoque.service';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterModule],
   template: `
-    <div class="h-screen w-screen flex bg-zen-bg font-sans text-zen-text selection:bg-zen-accent/20 overflow-hidden">
+    <div class="min-h-screen flex flex-col w-full bg-zen-bg font-sans text-zen-text selection:bg-zen-accent/20 relative">
       
-      <!-- 1. LEFT NAVIGATION SIDEBAR (Sunsama / M3 Expressive) -->
-      <aside class="w-60 bg-white/70 backdrop-blur-md border-r border-stone-200/80 flex flex-col justify-between p-4 shrink-0 z-20 select-none">
+      <!-- TOP NAVIGATION BAR (Material Design 3 Zen Header) -->
+      <header class="w-full flex items-center justify-between px-6 sm:px-10 py-4 border-b border-stone-200/60 bg-zen-bg/90 backdrop-blur-md sticky top-0 z-30">
         
-        <!-- Top Section: Workspace Selector & Primary Navigation -->
-        <div class="flex flex-col gap-6">
-          
-          <!-- Workspace Menu (Sunsama style dropdown) -->
-          <div class="flex items-center justify-between px-2 py-1.5 rounded-2xl hover:bg-stone-100/80 cursor-pointer transition-colors group">
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-zen-accent shadow-2xs group-hover:scale-105 transition-transform">
-                <span class="material-symbols-rounded text-base" style="font-variation-settings: 'FILL' 1;">eco</span>
-              </div>
-              <span class="font-semibold text-xs tracking-tight text-stone-900">Focus Sanctuary</span>
-            </div>
-            <span class="material-symbols-rounded text-stone-400 text-sm group-hover:text-stone-700 transition-colors">unfold_more</span>
+        <!-- Left: Brand / Logo (matching Auth aesthetic) -->
+        <a routerLink="/" class="flex items-center gap-3 group cursor-pointer">
+          <div class="w-9 h-9 rounded-2xl bg-stone-100 border border-stone-200/80 flex items-center justify-center text-zen-accent shadow-xs group-hover:scale-105 transition-transform">
+            <span class="material-symbols-rounded text-xl" style="font-variation-settings: 'FILL' 1;">eco</span>
           </div>
-
-          <!-- Primary App Spaces -->
-          <nav class="flex flex-col gap-1">
-            <!-- Home / Dashboard -->
-            <a 
-              routerLink="/"
-              routerLinkActive="bg-stone-100 text-stone-900 font-semibold shadow-2xs"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[18px]">home</span>
-              <span>Home</span>
-            </a>
-
-            <!-- Today Plan -->
-            <a 
-              routerLink="/"
-              class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[18px]">today</span>
-              <span>Today</span>
-            </a>
-
-            <!-- Focus Sanctuary (Immersive Pomodoro Room) -->
-            <a 
-              routerLink="/sanctuary"
-              routerLinkActive="bg-stone-900 text-white font-semibold shadow-xs"
-              class="relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[18px]">timer</span>
-              <span>Focus Room</span>
-
-              @if (tareaService.isPomodoroActivo()) {
-                <span class="ml-auto flex h-2 w-2 relative">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-              }
-            </a>
-          </nav>
-
-          <!-- Rituals: DAY -->
-          <div class="flex flex-col gap-1">
-            <span class="text-[10px] font-bold tracking-wider text-stone-400 uppercase px-3 mb-1">Day</span>
-            
-            <a class="flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[17px] text-stone-400">wb_sunny</span>
-              <span>Daily planning</span>
-            </a>
-
-            <a class="flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[17px] text-stone-400">bedtime</span>
-              <span>Daily shutdown</span>
-            </a>
-
-            <a class="flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[17px] text-stone-400">stylus_note</span>
-              <span>Daily highlights</span>
-            </a>
+          <div>
+            <h1 class="font-semibold text-sm tracking-tight text-stone-900 leading-tight">Focus Sanctuary</h1>
+            <p class="text-[10px] uppercase tracking-wider text-zen-text-light font-medium">Embrace the flow</p>
           </div>
+        </a>
 
-          <!-- Rituals: WEEK -->
-          <div class="flex flex-col gap-1">
-            <span class="text-[10px] font-bold tracking-wider text-stone-400 uppercase px-3 mb-1">Week</span>
-            
-            <a class="flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[17px] text-stone-400">event_note</span>
-              <span>Weekly planning</span>
-            </a>
-
-            <a class="flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/70 transition-all cursor-pointer">
-              <span class="material-symbols-rounded text-[17px] text-stone-400">analytics</span>
-              <span>Weekly review</span>
-            </a>
-          </div>
-
+        <!-- Center: Date & Intent Pill -->
+        <div class="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-stone-200/80 shadow-2xs text-xs text-stone-700">
+          <span class="material-symbols-rounded text-base text-zen-accent">calendar_today</span>
+          <span class="font-medium">Today</span>
+          <span class="text-stone-300">·</span>
+          <span class="text-stone-500">Mindful Timeboxing</span>
         </div>
 
-        <!-- Bottom Sidebar Section: Streak & User profile -->
-        <div class="pt-4 border-t border-stone-200/70 flex flex-col gap-3">
-          <!-- Streak Indicator -->
-          <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-stone-100/60 border border-stone-200/70">
-            <div class="flex items-center gap-2">
-              <span class="text-sm">🔥</span>
-              <span class="text-xs font-semibold text-stone-700">5-day streak</span>
-            </div>
-            <span class="text-[10px] text-zen-accent font-medium bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60">Flow</span>
+        <!-- Right Quick Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Streak Pill -->
+          <div class="flex items-center gap-1.5 px-3 py-1.5 bg-white/80 rounded-full border border-stone-200/80 shadow-2xs">
+            <span class="text-orange-500 text-sm">🔥</span>
+            <span class="text-xs font-semibold text-stone-700">5 days</span>
           </div>
 
-          <!-- User & Actions -->
-          <div class="flex items-center justify-between px-1">
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-full bg-zen-accent text-white flex items-center justify-center text-xs font-semibold">
-                M
-              </div>
-              <div class="flex flex-col">
-                <span class="text-xs font-medium text-stone-800 leading-tight">Practitioner</span>
-                <span class="text-[10px] text-stone-400">Online</span>
-              </div>
-            </div>
+          <!-- Language Selector -->
+          <button 
+            type="button"
+            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-100 text-stone-500 transition-colors cursor-pointer"
+            title="Language">
+            <span class="material-symbols-rounded text-[20px]">language</span>
+          </button>
 
-            <!-- Settings & Logout Buttons -->
-            <div class="flex items-center gap-1">
-              <button 
-                type="button"
-                (click)="toggleSettings()"
-                title="Settings"
-                class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer">
-                <span class="material-symbols-rounded text-[18px]">settings</span>
-              </button>
-              <button 
-                type="button"
-                (click)="logout()"
-                title="Log out"
-                class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer">
-                <span class="material-symbols-rounded text-[18px]">logout</span>
-              </button>
-            </div>
-          </div>
+          <!-- Settings Trigger -->
+          <button 
+            type="button"
+            (click)="toggleSettings()" 
+            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-100 text-stone-500 transition-colors cursor-pointer"
+            title="Settings">
+            <span class="material-symbols-rounded text-[20px]">settings</span>
+          </button>
+
+          <!-- Logout Button -->
+          <button 
+            type="button"
+            (click)="logout()"
+            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-rose-50 text-stone-400 hover:text-rose-600 transition-colors cursor-pointer"
+            title="Cerrar sesión">
+            <span class="material-symbols-rounded text-[20px]">logout</span>
+          </button>
         </div>
+      </header>
 
-      </aside>
-
-      <!-- 2. CENTRAL WORKSPACE CANVAS (Router Outlet: Kanban + Timeline) -->
-      <main class="flex-1 h-full overflow-y-auto overflow-x-hidden relative bg-zen-bg">
+      <!-- MAIN ROUTER CONTENT (Bento Canvas) -->
+      <main class="flex-1 w-full relative pb-28">
         <router-outlet></router-outlet>
       </main>
 
-      <!-- 3. RIGHT UTILITY DOCK / INTEGRATIONS RIBBON (Sunsama style far-right bar) -->
-      <aside class="w-14 bg-white/70 backdrop-blur-md border-l border-stone-200/80 flex flex-col items-center justify-between py-4 shrink-0 z-20 select-none">
+      <!-- FLOATING BOTTOM PILL DOCK (Material 3 Expressive Capsule) -->
+      <nav 
+        aria-label="Primary Navigation"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 p-1.5 rounded-full bg-white/85 backdrop-blur-xl border border-stone-200/80 shadow-lg shadow-stone-900/5 select-none transition-all duration-200 hover:shadow-xl">
         
-        <!-- Top Integrations: Google Calendar, Notion, Jira/Asana -->
-        <div class="flex flex-col items-center gap-3">
-          <!-- Google Calendar Icon -->
-          <button 
-            type="button"
-            title="Google Calendar Connected"
-            class="w-8 h-8 rounded-xl bg-white border border-stone-200/80 flex items-center justify-center shadow-2xs hover:scale-105 transition-all cursor-pointer">
-            <span class="text-xs font-semibold text-blue-600">31</span>
-          </button>
+        <!-- Dashboard Button -->
+        <a 
+          routerLink="/"
+          routerLinkActive="bg-stone-900 text-white shadow-xs font-medium"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/80 transition-all cursor-pointer">
+          <span class="material-symbols-rounded text-lg">space_dashboard</span>
+          <span>Dashboard</span>
+        </a>
 
-          <!-- Notion Sync Icon -->
-          <button 
-            type="button"
-            title="Notion Workspace"
-            class="w-8 h-8 rounded-xl bg-white border border-stone-200/80 flex items-center justify-center shadow-2xs hover:scale-105 transition-all cursor-pointer">
-            <span class="text-xs font-bold text-stone-800">N</span>
-          </button>
+        <!-- Focus Sanctuary Button (with live pulsing dot when timer is running) -->
+        <a 
+          routerLink="/sanctuary"
+          routerLinkActive="bg-stone-900 text-white shadow-xs font-medium"
+          class="relative flex items-center gap-2 px-4 py-2 rounded-full text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/80 transition-all cursor-pointer">
+          <span class="material-symbols-rounded text-lg">timer</span>
+          <span>Sanctuary</span>
 
-          <!-- Task Garden / Projects -->
-          <button 
-            type="button"
-            title="Projects & Tags"
-            class="w-8 h-8 rounded-xl bg-white border border-stone-200/80 flex items-center justify-center text-rose-500 shadow-2xs hover:scale-105 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-[18px]">hub</span>
-          </button>
+          @if (tareaService.isPomodoroActivo()) {
+            <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+          }
+        </a>
 
-          <!-- Trello / Kanban Sync -->
-          <button 
-            type="button"
-            title="Board Connections"
-            class="w-8 h-8 rounded-xl bg-white border border-stone-200/80 flex items-center justify-center text-blue-500 shadow-2xs hover:scale-105 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-[18px]">view_column</span>
-          </button>
+        <!-- Divider -->
+        <div class="w-px h-5 bg-stone-200 my-auto mx-1"></div>
 
-          <div class="w-6 h-px bg-stone-200 my-1"></div>
+        <!-- Quick Settings Button -->
+        <button 
+          type="button"
+          (click)="toggleSettings()"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/80 transition-all cursor-pointer"
+          title="Settings">
+          <span class="material-symbols-rounded text-lg">tune</span>
+          <span class="hidden sm:inline">Settings</span>
+        </button>
 
-          <!-- Quick Pomodoro Stats -->
-          <button 
-            type="button"
-            title="Focus Stats & Targets"
-            class="w-8 h-8 rounded-xl hover:bg-stone-100 flex items-center justify-center text-stone-500 hover:text-stone-900 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-[18px]">target</span>
-          </button>
+      </nav>
 
-          <!-- Archive / Completed -->
-          <button 
-            type="button"
-            title="Archive"
-            class="w-8 h-8 rounded-xl hover:bg-stone-100 flex items-center justify-center text-stone-500 hover:text-stone-900 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-[18px]">inventory_2</span>
-          </button>
-
-          <!-- Ambient Soundscapes -->
-          <button 
-            type="button"
-            title="Soundscapes"
-            class="w-8 h-8 rounded-xl hover:bg-stone-100 flex items-center justify-center text-stone-500 hover:text-stone-900 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-[18px]">graphic_eq</span>
-          </button>
-        </div>
-
-        <!-- Bottom Utility Buttons: Search, Theme, Quick Add -->
-        <div class="flex flex-col items-center gap-2.5">
-          <!-- Search -->
-          <button 
-            type="button"
-            title="Search (⌘K)"
-            class="w-8 h-8 rounded-xl hover:bg-stone-100 flex items-center justify-center text-stone-500 hover:text-stone-900 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-[18px]">search</span>
-          </button>
-
-          <!-- Quick Add FAB (Material 3 Expressive) -->
-          <button 
-            type="button"
-            title="New Intention (+)"
-            class="w-8 h-8 rounded-xl bg-zen-accent text-white flex items-center justify-center shadow-xs hover:bg-stone-800 hover:scale-105 transition-all cursor-pointer">
-            <span class="material-symbols-rounded text-lg">add</span>
-          </button>
-        </div>
-
-      </aside>
-
-      <!-- SETTINGS POPOVER / MODAL -->
+      <!-- SETTINGS MODAL DIALOG -->
       @if (isSettingsOpen()) {
         <div class="fixed inset-0 bg-stone-900/20 backdrop-blur-xs z-50 flex items-center justify-center p-4">
           <aside class="w-full max-w-md bg-zen-bg rounded-3xl border border-stone-200 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div class="flex items-center justify-between px-6 py-4 border-b border-stone-100 bg-stone-50/70">
               <div class="flex items-center gap-2">
                 <span class="material-symbols-rounded text-zen-accent text-xl">tune</span>
-                <h2 class="text-sm font-semibold text-stone-800">Preferences & Timers</h2>
+                <h2 class="text-sm font-semibold text-stone-800">Preferences & Sanctuary Timers</h2>
               </div>
-              <button (click)="toggleSettings()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-200 text-stone-500 transition-colors cursor-pointer">
+              <button 
+                type="button"
+                (click)="toggleSettings()" 
+                class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-200 text-stone-500 transition-colors cursor-pointer">
                 <span class="material-symbols-rounded text-[20px]">close</span>
               </button>
             </div>
@@ -303,7 +189,7 @@ import { TareaEnfoqueService } from '../core/services/tarea-enfoque.service';
               <button 
                 type="button" 
                 (click)="toggleSettings()" 
-                class="px-4 py-2 rounded-xl bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 cursor-pointer">
+                class="px-5 py-2 rounded-xl bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 cursor-pointer">
                 Done
               </button>
             </div>

@@ -13,34 +13,24 @@ export interface SubTask {
 export interface DashboardTask {
   id: string;
   title: string;
-  durationLabel: string; // e.g. "4:00"
   pomodoros: number;
   pomodorosCompleted: number;
-  timeBadge?: string;     // e.g. "10:00"
-  tag: string;           // e.g. "#product"
-  tagColorClass: string; // Tailwind color token
-  originIcon?: string;   // e.g. "diamond", "description", "view_column"
+  durationLabel: string;
+  tag: string;
+  tagColorClass: string;
+  timeSlot?: string;
   completed: boolean;
   subtasks?: SubTask[];
-}
-
-export interface DayColumn {
-  id: string;
-  dayName: string;       // e.g. "Monday"
-  dateLabel: string;     // e.g. "January 10"
-  totalEstimatedTime: string; // e.g. "8:00"
-  progressPercent: number;
-  tasks: DashboardTask[];
 }
 
 export interface TimeBlock {
   id: string;
   title: string;
-  timeSpan: string;      // e.g. "7 - 7:30"
-  startTime: string;     // "07:00"
-  endTime: string;       // "07:30"
+  startTime: string; // e.g. "09:00"
+  endTime: string;   // e.g. "10:30"
   durationMinutes: number;
-  colorTheme: 'sky' | 'amber' | 'purple' | 'emerald';
+  category: 'deep-work' | 'meeting' | 'routine' | 'break';
+  categoryLabel: string;
 }
 
 @Component({
@@ -54,243 +44,209 @@ export class DashboardPageComponent {
   private tareaService = inject(TareaEnfoqueService);
   private router = inject(Router);
 
-  // Quick add inputs per column
-  newTitles = signal<{ [columnId: string]: string }>({
-    'col-monday': '',
-    'col-tuesday': ''
-  });
+  // Intentions state
+  newTaskTitle = signal<string>('');
+  newTaskPomodoros = signal<number>(2);
+  newTaskTag = signal<string>('deep-work');
 
-  // Multi-day Kanban Board Data (Sunsama 1:1 Layout)
-  columns = signal<DayColumn[]>([
+  // Pre-populated realistic tasks aligned with Material 3 & Zen sanctuary
+  tasks = signal<DashboardTask[]>([
     {
-      id: 'col-monday',
-      dayName: 'Monday',
-      dateLabel: 'September 24',
-      totalEstimatedTime: '8:00',
-      progressPercent: 50,
-      tasks: [
-        {
-          id: 'm-1',
-          title: 'Build daily notes feature',
-          durationLabel: '4:00',
-          pomodoros: 8,
-          pomodorosCompleted: 4,
-          tag: '#product',
-          tagColorClass: 'text-indigo-600',
-          originIcon: 'diamond',
-          completed: false,
-          subtasks: [
-            { id: 'st-1', title: 'Mockups', completed: true },
-            { id: 'st-2', title: 'Data model', completed: true },
-            { id: 'st-3', title: 'Basic functionality', completed: false }
-          ]
-        },
-        {
-          id: 'm-2',
-          title: 'Document customer feedback',
-          durationLabel: '1:30',
-          pomodoros: 3,
-          pomodorosCompleted: 1,
-          tag: '#product',
-          tagColorClass: 'text-indigo-600',
-          originIcon: 'view_column',
-          completed: false,
-          subtasks: [
-            { id: 'st-4', title: 'Summarize customer churn surveys', completed: false },
-            { id: 'st-5', title: 'Review top posts in Canny', completed: false }
-          ]
-        },
-        {
-          id: 'm-3',
-          title: 'Investigate secondary growth channels',
-          durationLabel: '1:00',
-          pomodoros: 2,
-          pomodorosCompleted: 0,
-          tag: '#planning',
-          tagColorClass: 'text-teal-600',
-          completed: false
-        },
-        {
-          id: 'm-4',
-          title: 'Product demo with Jenn',
-          durationLabel: '1:30',
-          pomodoros: 3,
-          pomodorosCompleted: 0,
-          timeBadge: '10:00',
-          tag: '#growth',
-          tagColorClass: 'text-amber-600',
-          originIcon: 'description',
-          completed: false
-        }
+      id: 'task-1',
+      title: 'Architect Focus Sanctuary layout & transitions',
+      pomodoros: 3,
+      pomodorosCompleted: 2,
+      durationLabel: '75m',
+      timeSlot: '09:00 - 10:15',
+      tag: '#architecture',
+      tagColorClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+      completed: false,
+      subtasks: [
+        { id: 'st-1', title: 'Material 3 Expressive Bento canvas', completed: true },
+        { id: 'st-2', title: 'Floating Bottom Pill Dock navigation', completed: true },
+        { id: 'st-3', title: 'Visual hourly timebox timeline synchronization', completed: false }
       ]
     },
     {
-      id: 'col-tuesday',
-      dayName: 'Tuesday',
-      dateLabel: 'September 25',
-      totalEstimatedTime: '4:30',
-      progressPercent: 20,
-      tasks: [
-        {
-          id: 't-1',
-          title: 'Answer customer support tickets',
-          durationLabel: '0:30',
-          pomodoros: 1,
-          pomodorosCompleted: 0,
-          tag: '#growth',
-          tagColorClass: 'text-amber-600',
-          completed: false
-        },
-        {
-          id: 't-2',
-          title: 'Investigate secondary growth channels',
-          durationLabel: '0:30',
-          pomodoros: 1,
-          pomodorosCompleted: 0,
-          tag: '#growth',
-          tagColorClass: 'text-amber-600',
-          completed: false
-        },
-        {
-          id: 't-3',
-          title: 'Review prototype of new feature',
-          durationLabel: '2:00',
-          pomodoros: 4,
-          pomodorosCompleted: 0,
-          timeBadge: '10:00',
-          tag: '#product',
-          tagColorClass: 'text-indigo-600',
-          originIcon: 'description',
-          completed: false
-        },
-        {
-          id: 't-4',
-          title: '1:1 with Tomoa',
-          durationLabel: '0:30',
-          pomodoros: 1,
-          pomodorosCompleted: 0,
-          timeBadge: '11:00',
-          tag: '#growth',
-          tagColorClass: 'text-amber-600',
-          originIcon: 'hub',
-          completed: false
-        }
+      id: 'task-2',
+      title: 'Review pull request & token pipeline',
+      pomodoros: 1,
+      pomodorosCompleted: 1,
+      durationLabel: '25m',
+      timeSlot: '11:00 - 11:30',
+      tag: '#code-review',
+      tagColorClass: 'bg-stone-100 text-stone-800 border-stone-200',
+      completed: true
+    },
+    {
+      id: 'task-3',
+      title: 'Audit Pomodoro state machine & audio chimes',
+      pomodoros: 2,
+      pomodorosCompleted: 0,
+      durationLabel: '50m',
+      timeSlot: '14:30 - 15:30',
+      tag: '#deep-work',
+      tagColorClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+      completed: false,
+      subtasks: [
+        { id: 'st-4', title: 'Test pause and resume cycles', completed: false },
+        { id: 'st-5', title: 'Verify audio chime notification on completion', completed: false }
       ]
+    },
+    {
+      id: 'task-4',
+      title: 'Weekly mindfulness sync with team',
+      pomodoros: 1,
+      pomodorosCompleted: 0,
+      durationLabel: '30m',
+      timeSlot: '16:00 - 16:30',
+      tag: '#meeting',
+      tagColorClass: 'bg-amber-50 text-amber-800 border-amber-200/80',
+      completed: false
     }
   ]);
 
-  // Hourly timeline slots from 6 AM to 5 PM (Sunsama style 6 AM to 6 PM)
-  readonly hours = [
-    '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM',
-    '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM'
-  ];
-
-  // Calendar Scheduled Blocks
+  // Scheduled time blocks for the daily visual calendar grid
   timeBlocks = signal<TimeBlock[]>([
     {
-      id: 'tb-1',
-      title: 'Morning routine 7 - 7:30',
-      timeSpan: '7 - 7:30',
-      startTime: '07:00',
-      endTime: '07:30',
+      id: 'b-1',
+      title: 'Morning Mindfulness & Daily Intentions',
+      startTime: '08:00',
+      endTime: '08:30',
       durationMinutes: 30,
-      colorTheme: 'sky'
+      category: 'routine',
+      categoryLabel: 'Routine'
     },
     {
-      id: 'tb-2',
-      title: 'Product demo with Jenn',
-      timeSpan: '10 - 11',
-      startTime: '10:00',
-      endTime: '11:00',
+      id: 'b-2',
+      title: 'Architect Focus Sanctuary layout & transitions',
+      startTime: '09:00',
+      endTime: '10:15',
+      durationMinutes: 75,
+      category: 'deep-work',
+      categoryLabel: 'Deep Work'
+    },
+    {
+      id: 'b-3',
+      title: 'Review pull request & token pipeline',
+      startTime: '11:00',
+      endTime: '11:30',
+      durationMinutes: 30,
+      category: 'deep-work',
+      categoryLabel: 'Deep Work'
+    },
+    {
+      id: 'b-4',
+      title: 'Mindful Lunch & Digital Detox Walk',
+      startTime: '12:30',
+      endTime: '13:30',
       durationMinutes: 60,
-      colorTheme: 'amber'
+      category: 'break',
+      categoryLabel: 'Break'
     },
     {
-      id: 'tb-3',
-      title: 'Lunch 12 - 1',
-      timeSpan: '12 - 1',
-      startTime: '12:00',
-      endTime: '13:00',
+      id: 'b-5',
+      title: 'Audit Pomodoro state machine & audio chimes',
+      startTime: '14:30',
+      endTime: '15:30',
       durationMinutes: 60,
-      colorTheme: 'sky'
+      category: 'deep-work',
+      categoryLabel: 'Deep Work'
     },
     {
-      id: 'tb-4',
-      title: 'Review prototype of new feature',
-      timeSpan: '1 - 3',
-      startTime: '13:00',
-      endTime: '15:00',
-      durationMinutes: 120,
-      colorTheme: 'purple'
+      id: 'b-6',
+      title: 'Weekly mindfulness sync with team',
+      startTime: '16:00',
+      endTime: '16:30',
+      durationMinutes: 30,
+      category: 'meeting',
+      categoryLabel: 'Meeting'
     }
   ]);
 
-  // Calculations
-  totalTasksToday = computed(() => {
-    return this.columns()[0]?.tasks.length || 0;
+  // Hourly slots from 07:00 to 19:00
+  readonly hours = [
+    '07:00', '08:00', '09:00', '10:00', '11:00', 
+    '12:00', '13:00', '14:00', '15:00', '16:00', 
+    '17:00', '18:00', '19:00'
+  ];
+
+  // Calculated Metrics
+  totalPlannedMinutes = computed(() => {
+    return this.tasks().reduce((acc, t) => acc + (t.pomodoros * 25), 0);
   });
 
-  completedTasksToday = computed(() => {
-    return this.columns()[0]?.tasks.filter(t => t.completed).length || 0;
+  completedMinutes = computed(() => {
+    return this.tasks().reduce((acc, t) => acc + (t.pomodorosCompleted * 25), 0);
   });
 
-  onInputTask(colId: string, event: Event): void {
+  totalCompletedTasks = computed(() => {
+    return this.tasks().filter(t => t.completed).length;
+  });
+
+  progressPercentage = computed(() => {
+    const total = this.totalPlannedMinutes();
+    if (total === 0) return 0;
+    return Math.min(100, Math.round((this.completedMinutes() / total) * 100));
+  });
+
+  onTitleInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.newTitles.update(m => ({ ...m, [colId]: input.value }));
+    this.newTaskTitle.set(input?.value ?? '');
   }
 
-  addTask(colId: string): void {
-    const title = (this.newTitles()[colId] || '').trim();
+  onPomodorosChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.newTaskPomodoros.set(Number(select?.value || 2));
+  }
+
+  addTask(): void {
+    const title = this.newTaskTitle().trim();
     if (!title) return;
 
     const newTask: DashboardTask = {
       id: 'task-' + Date.now(),
       title,
-      durationLabel: '0:50',
-      pomodoros: 2,
+      pomodoros: this.newTaskPomodoros(),
       pomodorosCompleted: 0,
-      tag: '#product',
-      tagColorClass: 'text-indigo-600',
+      durationLabel: `${this.newTaskPomodoros() * 25}m`,
+      tag: `#${this.newTaskTag()}`,
+      tagColorClass: this.newTaskTag() === 'deep-work'
+        ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80'
+        : 'bg-stone-100 text-stone-800 border-stone-200',
       completed: false
     };
 
-    this.columns.update(cols =>
-      cols.map(c => c.id === colId ? { ...c, tasks: [newTask, ...c.tasks] } : c)
-    );
-
-    this.newTitles.update(m => ({ ...m, [colId]: '' }));
+    this.tasks.update(all => [newTask, ...all]);
+    this.newTaskTitle.set('');
   }
 
-  toggleTask(colId: string, taskId: string): void {
-    this.columns.update(cols =>
-      cols.map(c => {
-        if (c.id !== colId) return c;
-        const updatedTasks = c.tasks.map(t => {
-          if (t.id !== taskId) return t;
-          const next = !t.completed;
+  toggleTask(taskId: string): void {
+    this.tasks.update(all =>
+      all.map(task => {
+        if (task.id === taskId) {
+          const next = !task.completed;
           return {
-            ...t,
+            ...task,
             completed: next,
-            pomodorosCompleted: next ? t.pomodoros : 0
+            pomodorosCompleted: next ? task.pomodoros : 0
           };
-        });
-        return { ...c, tasks: updatedTasks };
+        }
+        return task;
       })
     );
   }
 
-  toggleSubtask(colId: string, taskId: string, subtaskId: string): void {
-    this.columns.update(cols =>
-      cols.map(c => {
-        if (c.id !== colId) return c;
-        const updatedTasks = c.tasks.map(t => {
-          if (t.id !== taskId || !t.subtasks) return t;
-          const updatedSubs = t.subtasks.map(st =>
+  toggleSubtask(taskId: string, subtaskId: string): void {
+    this.tasks.update(all =>
+      all.map(task => {
+        if (task.id === taskId && task.subtasks) {
+          const updated = task.subtasks.map(st =>
             st.id === subtaskId ? { ...st, completed: !st.completed } : st
           );
-          return { ...t, subtasks: updatedSubs };
-        });
-        return { ...c, tasks: updatedTasks };
+          return { ...task, subtasks: updated };
+        }
+        return task;
       })
     );
   }
@@ -308,11 +264,11 @@ export class DashboardPageComponent {
   }
 
   getBlockStyle(block: TimeBlock): { [key: string]: string } {
-    // 6 AM is minute 0. 1 hour = 64px.
+    // 07:00 is minute 0. 1 hour = 64px.
     const [startH, startM] = block.startTime.split(':').map(Number);
-    const startMinutesFrom6 = (startH - 6) * 60 + startM;
-    const topPx = (startMinutesFrom6 / 60) * 64;
-    const heightPx = Math.max(34, (block.durationMinutes / 60) * 64 - 2);
+    const startMinutesFrom7 = (startH - 7) * 60 + startM;
+    const topPx = Math.max(0, (startMinutesFrom7 / 60) * 64);
+    const heightPx = Math.max(36, (block.durationMinutes / 60) * 64 - 4);
 
     return {
       top: `${topPx}px`,
@@ -320,17 +276,31 @@ export class DashboardPageComponent {
     };
   }
 
-  getBlockColorClasses(color: TimeBlock['colorTheme']): string {
-    switch (color) {
-      case 'sky':
-        return 'bg-[#40b5f5] text-white border-transparent shadow-xs';
-      case 'amber':
-        return 'bg-[#f59e0b] text-white border-transparent shadow-xs';
-      case 'purple':
-        return 'bg-[#8b5cf6] text-white border-transparent shadow-xs';
-      case 'emerald':
+  getCategoryContainerClasses(category: TimeBlock['category']): string {
+    switch (category) {
+      case 'deep-work':
+        return 'bg-emerald-50/95 border-emerald-300 text-emerald-950 hover:bg-emerald-100 shadow-2xs';
+      case 'meeting':
+        return 'bg-amber-50/95 border-amber-300 text-amber-950 hover:bg-amber-100 shadow-2xs';
+      case 'break':
+        return 'bg-sky-50/95 border-sky-300 text-sky-950 hover:bg-sky-100 shadow-2xs';
+      case 'routine':
       default:
-        return 'bg-[#10b981] text-white border-transparent shadow-xs';
+        return 'bg-stone-100/95 border-stone-300 text-stone-800 hover:bg-stone-200 shadow-2xs';
+    }
+  }
+
+  getCategoryIcon(category: TimeBlock['category']): string {
+    switch (category) {
+      case 'deep-work':
+        return 'spa';
+      case 'meeting':
+        return 'groups';
+      case 'break':
+        return 'coffee';
+      case 'routine':
+      default:
+        return 'wb_sunny';
     }
   }
 }
