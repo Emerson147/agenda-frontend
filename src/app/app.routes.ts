@@ -11,7 +11,14 @@ export const routes: Routes = [
     loadComponent: () => import('./layout/main-layout.component').then(m => m.MainLayoutComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', component: FocusSanctuaryPage }
+      { 
+        path: '', 
+        loadComponent: () => import('./features/dashboard/pages/dashboard-page/dashboard-page.component').then(m => m.DashboardPageComponent) 
+      },
+      { 
+        path: 'sanctuary', 
+        component: FocusSanctuaryPage 
+      }
     ]
   },
   { path: '**', redirectTo: '' }
