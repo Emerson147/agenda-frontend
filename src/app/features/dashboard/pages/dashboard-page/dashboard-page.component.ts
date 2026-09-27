@@ -49,6 +49,9 @@ export class DashboardPageComponent {
   // Active filter tab (Material 3 Segmented Button)
   activeFilter = signal<FilterCategory>('all');
 
+  // Mobile view toggle (Intentions vs Daily Schedule)
+  mobileTab = signal<'intentions' | 'schedule'>('intentions');
+
   // Intentions state
   newTaskTitle = signal<string>('');
   newTaskPomodoros = signal<number>(2);
@@ -298,14 +301,14 @@ export class DashboardPageComponent {
   getCategoryContainerClasses(category: TimeBlock['category']): string {
     switch (category) {
       case 'deep-work':
-        return 'bg-emerald-100/80 border-emerald-200/90 text-emerald-950 hover:bg-emerald-100/95 shadow-2xs';
+        return 'bg-emerald-100/90 text-emerald-950 hover:bg-emerald-200/90';
       case 'meeting':
-        return 'bg-amber-100/80 border-amber-200/90 text-amber-950 hover:bg-amber-100/95 shadow-2xs';
+        return 'bg-amber-100/90 text-amber-950 hover:bg-amber-200/90';
       case 'break':
-        return 'bg-sky-100/80 border-sky-200/90 text-sky-950 hover:bg-sky-100/95 shadow-2xs';
+        return 'bg-sky-100/90 text-sky-950 hover:bg-sky-200/90';
       case 'routine':
       default:
-        return 'bg-stone-100 border-stone-200/90 text-stone-900 hover:bg-stone-200/70 shadow-2xs';
+        return 'bg-stone-200 text-stone-900 hover:bg-stone-300/80';
     }
   }
 
