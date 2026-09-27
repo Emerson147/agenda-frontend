@@ -301,14 +301,14 @@ export class DashboardPageComponent {
   getCategoryContainerClasses(category: TimeBlock['category']): string {
     switch (category) {
       case 'deep-work':
-        return 'bg-emerald-100/90 text-emerald-950 hover:bg-emerald-200/90';
+        return 'bg-emerald-100/95 border-l-4 border-l-emerald-600 border border-emerald-300/90 text-emerald-950 hover:bg-emerald-200/90 shadow-2xs';
       case 'meeting':
-        return 'bg-amber-100/90 text-amber-950 hover:bg-amber-200/90';
+        return 'bg-amber-100/95 border-l-4 border-l-amber-600 border border-amber-300/90 text-amber-950 hover:bg-amber-200/90 shadow-2xs';
       case 'break':
-        return 'bg-sky-100/90 text-sky-950 hover:bg-sky-200/90';
+        return 'bg-sky-100/95 border-l-4 border-l-sky-600 border border-sky-300/90 text-sky-950 hover:bg-sky-200/90 shadow-2xs';
       case 'routine':
       default:
-        return 'bg-stone-200 text-stone-900 hover:bg-stone-300/80';
+        return 'bg-stone-200 border-l-4 border-l-stone-600 border border-stone-300/90 text-stone-900 hover:bg-stone-300/90 shadow-2xs';
     }
   }
 

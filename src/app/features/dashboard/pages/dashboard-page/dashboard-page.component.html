@@ -21,16 +21,18 @@
         </p>
       </div>
 
-      <!-- Tonal Progress Bar & Summary Pill -->
+      <!-- Tonal Progress Bar & Summary Pill with Gradient and Shimmer -->
       <div class="flex flex-col gap-3">
         <div class="flex items-center justify-between text-xs font-medium">
           <span class="text-xs uppercase tracking-widest text-stone-400 font-medium">Daily Focus Completion</span>
           <span class="text-stone-900 font-normal text-sm">{{ progressPercentage() }}% Complete</span>
         </div>
-        <div class="w-full h-3 rounded-full bg-stone-200 overflow-hidden">
+        <div class="relative w-full h-3.5 rounded-full bg-stone-200 overflow-hidden p-0.5">
           <div 
-            class="h-full rounded-full bg-stone-900 transition-all duration-700 ease-out"
+            class="relative h-full rounded-full bg-gradient-to-r from-stone-800 via-stone-900 to-stone-950 transition-all duration-700 ease-out overflow-hidden shadow-2xs"
             [style.width.%]="progressPercentage()">
+            <!-- Animated shimmer gleam for in-progress flow -->
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
           </div>
         </div>
       </div>
@@ -132,43 +134,51 @@
             <h2 class="text-2xl font-light tracking-tight text-stone-900">Today's Intentions</h2>
           </div>
 
-          <!-- M3 Segmented Pill Filter Bar -->
-          <div class="inline-flex p-1.5 rounded-full bg-stone-200 gap-1 overflow-x-auto">
+          <!-- M3 Segmented Pill Filter Bar with Elevated Active Pill -->
+          <div class="inline-flex p-1.5 rounded-full bg-stone-200 gap-1.5 overflow-x-auto select-none">
             <button 
               type="button"
               (click)="setFilter('all')"
-              [class.bg-stone-50]="activeFilter() === 'all'"
-              [class.text-stone-900]="activeFilter() === 'all'"
-              [class.text-stone-500]="activeFilter() !== 'all'"
-              class="px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer">
-              All
+              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+              [ngClass]="activeFilter() === 'all' 
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
+                : 'border border-transparent text-stone-500 hover:text-stone-800'">
+              <span>All</span>
+              <span class="px-1.5 py-0.2 rounded-full text-[10px]"
+                [ngClass]="activeFilter() === 'all' ? 'bg-stone-100 text-stone-700 font-bold' : 'bg-stone-300/60 text-stone-600'">
+                {{ tasks().length }}
+              </span>
             </button>
             <button 
               type="button"
               (click)="setFilter('deep-work')"
-              [class.bg-stone-50]="activeFilter() === 'deep-work'"
-              [class.text-stone-900]="activeFilter() === 'deep-work'"
-              [class.text-stone-500]="activeFilter() !== 'deep-work'"
-              class="px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer">
-              Deep Work
+              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+              [ngClass]="activeFilter() === 'deep-work' 
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
+                : 'border border-transparent text-stone-500 hover:text-stone-800'">
+              <span>Deep Work</span>
             </button>
             <button 
               type="button"
               (click)="setFilter('quick')"
-              [class.bg-stone-50]="activeFilter() === 'quick'"
-              [class.text-stone-900]="activeFilter() === 'quick'"
-              [class.text-stone-500]="activeFilter() !== 'quick'"
-              class="px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer">
-              Quick (≤1🍅)
+              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+              [ngClass]="activeFilter() === 'quick' 
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
+                : 'border border-transparent text-stone-500 hover:text-stone-800'">
+              <span>Quick (≤1🍅)</span>
             </button>
             <button 
               type="button"
               (click)="setFilter('completed')"
-              [class.bg-stone-50]="activeFilter() === 'completed'"
-              [class.text-stone-900]="activeFilter() === 'completed'"
-              [class.text-stone-500]="activeFilter() !== 'completed'"
-              class="px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer">
-              Done ({{ totalCompletedTasks() }})
+              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+              [ngClass]="activeFilter() === 'completed' 
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
+                : 'border border-transparent text-stone-500 hover:text-stone-800'">
+              <span>Done</span>
+              <span class="px-1.5 py-0.2 rounded-full text-[10px]"
+                [ngClass]="activeFilter() === 'completed' ? 'bg-stone-100 text-stone-700 font-bold' : 'bg-stone-300/60 text-stone-600'">
+                {{ totalCompletedTasks() }}
+              </span>
             </button>
           </div>
         </div>
@@ -365,10 +375,12 @@
                 
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex items-center gap-2 min-w-0">
-                    <span class="material-symbols-rounded text-sm shrink-0">
-                      {{ getCategoryIcon(block.category) }}
-                    </span>
-                    <span class="text-xs font-medium tracking-tight truncate leading-tight">
+                    <div class="w-5 h-5 rounded-full bg-white/70 flex items-center justify-center shrink-0 shadow-2xs">
+                      <span class="material-symbols-rounded text-xs">
+                        {{ getCategoryIcon(block.category) }}
+                      </span>
+                    </div>
+                    <span class="text-xs font-semibold tracking-tight truncate leading-tight">
                       {{ block.title }}
                     </span>
                   </div>
@@ -378,16 +390,16 @@
                     <button 
                       type="button"
                       (click)="enterSanctuary()"
-                      class="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center transition-opacity shrink-0"
+                      class="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center transition-opacity shrink-0 shadow-2xs hover:scale-105"
                       title="Run in Sanctuary">
                       <span class="material-symbols-rounded text-xs">play_arrow</span>
                     </button>
                   }
                 </div>
 
-                <div class="flex items-center justify-between text-[11px] opacity-75 pt-1">
+                <div class="flex items-center justify-between text-[11px] font-medium opacity-90 pt-1">
                   <span>{{ block.startTime }} - {{ block.endTime }}</span>
-                  <span class="font-semibold">{{ block.durationMinutes }}m</span>
+                  <span class="font-bold">{{ block.durationMinutes }}m</span>
                 </div>
               </div>
             }
