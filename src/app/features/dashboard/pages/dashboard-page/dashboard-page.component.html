@@ -120,10 +120,8 @@
     
     <!-- LEFT COLUMN: FOCUS INTENTIONS (7 Cols on Desktop; conditional on mobile) -->
     <div 
-      class="lg:col-span-7 flex flex-col gap-6"
-      [class.hidden]="mobileTab() !== 'intentions'"
-      [class.flex]="mobileTab() === 'intentions'"
-      class="lg:flex">
+      class="col-span-12 lg:col-span-7 flex-col gap-6"
+      [ngClass]="mobileTab() === 'intentions' ? 'flex' : 'hidden lg:flex'">
       
       <div class="rounded-[2.5rem] sm:rounded-[3rem] bg-stone-100 p-8 sm:p-10 lg:p-12 flex flex-col gap-8">
         
@@ -314,10 +312,8 @@
 
     <!-- RIGHT COLUMN: MINDFUL FLOW TIMELINE (5 Cols on Desktop; conditional on mobile) -->
     <div 
-      class="lg:col-span-5 flex flex-col gap-6"
-      [class.hidden]="mobileTab() !== 'schedule'"
-      [class.flex]="mobileTab() === 'schedule'"
-      class="lg:flex">
+      class="col-span-12 lg:col-span-5 flex-col gap-6"
+      [ngClass]="mobileTab() === 'schedule' ? 'flex' : 'hidden lg:flex'">
       
       <div class="rounded-[2.5rem] sm:rounded-[3rem] bg-stone-100 p-8 sm:p-10 lg:p-12 flex flex-col gap-6">
         
