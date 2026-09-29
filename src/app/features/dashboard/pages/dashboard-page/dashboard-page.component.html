@@ -1,34 +1,29 @@
-<div class="w-full min-h-screen bg-[#f5f4f0] text-stone-900 font-sans px-4 sm:px-8 lg:px-12 py-6 sm:py-10 pb-32 flex flex-col gap-8">
-  
-  <!-- MAIN UNIFIED WHITE CANVAS (Inspired 1:1 by your reference app) -->
-  <main class="w-full bg-white rounded-[2.5rem] sm:rounded-[3rem] border border-stone-200/60 shadow-xs p-6 sm:p-10 lg:p-12 flex flex-col gap-8">
+<div class="w-full min-h-screen bg-[#FDFCF9] text-stone-900 font-sans px-6 sm:px-10 lg:px-16 py-8 pb-36 flex flex-col gap-8">
     
-    <!-- TOP SECTION: TITLE & CONTEXT ACTIONS -->
-    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <h1 class="text-3xl sm:text-4xl font-normal tracking-tight text-stone-900">
-          Today's Flow
-        </h1>
-        <p class="text-xs uppercase tracking-widest text-stone-400 font-medium mt-1">
-          Focus Sanctuary · Mindful Timeboxing
-        </p>
+    <!-- TOP FLOATING BRAND & CONTEXT (Floating freely on canvas, zero navbar box) -->
+    <header class="flex items-center justify-between select-none">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-[#f4f3ef] flex items-center justify-center text-stone-800 shadow-2xs">
+          <span class="material-symbols-rounded text-2xl icon-filled">eco</span>
+        </div>
+        <div>
+          <h1 class="text-base font-semibold tracking-tight text-stone-900 leading-tight">Focus Sanctuary</h1>
+          <p class="text-[11px] uppercase tracking-wider text-stone-400 font-medium">Mindful Timeboxing</p>
+        </div>
       </div>
 
-      <!-- Header Quick Actions -->
+      <!-- Quick Context Action -->
       <div class="flex items-center gap-3">
-        <!-- Live Status Pill -->
-        <div class="flex items-center gap-2 bg-[#f4f3ef] rounded-full px-4 py-2 text-xs font-medium text-stone-600">
+        <div class="hidden sm:flex items-center gap-2 bg-[#f4f3ef] rounded-full px-3.5 py-1.5 text-xs font-medium text-stone-600">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>In Rhythm</span>
         </div>
-
-        <!-- Enter Sanctuary Action FAB -->
         <button 
           type="button"
           (click)="enterSanctuary()"
-          class="w-11 h-11 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs shrink-0"
+          class="w-10 h-10 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs shrink-0"
           title="Enter Fullscreen Sanctuary">
-          <span class="material-symbols-rounded text-xl">timer</span>
+          <span class="material-symbols-rounded text-lg">timer</span>
         </button>
       </div>
     </header>
@@ -396,7 +391,5 @@
       </div>
 
     </div>
-
-  </main>
 
 </div>

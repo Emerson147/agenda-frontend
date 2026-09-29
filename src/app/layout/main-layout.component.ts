@@ -11,44 +11,6 @@ import { TareaEnfoqueService } from '../core/services/tarea-enfoque.service';
   template: `
     <div class="min-h-screen w-full bg-zen-bg font-sans text-zen-text selection:bg-zen-accent/20 relative flex flex-col">
       
-      <!-- TOP CONTEXT HEADER (Full-Width Clean Header) -->
-      <header class="w-full flex items-center justify-between px-6 sm:px-10 py-4 border-b border-stone-200/60 bg-zen-bg/90 backdrop-blur-md sticky top-0 z-30 select-none">
-        
-        <!-- Left: Brand / Logo -->
-        <a routerLink="/" class="flex items-center gap-3 group cursor-pointer">
-          <div class="w-9 h-9 rounded-2xl bg-stone-100 border border-stone-200/80 flex items-center justify-center text-zen-accent shadow-xs group-hover:scale-105 transition-transform">
-            <span class="material-symbols-rounded text-xl icon-filled">eco</span>
-          </div>
-          <div>
-            <h1 class="font-semibold text-sm tracking-tight text-stone-900 leading-tight">Focus Sanctuary</h1>
-            <p class="text-[10px] uppercase tracking-wider text-zen-text-light font-medium">Embrace the flow</p>
-          </div>
-        </a>
-
-        <!-- Center: Date & Mindful Status Pill -->
-        <div class="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-stone-200/80 shadow-2xs text-xs text-stone-700">
-          <span class="material-symbols-rounded text-base text-zen-accent">calendar_today</span>
-          <span class="font-medium">Today</span>
-          <span class="text-stone-300">·</span>
-          <span class="text-stone-500">Mindful Timeboxing</span>
-        </div>
-
-        <!-- Right Quick Status -->
-        <div class="flex items-center gap-3">
-          <!-- Streak Pill -->
-          <div class="flex items-center gap-1.5 px-3 py-1.5 bg-white/80 rounded-full border border-stone-200/80 shadow-2xs text-xs">
-            <span class="text-orange-500 text-sm">🔥</span>
-            <span class="font-semibold text-stone-800">5-day streak</span>
-          </div>
-
-          <!-- User Profile Avatar -->
-          <div class="w-8 h-8 rounded-full bg-zen-accent text-white flex items-center justify-center text-xs font-semibold shadow-2xs">
-            P
-          </div>
-        </div>
-
-      </header>
-
       <!-- MAIN ROUTER CONTENT (100% Full Width Screen Utilization) -->
       <main class="flex-1 w-full relative pb-28">
         <router-outlet></router-outlet>
