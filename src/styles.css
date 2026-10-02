@@ -1,20 +1,58 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta Zen / Orgánica basada en tu diseño */
-  --color-zen-bg: #FDFCF9;
-  /* Fondo crema principal */
-  --color-zen-surface: #F5F3EC;
-  /* Fondo un toque más oscuro para el sidebar */
-  --color-zen-accent: #3A4D39;
-  /* Verde musgo/bosque para botones y el aro */
-  --color-zen-text: #333333;
-  /* Texto principal suave, no negro puro */
-  --color-zen-text-light: #9CA3AF;
-  /* Texto secundario gris claro */
+  /* ==========================================================================
+     MATERIAL DESIGN 3 EXPRESSIVE (M3) SYSTEM DESIGN TOKENS
+     Official M3 Specifications calibrated for Zen Minimalist Workspace
+     ========================================================================== */
 
-  /* Fuentes limpias */
-  --font-sans: 'Inter', system-ui, sans-serif;
+  /* 1. M3 Surface Tonal Elevation (Zero Hard Shadows) */
+  --color-md-sys-surface: #FDFCF9;
+  --color-md-sys-surface-container-lowest: #FFFFFF;
+  --color-md-sys-surface-container-low: #F7F6F2;
+  --color-md-sys-surface-container: #F3F2ED;
+  --color-md-sys-surface-container-high: #EDECE6;
+  --color-md-sys-surface-container-highest: #E6E5DF;
+
+  /* 2. M3 On-Surface & Content Colors */
+  --color-md-sys-on-surface: #1C1B1F;
+  --color-md-sys-on-surface-variant: #49454F;
+  --color-md-sys-outline: #79747E;
+  --color-md-sys-outline-variant: #E6E5DF;
+
+  /* 3. M3 Primary & Zen Accent Roles */
+  --color-md-sys-primary: #1C1B1F;
+  --color-md-sys-on-primary: #FFFFFF;
+  --color-md-sys-primary-container: #F3F2ED;
+  --color-md-sys-on-primary-container: #1C1B1F;
+
+  --color-md-sys-tertiary: #3A4D39;
+  --color-md-sys-tertiary-container: #E8EFE8;
+  --color-md-sys-on-tertiary-container: #1A281A;
+
+  /* 4. M3 Expressive Corner Radii (Official m3.material.io Shape Specs) */
+  --radius-md-sys-corner-xs: 4px;
+  --radius-md-sys-corner-sm: 8px;
+  --radius-md-sys-corner-md: 12px;
+  --radius-md-sys-corner-lg: 16px;
+  --radius-md-sys-corner-xl: 28px;
+  --radius-md-sys-corner-2xl: 32px;
+  --radius-md-sys-corner-full: 9999px;
+
+  /* 5. M3 Expressive Motion / Easing Curves */
+  --ease-md-sys-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --ease-md-sys-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-md-sys-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  /* 6. Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* 7. Zen Backwards-Compatible Aliases */
+  --color-zen-bg: var(--color-md-sys-surface);
+  --color-zen-surface: var(--color-md-sys-surface-container);
+  --color-zen-accent: var(--color-md-sys-tertiary);
+  --color-zen-text: var(--color-md-sys-on-surface);
+  --color-zen-text-light: var(--color-md-sys-outline);
 }
 
 @layer base {
