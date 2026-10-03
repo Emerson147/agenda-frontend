@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TareaEnfoqueService } from '../../../../core/services/tarea-enfoque.service';
+import { M3CardComponent, M3ChipComponent, M3LinearProgressComponent } from '../../../../shared/ui';
 
 export interface SubTask {
   id: string;
@@ -38,7 +39,14 @@ export type FilterCategory = 'all' | 'deep-work' | 'quick' | 'completed';
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterModule,
+    M3CardComponent,
+    M3ChipComponent,
+    M3LinearProgressComponent
+  ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css'
 })

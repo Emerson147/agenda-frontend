@@ -1,81 +1,82 @@
-<div class="w-full min-h-screen bg-[#FDFCF9] text-stone-900 font-sans px-6 sm:px-10 lg:px-16 py-8 pb-36 flex flex-col gap-8">
+<div class="w-full min-h-screen bg-md-sys-surface text-md-sys-on-surface font-sans px-6 sm:px-10 lg:px-16 py-8 pb-36 flex flex-col gap-8">
     
-    <!-- TOP FLOATING BRAND & CONTEXT (Floating freely on canvas, zero navbar box) -->
+    <!-- TOP FLOATING BRAND & CONTEXT (Official M3 System Tokens) -->
     <header class="flex items-center justify-between select-none">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-[#f4f3ef] flex items-center justify-center text-stone-800 shadow-2xs">
-          <span class="material-symbols-rounded text-2xl icon-filled">eco</span>
+        <!-- Brand Icon in Surface Container (M3 Shape corner-lg) -->
+        <div class="w-10 h-10 rounded-md-sys-corner-lg bg-md-sys-surface-container flex items-center justify-center">
+          <span class="material-symbols-rounded text-2xl icon-filled text-md-sys-tertiary">eco</span>
         </div>
         <div>
-          <h1 class="text-base font-semibold tracking-tight text-stone-900 leading-tight">Focus Sanctuary</h1>
-          <p class="text-[11px] uppercase tracking-wider text-stone-400 font-medium">Mindful Timeboxing</p>
+          <h1 class="text-base font-semibold tracking-tight text-md-sys-on-surface leading-tight">Focus Sanctuary</h1>
+          <p class="text-[11px] uppercase tracking-wider text-md-sys-on-surface-variant font-medium">Mindful Timeboxing</p>
         </div>
       </div>
 
       <!-- Quick Context Action -->
       <div class="flex items-center gap-3">
-        <div class="hidden sm:flex items-center gap-2 bg-[#f4f3ef] rounded-full px-3.5 py-1.5 text-xs font-medium text-stone-600">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <!-- Live Status Pill in Surface Container (M3 Shape corner-full) -->
+        <div class="hidden sm:flex items-center gap-2 bg-md-sys-surface-container rounded-md-sys-corner-full px-3.5 py-1.5 text-xs font-medium text-md-sys-on-surface-variant">
+          <span class="w-2 h-2 rounded-md-sys-corner-full bg-emerald-500 animate-pulse"></span>
           <span>In Rhythm</span>
         </div>
+        
+        <!-- Primary Action FAB (M3 Shape corner-full, Primary Tonal Role, Emphasized Motion) -->
         <button 
           type="button"
           (click)="enterSanctuary()"
-          class="w-10 h-10 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs shrink-0"
+          class="w-10 h-10 rounded-md-sys-corner-full bg-md-sys-primary text-md-sys-on-primary flex items-center justify-center hover:scale-105 active:scale-95 transition-all ease-md-sys-emphasized duration-200 cursor-pointer shrink-0"
           title="Enter Fullscreen Sanctuary">
           <span class="material-symbols-rounded text-lg">timer</span>
         </button>
       </div>
     </header>
 
-    <!-- HERO METRIC CARD (Inspired by the Dashboard "total $14,912.75" card) -->
-    <section class="rounded-[2rem] bg-[#f7f6f2] p-6 sm:p-8 flex flex-col gap-6">
+    <!-- HERO METRIC CARD (Official M3 Component Suite) -->
+    <m3-card variant="filled" class="flex flex-col gap-6 m3-container-transform">
       
-      <!-- Metrics Pills Row across the top -->
+      <!-- Metrics Pills Row across the top (M3 Assist Chips) -->
       <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
-        <div class="px-4 py-1.5 rounded-full bg-white/90 border border-stone-200/70 flex items-center gap-2 text-xs text-stone-700 shadow-2xs">
-          <span class="text-stone-400 uppercase tracking-wider text-[10px] font-semibold">Focus Time</span>
-          <span class="font-semibold text-stone-900">{{ completedMinutes() / 60 | number:'1.1-1' }} / {{ totalPlannedMinutes() / 60 | number:'1.1-1' }}h</span>
-        </div>
+        
+        <m3-chip variant="assist" icon="timelapse">
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Focus Time</span>
+          <span class="font-semibold text-md-sys-on-surface ml-1">{{ completedMinutes() / 60 | number:'1.1-1' }} / {{ totalPlannedMinutes() / 60 | number:'1.1-1' }}h</span>
+        </m3-chip>
 
-        <div class="px-4 py-1.5 rounded-full bg-white/90 border border-stone-200/70 flex items-center gap-2 text-xs text-stone-700 shadow-2xs">
-          <span class="text-stone-400 uppercase tracking-wider text-[10px] font-semibold">Pomodoros</span>
-          <span class="font-semibold text-stone-900">{{ completedMinutes() / 25 }} / {{ totalPlannedMinutes() / 25 }} 🍅</span>
-        </div>
+        <m3-chip variant="assist" icon="timer" [iconFilled]="true" iconColor="tertiary">
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Pomodoros</span>
+          <span class="font-semibold text-md-sys-on-surface ml-1">{{ completedMinutes() / 25 }} / {{ totalPlannedMinutes() / 25 }}</span>
+        </m3-chip>
 
-        <div class="px-4 py-1.5 rounded-full bg-white/90 border border-stone-200/70 flex items-center gap-2 text-xs text-stone-700 shadow-2xs">
-          <span class="text-stone-400 uppercase tracking-wider text-[10px] font-semibold">Completion</span>
-          <span class="font-semibold text-stone-900">{{ progressPercentage() }}%</span>
-        </div>
+        <m3-chip variant="assist" icon="check_circle">
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Completion</span>
+          <span class="font-semibold text-md-sys-on-surface ml-1">{{ progressPercentage() }}%</span>
+        </m3-chip>
 
-        <div class="px-4 py-1.5 rounded-full bg-white/90 border border-stone-200/70 flex items-center gap-2 text-xs text-stone-700 shadow-2xs">
-          <span class="text-stone-400 uppercase tracking-wider text-[10px] font-semibold">Streak</span>
-          <span class="font-semibold text-stone-900">🔥 5 days</span>
-        </div>
+        <m3-chip variant="assist" icon="local_fire_department" [iconFilled]="true" iconColor="amber">
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Streak</span>
+          <span class="font-semibold text-md-sys-on-surface ml-1">5 days</span>
+        </m3-chip>
+
       </div>
 
-      <!-- Protagonist Large Typography Display -->
+      <!-- Protagonist Large Typography Display (M3 Display Scale) -->
       <div class="flex flex-col gap-1 pt-1">
-        <span class="text-xs uppercase tracking-widest text-stone-400 font-medium">Daily Focus Investment</span>
+        <span class="m3-label-small uppercase text-md-sys-on-surface-variant font-medium">Daily Focus Investment</span>
         <div class="flex flex-wrap items-baseline gap-3">
-          <span class="text-4xl sm:text-5xl font-light tracking-tight text-stone-900">
+          <span class="m3-display-small sm:m3-display-medium text-md-sys-on-surface font-normal tracking-tight">
             {{ completedMinutes() }} min
           </span>
-          <span class="text-sm sm:text-base text-stone-400 font-normal">
+          <span class="m3-body-medium text-md-sys-on-surface-variant font-normal">
             focused out of {{ totalPlannedMinutes() }} min planned today
           </span>
         </div>
       </div>
 
-      <!-- Clean Linear Progress Bar -->
-      <div class="w-full h-2.5 rounded-full bg-stone-200/80 overflow-hidden">
-        <div 
-          class="h-full rounded-full bg-stone-900 transition-all duration-700 ease-out"
-          [style.width.%]="progressPercentage()">
-        </div>
-      </div>
+      <!-- M3 Linear Progress Indicator Component -->
+      <m3-linear-progress [value]="progressPercentage()"></m3-linear-progress>
 
-    </section>
+    </m3-card>
 
     <!-- CAPSULE INPUT BAR (Inspired by "Chatea conmigo" input bar + circular FAB) -->
     <section class="flex items-center gap-3">
