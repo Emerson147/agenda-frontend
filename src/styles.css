@@ -3,34 +3,69 @@
 @theme {
   /* ==========================================================================
      MATERIAL DESIGN 3 EXPRESSIVE (M3) SYSTEM DESIGN TOKENS
-     Official M3 Specifications calibrated for Zen Minimalist Workspace
+     Official Google Specifications (https://m3.material.io/styles)
+     Calibrated for Zen Minimalist Enterprise Workspace
      ========================================================================== */
 
-  /* 1. M3 Surface Tonal Elevation (Zero Hard Shadows) */
-  --color-md-sys-surface: #FDFCF9;
+  /* --------------------------------------------------------------------------
+     1. COLOR SYSTEM (Zen Minimalist Palette)
+     -------------------------------------------------------------------------- */
+  /* Surfaces & Tonal Elevation (Airy, highly breathable) */
+  --color-md-sys-surface: #FAFAFA;
+  --color-md-sys-surface-dim: #F0F0F0;
+  --color-md-sys-surface-bright: #FFFFFF;
   --color-md-sys-surface-container-lowest: #FFFFFF;
-  --color-md-sys-surface-container-low: #F7F6F2;
-  --color-md-sys-surface-container: #F3F2ED;
-  --color-md-sys-surface-container-high: #EDECE6;
-  --color-md-sys-surface-container-highest: #E6E5DF;
+  --color-md-sys-surface-container-low: #FAFAFA;
+  --color-md-sys-surface-container: #F4F4F4;
+  --color-md-sys-surface-container-high: #EAEAEA;
+  --color-md-sys-surface-container-highest: #E0E0E0;
 
-  /* 2. M3 On-Surface & Content Colors */
-  --color-md-sys-on-surface: #1C1B1F;
-  --color-md-sys-on-surface-variant: #49454F;
-  --color-md-sys-outline: #79747E;
-  --color-md-sys-outline-variant: #E6E5DF;
+  /* On-Surface & Line Contrast (Soft charcoals, no pure blacks) */
+  --color-md-sys-on-surface: #222222;
+  --color-md-sys-on-surface-variant: #666666;
+  --color-md-sys-outline: #CCCCCC;
+  --color-md-sys-outline-variant: #E0E0E0;
+  --color-md-sys-inverse-surface: #222222;
+  --color-md-sys-inverse-on-surface: #F0F0F0;
 
-  /* 3. M3 Primary & Zen Accent Roles */
-  --color-md-sys-primary: #1C1B1F;
+  /* Primary Role (Soft Sage Green - Focus) */
+  --color-md-sys-primary: #879C8C;
   --color-md-sys-on-primary: #FFFFFF;
-  --color-md-sys-primary-container: #F3F2ED;
-  --color-md-sys-on-primary-container: #1C1B1F;
+  --color-md-sys-primary-container: #E1E8E2;
+  --color-md-sys-on-primary-container: #1C2C20;
 
-  --color-md-sys-tertiary: #3A4D39;
-  --color-md-sys-tertiary-container: #E8EFE8;
-  --color-md-sys-on-tertiary-container: #1A281A;
+  /* Secondary Role (Warm Sand - Breaks/Secondary actions) */
+  --color-md-sys-secondary: #D9C8B6;
+  --color-md-sys-on-secondary: #332B22;
+  --color-md-sys-secondary-container: #F4EDE5;
+  --color-md-sys-on-secondary-container: #332B22;
 
-  /* 4. M3 Expressive Corner Radii (Official m3.material.io Shape Specs) */
+  /* Tertiary Role (Soft Slate - Accents) */
+  --color-md-sys-tertiary: #84909C;
+  --color-md-sys-on-tertiary: #FFFFFF;
+  --color-md-sys-tertiary-container: #DEE5ED;
+  --color-md-sys-on-tertiary-container: #1C242B;
+
+  /* Error Role (Muted Red) */
+  --color-md-sys-error: #B05C5C;
+  --color-md-sys-on-error: #FFFFFF;
+  --color-md-sys-error-container: #F9EAEA;
+  --color-md-sys-on-error-container: #4D1A1A;
+
+  /* --------------------------------------------------------------------------
+     2. ELEVATION TOKENS (Flattened & Feather-light shadows)
+     -------------------------------------------------------------------------- */
+  --shadow-md-sys-elevation-0: none;
+  --shadow-md-sys-elevation-1: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-md-sys-elevation-2: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+  --shadow-md-sys-elevation-3: 0 4px 16px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md-sys-elevation-4: 0 8px 24px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md-sys-elevation-5: 0 12px 32px 0 rgba(0, 0, 0, 0.07);
+
+  /* --------------------------------------------------------------------------
+     3. SHAPE TOKENS (m3.material.io/styles/shape)
+     -------------------------------------------------------------------------- */
+  --radius-md-sys-corner-none: 0px;
   --radius-md-sys-corner-xs: 4px;
   --radius-md-sys-corner-sm: 8px;
   --radius-md-sys-corner-md: 12px;
@@ -39,15 +74,39 @@
   --radius-md-sys-corner-2xl: 32px;
   --radius-md-sys-corner-full: 9999px;
 
-  /* 5. M3 Expressive Motion / Easing Curves */
+  /* --------------------------------------------------------------------------
+     4. MOTION EASING & DURATION (m3.material.io/styles/motion)
+     -------------------------------------------------------------------------- */
+  /* Easing curves */
   --ease-md-sys-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --ease-md-sys-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
   --ease-md-sys-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-md-sys-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-md-sys-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --ease-md-sys-standard-decelerate: cubic-bezier(0, 0, 0, 1);
 
-  /* 6. Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Durations (Slowed down for breathing Zen feeling) */
+  --duration-md-sys-short-1: 100ms;
+  --duration-md-sys-short-2: 150ms;
+  --duration-md-sys-short-3: 200ms;
+  --duration-md-sys-short-4: 250ms;
+  --duration-md-sys-medium-1: 300ms;
+  --duration-md-sys-medium-2: 350ms;
+  --duration-md-sys-medium-3: 400ms;
+  --duration-md-sys-medium-4: 450ms;
+  --duration-md-sys-long-1: 500ms;
+  --duration-md-sys-long-2: 550ms;
+  --duration-md-sys-long-3: 600ms;
+  --duration-md-sys-long-4: 650ms;
 
-  /* 7. Zen Backwards-Compatible Aliases */
+  /* --------------------------------------------------------------------------
+     5. TYPOGRAPHY FONT (Clean & Geometric)
+     -------------------------------------------------------------------------- */
+  --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* --------------------------------------------------------------------------
+     6. LEGACY / ZEN BACKWARDS-COMPATIBILITY ALIASES
+     -------------------------------------------------------------------------- */
   --color-zen-bg: var(--color-md-sys-surface);
   --color-zen-surface: var(--color-md-sys-surface-container);
   --color-zen-accent: var(--color-md-sys-tertiary);
@@ -57,19 +116,252 @@
 
 @layer base {
   body {
-    background-color: var(--color-zen-bg);
-    color: var(--color-zen-text);
+    background-color: var(--color-md-sys-surface);
+    color: var(--color-md-sys-on-surface);
     font-family: var(--font-sans);
     margin: 0;
     -webkit-font-smoothing: antialiased;
-  }
-
-  .icon-filled {
-    font-variation-settings: 'FILL' 1;
+    text-rendering: optimizeLegibility;
   }
 }
 
-/* View Transitions & Shared Elements (Ultra 120Hz ProMotion Calibration) */
+/* ==========================================================================
+   M3 ICONS (m3.material.io/styles/icons)
+   Material Symbols Rounded Variable Font Configuration
+   ========================================================================== */
+@layer utilities {
+  .icon-filled {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .icon-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .icon-bold {
+    font-variation-settings: 'wght' 600;
+  }
+  .icon-sm {
+    font-size: 1.25rem;
+    font-variation-settings: 'opsz' 20;
+  }
+  .icon-md {
+    font-size: 1.5rem;
+    font-variation-settings: 'opsz' 24;
+  }
+  .icon-lg {
+    font-size: 2rem;
+    font-variation-settings: 'opsz' 40;
+  }
+}
+
+/* ==========================================================================
+   M3 TYPOGRAPHY SCALE (m3.material.io/styles/typography)
+   Official Type Scale Specifications (Display, Headline, Title, Body, Label)
+   ========================================================================== */
+@layer utilities {
+  .m3-display-large {
+    font-size: 57px;
+    line-height: 64px;
+    letter-spacing: -0.25px;
+    font-weight: 400;
+  }
+  .m3-display-medium {
+    font-size: 45px;
+    line-height: 52px;
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+  .m3-display-small {
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+
+  .m3-headline-large {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+  .m3-headline-medium {
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+  .m3-headline-small {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+
+  .m3-title-large {
+    font-size: 22px;
+    line-height: 28px;
+    letter-spacing: 0px;
+    font-weight: 400;
+  }
+  .m3-title-medium {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    font-weight: 500;
+  }
+  .m3-title-small {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    font-weight: 500;
+  }
+
+  .m3-body-large {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+  }
+  .m3-body-medium {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    font-weight: 400;
+  }
+  .m3-body-small {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+    font-weight: 400;
+  }
+
+  .m3-label-large {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    font-weight: 500;
+  }
+  .m3-label-medium {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+  .m3-label-small {
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+}
+
+/* ==========================================================================
+   M3 MOTION TRANSITION PATTERNS (m3.material.io/styles/motion/transitions)
+   1. Container Transform
+   2. Shared Axis (X, Y, Z)
+   3. Fade Through
+   4. Fade (Crossfade)
+   ========================================================================== */
+@layer utilities {
+  /* 1. M3 Container Transform (Smooth shape & bounds morphing) */
+  .m3-container-transform {
+    transition-property: transform, border-radius, background-color, box-shadow;
+    transition-duration: var(--duration-md-sys-long-2, 500ms);
+    transition-timing-function: var(--ease-md-sys-emphasized);
+    will-change: transform, border-radius;
+  }
+
+  /* 2. M3 Shared Axis X (Horizontal slide + fade for steps/tabs) */
+  .m3-shared-axis-x-enter {
+    animation: m3SharedAxisXIn var(--duration-md-sys-medium-2, 300ms) var(--ease-md-sys-emphasized) forwards;
+  }
+  .m3-shared-axis-x-exit {
+    animation: m3SharedAxisXOut var(--duration-md-sys-medium-2, 300ms) var(--ease-md-sys-emphasized-accelerate) forwards;
+  }
+
+  /* 3. M3 Shared Axis Y (Vertical slide + fade for bottom sheets/drawers) */
+  .m3-shared-axis-y-enter {
+    animation: m3SharedAxisYIn var(--duration-md-sys-medium-3, 350ms) var(--ease-md-sys-emphasized-decelerate) forwards;
+  }
+  .m3-shared-axis-y-exit {
+    animation: m3SharedAxisYOut var(--duration-md-sys-short-4, 200ms) var(--ease-md-sys-emphasized-accelerate) forwards;
+  }
+
+  /* 4. M3 Fade Through (Cross-fade with subtle scale for top-level view switches) */
+  .m3-fade-through-enter {
+    animation: m3FadeThroughIn var(--duration-md-sys-medium-2, 300ms) var(--ease-md-sys-emphasized-decelerate) forwards;
+  }
+  .m3-fade-through-exit {
+    animation: m3FadeThroughOut var(--duration-md-sys-short-2, 100ms) var(--ease-md-sys-emphasized-accelerate) forwards;
+  }
+}
+
+@keyframes m3SharedAxisXIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes m3SharedAxisXOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes m3SharedAxisYIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes m3SharedAxisYOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes m3FadeThroughIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes m3FadeThroughOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   VIEW TRANSITIONS API (Browser Native FLIP & Shared Element Navigation)
+   ========================================================================== */
 @layer utilities {
   .vt-brand {
     view-transition-name: auth-brand;
@@ -96,7 +388,7 @@
 ::view-transition-group(auth-brand),
 ::view-transition-group(auth-footer) {
   animation-duration: 380ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-timing-function: var(--ease-md-sys-emphasized, cubic-bezier(0.2, 0, 0, 1));
 }
 
 ::view-transition-image-pair(auth-media),
@@ -107,7 +399,7 @@
 ::view-transition-old(auth-media),
 ::view-transition-new(auth-media) {
   animation-duration: 380ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-timing-function: var(--ease-md-sys-emphasized, cubic-bezier(0.2, 0, 0, 1));
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -119,7 +411,7 @@
 ::view-transition-old(auth-form),
 ::view-transition-new(auth-form) {
   animation-duration: 280ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-timing-function: var(--ease-md-sys-emphasized, cubic-bezier(0.2, 0, 0, 1));
   mix-blend-mode: normal;
   backface-visibility: hidden;
   transform: translateZ(0);
