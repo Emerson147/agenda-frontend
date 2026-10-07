@@ -47,7 +47,7 @@ export type M3TextFieldVariant = 'filled' | 'outlined';
         [type]="type()"
         [placeholder]="isFocused() || hasValue() ? '' : ' '"
         [value]="value()"
-        [disabled]="isDisabled()"
+        [disabled]="effectiveDisabled()"
         [class]="inputClasses()"
         [attr.aria-label]="label()"
         [attr.aria-describedby]="supportingText() ? inputId() + '-hint' : null"
@@ -135,10 +135,15 @@ export class M3TextFieldComponent implements ControlValueAccessor {
   /** Accessible ID for the input (auto-generated if not set) */
   inputId = input<string>(`m3-field-${Math.random().toString(36).slice(2, 7)}`);
 
+  /** Whether the field is disabled */
+  disabled = input<boolean>(false);
+
   // Internal state
   protected value = signal<string>('');
   protected isFocused = signal<boolean>(false);
-  protected isDisabled = signal<boolean>(false);
+  protected cvaDisabled = signal<boolean>(false);
+
+  protected effectiveDisabled = computed(() => this.disabled() || this.cvaDisabled());
 
   protected hasValue = computed(() => this.value().length > 0);
   protected hasError = computed(() => !!this.errorText());
@@ -276,6 +281,6 @@ export class M3TextFieldComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.isDisabled.set(isDisabled);
+    this.cvaDisabled.set(isDisabled);
   }
 }

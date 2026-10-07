@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { M3DividerComponent } from '../m3-divider/m3-divider.component';
+
 
 /**
  * Material Design 3 (M3) Dialog Component
@@ -22,7 +22,7 @@ import { M3DividerComponent } from '../m3-divider/m3-divider.component';
 @Component({
   selector: 'm3-dialog',
   standalone: true,
-  imports: [CommonModule, M3DividerComponent],
+  imports: [CommonModule],
   template: `
     @if (open()) {
       <!-- Scrim (Backdrop) -->
