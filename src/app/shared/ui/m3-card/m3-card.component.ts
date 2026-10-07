@@ -1,4 +1,4 @@
-import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
+ import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type M3CardVariant = 'filled' | 'elevated' | 'outlined';
@@ -30,7 +30,7 @@ export class M3CardComponent {
   /**
    * Card visual variant: 'filled' | 'elevated' | 'outlined'
    */
-  variant = input<M3CardVariant>('filled');
+  variant = input<M3CardVariant>('elevated');
 
   /**
    * Whether the card responds to user hover and active touch
