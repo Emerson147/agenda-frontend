@@ -86,7 +86,7 @@ export class M3FabComponent {
     const sizeClasses: Record<M3FabSize, string> = {
       small: 'w-10 h-10 rounded-md-sys-corner-md',
       medium: isExtended
-        ? 'h-14 px-4 rounded-md-sys-corner-lg min-w-[80px]'
+        ? 'h-14 px-4 rounded-md-sys-corner-lg min-w-20'
         : 'w-14 h-14 rounded-md-sys-corner-lg',
       large: 'w-24 h-24 rounded-md-sys-corner-xl',
     };
@@ -116,12 +116,13 @@ export class M3FabComponent {
     return `${base} ${sizeClasses[this.size()]} ${colorClasses[this.color()]}`.trim();
   });
 
-  protected handleClick(event: MouseEvent): void {
+  protected handleClick(event: Event): void {
     if (this.disabled()) {
       event.preventDefault();
       event.stopPropagation();
       return;
     }
-    this.fabClick.emit(event);
+    this.fabClick.emit(event as MouseEvent);
   }
 }
+

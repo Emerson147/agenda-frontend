@@ -60,7 +60,7 @@ export class M3SnackbarService {
   template: `
     @if (state()) {
       <div
-        class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center min-w-[344px] max-w-[600px] min-h-[48px] px-4 py-3.5 bg-md-sys-inverse-surface text-md-sys-inverse-on-surface rounded-md-sys-corner-xs shadow-md-sys-elevation-3 m3-body-medium animate-in fade-in slide-in-from-bottom-4 duration-200"
+        class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center min-w-86 max-w-150 min-h-12 px-4 py-3.5 bg-md-sys-inverse-surface text-md-sys-inverse-on-surface rounded-md-sys-corner-xs shadow-md-sys-elevation-3 m3-body-medium animate-in fade-in slide-in-from-bottom-4 duration-200"
         role="status"
         aria-live="polite">
         

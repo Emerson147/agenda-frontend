@@ -10,12 +10,32 @@ export class LayoutService {
   navigationStyle = signal<NavigationStyle>('Dock');
   themeColor = signal<ThemeColor>('blue');
   isDarkMode = signal<boolean>(typeof document !== 'undefined' && document.documentElement.classList.contains('dark'));
-  
+
   toggleDarkMode() {
     if (typeof document === 'undefined') return;
 
     const performToggle = () => {
       const isDark = document.documentElement.classList.toggle('dark');
+      this.isDarkMode.set(isDark);
+    };
+
+    if ('startViewTransition' in document) {
+      (document as any).startViewTransition(performToggle);
+    } else {
+      performToggle();
+    }
+  }
+
+  setDarkMode(isDark: boolean) {
+    if (typeof document === 'undefined') return;
+    if (this.isDarkMode() === isDark) return;
+
+    const performToggle = () => {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
       this.isDarkMode.set(isDark);
     };
 

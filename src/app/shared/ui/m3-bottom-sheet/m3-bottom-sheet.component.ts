@@ -33,7 +33,7 @@ import { CommonModule } from '@angular/common';
       <div
         role="dialog"
         aria-modal="true"
-        class="fixed bottom-0 left-0 right-0 z-50 flex flex-col w-full max-w-[640px] mx-auto bg-md-sys-surface-container-low text-md-sys-on-surface rounded-t-md-sys-corner-extra-large shadow-md-sys-elevation-1 animate-in slide-in-from-bottom duration-300 ease-md-sys-emphasized-decelerate">
+        class="fixed bottom-0 left-0 right-0 z-50 flex flex-col w-full max-w-160 mx-auto bg-md-sys-surface-container-low text-md-sys-on-surface rounded-t-md-sys-corner-extra-large shadow-md-sys-elevation-1 animate-in slide-in-from-bottom duration-300 ease-md-sys-emphasized-decelerate">
         
         <!-- Drag Handle (Visual only for now) -->
         <div class="flex justify-center pt-4 pb-2">

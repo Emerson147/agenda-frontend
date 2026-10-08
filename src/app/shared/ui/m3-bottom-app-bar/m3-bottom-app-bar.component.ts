@@ -16,7 +16,7 @@ import {
   selector: 'm3-bottom-app-bar',
   standalone: true,
   template: `
-    <div class="flex items-center justify-between w-full h-[80px] px-4 bg-md-sys-surface-container text-md-sys-on-surface shadow-md-sys-elevation-2">
+    <div class="flex items-center justify-between w-full h-20 px-4 bg-md-sys-surface-container text-md-sys-on-surface shadow-md-sys-elevation-2">
       
       <!-- Leading actions (Navigation or simple actions) -->
       <div class="flex items-center gap-2">

@@ -18,7 +18,7 @@ import {
   selector: 'm3-navigation-drawer',
   standalone: true,
   template: `
-    <aside class="flex flex-col w-[360px] h-full px-3 py-4 bg-md-sys-surface-container-low text-md-sys-on-surface rounded-r-md-sys-corner-extra-large">
+    <aside class="flex flex-col w-90 h-full px-3 py-4 bg-md-sys-surface-container-low text-md-sys-on-surface rounded-r-md-sys-corner-extra-large">
       
       <!-- Headline / Title area -->
       @if (headline()) {
@@ -52,7 +52,7 @@ export class M3NavigationDrawerComponent {
       type="button"
       [disabled]="disabled()"
       (click)="onClick()"
-      class="relative flex items-center w-full h-[56px] px-4 rounded-md-sys-corner-full outline-none group disabled:opacity-38 disabled:pointer-events-none transition-colors duration-200"
+      class="relative flex items-center w-full h-14 px-4 rounded-md-sys-corner-full outline-none group disabled:opacity-38 disabled:pointer-events-none transition-colors duration-200"
       [class.bg-md-sys-secondary-container]="selected()">
       
       <!-- State Layer -->

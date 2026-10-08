@@ -18,7 +18,7 @@ import {
   selector: 'm3-search-bar',
   standalone: true,
   template: `
-    <div class="flex items-center w-full h-[56px] px-4 bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-full transition-shadow duration-200 focus-within:shadow-md-sys-elevation-1">
+    <div class="flex items-center w-full h-14 px-4 bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-full transition-shadow duration-200 focus-within:shadow-md-sys-elevation-1">
       
       <!-- Leading Icon (Menu or Search) -->
       <button 

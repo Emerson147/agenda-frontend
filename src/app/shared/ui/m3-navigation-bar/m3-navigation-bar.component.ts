@@ -18,7 +18,7 @@ import {
   selector: 'm3-navigation-bar',
   standalone: true,
   template: `
-    <nav class="flex items-center justify-between w-full h-[80px] px-2 bg-md-sys-surface-container text-md-sys-on-surface">
+    <nav class="flex items-center justify-between w-full h-20 px-2 bg-md-sys-surface-container text-md-sys-on-surface">
       <ng-content></ng-content>
     </nav>
   `,
@@ -37,7 +37,7 @@ export class M3NavigationBarComponent {}
       type="button"
       [disabled]="disabled()"
       (click)="onClick()"
-      class="relative flex flex-col items-center justify-center flex-1 h-full min-w-[48px] max-w-[80px] outline-none group disabled:opacity-38 disabled:pointer-events-none">
+      class="relative flex flex-col items-center justify-center flex-1 h-full min-w-12 max-w-20 outline-none group disabled:opacity-38 disabled:pointer-events-none">
       
       <!-- Active Pill / Icon Container -->
       <div class="relative flex items-center justify-center w-16 h-8 rounded-full transition-colors duration-200"

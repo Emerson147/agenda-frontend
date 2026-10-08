@@ -23,7 +23,7 @@ import { DatePipe } from '@angular/common';
     @if (open()) {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/32" (click)="onBackdropClick()">
         
-        <div class="bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-extra-large shadow-md-sys-elevation-3 flex flex-col w-full max-w-[328px] overflow-hidden" (click)="$event.stopPropagation()">
+        <div class="bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-extra-large shadow-md-sys-elevation-3 flex flex-col w-full max-w-82 overflow-hidden" (click)="$event.stopPropagation()">
           
           <!-- Header -->
           <div class="flex flex-col px-6 pt-4 pb-2">
@@ -38,7 +38,7 @@ import { DatePipe } from '@angular/common';
           <div class="w-full h-px bg-md-sys-surface-variant"></div>
 
           <!-- Calendar Area (Scaffold) -->
-          <div class="p-4 flex-1 min-h-[250px] flex items-center justify-center text-md-sys-on-surface-variant">
+          <div class="p-4 flex-1 min-h-62.5 flex items-center justify-center text-md-sys-on-surface-variant">
             <ng-content></ng-content>
             @if (!hasContent) {
               <span>Calendar logic goes here</span>

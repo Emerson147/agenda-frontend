@@ -119,12 +119,12 @@ export class M3ButtonComponent {
     return `${base} ${variantClasses[this.variant()]}`.trim();
   });
 
-  protected handleClick(event: MouseEvent): void {
+  protected handleClick(event: Event): void {
     if (this.disabled() || this.loading()) {
       event.preventDefault();
       event.stopPropagation();
       return;
     }
-    this.btnClick.emit(event);
+    this.btnClick.emit(event as MouseEvent);
   }
 }

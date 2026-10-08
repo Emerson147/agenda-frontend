@@ -19,7 +19,7 @@ import {
   selector: 'm3-menu',
   standalone: true,
   template: `
-    <div class="flex flex-col py-2 bg-md-sys-surface-container text-md-sys-on-surface rounded-md-sys-corner-xs shadow-md-sys-elevation-2 min-w-[112px] max-w-[280px]">
+    <div class="flex flex-col py-2 bg-md-sys-surface-container text-md-sys-on-surface rounded-md-sys-corner-xs shadow-md-sys-elevation-2 min-w-28 max-w-70">
       <ng-content></ng-content>
     </div>
   `,
@@ -38,7 +38,7 @@ export class M3MenuComponent {}
       type="button"
       [disabled]="disabled()"
       (click)="onClick()"
-      class="relative flex items-center justify-between w-full h-[48px] px-3 outline-none group disabled:opacity-38 disabled:pointer-events-none cursor-pointer bg-transparent">
+      class="relative flex items-center justify-between w-full h-12 px-3 outline-none group disabled:opacity-38 disabled:pointer-events-none cursor-pointer bg-transparent">
       
       <!-- State Layer -->
       <div class="absolute inset-0 opacity-0 group-hover:bg-md-sys-on-surface/8 group-active:bg-md-sys-on-surface/12 peer-focus-visible:bg-md-sys-on-surface/12 transition-opacity"></div>

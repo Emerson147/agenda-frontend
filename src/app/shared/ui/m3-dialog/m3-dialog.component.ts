@@ -38,7 +38,7 @@ import { CommonModule } from '@angular/common';
           role="dialog"
           aria-modal="true"
           [attr.aria-labelledby]="headline() ? dialogId + '-title' : null"
-          class="pointer-events-auto bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-extra-large shadow-md-sys-elevation-3 flex flex-col overflow-hidden min-w-[280px] max-w-[560px] animate-in fade-in zoom-in-95 duration-200"
+          class="pointer-events-auto bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-extra-large shadow-md-sys-elevation-3 flex flex-col overflow-hidden min-w-70 max-w-140 animate-in fade-in zoom-in-95 duration-200"
           [class.w-full]="fullscreen()">
           
           <!-- Icon -->

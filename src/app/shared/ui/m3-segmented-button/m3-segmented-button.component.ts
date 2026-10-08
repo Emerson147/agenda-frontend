@@ -17,7 +17,7 @@ import {
   selector: 'm3-segmented-button',
   standalone: true,
   template: `
-    <div class="inline-flex h-[40px] rounded-md-sys-corner-full border border-md-sys-outline overflow-hidden">
+    <div class="inline-flex h-10 rounded-md-sys-corner-full border border-md-sys-outline overflow-hidden">
       <ng-content></ng-content>
     </div>
   `,

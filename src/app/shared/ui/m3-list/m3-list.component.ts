@@ -33,7 +33,7 @@ export class M3ListComponent {}
   standalone: true,
   template: `
     <li
-      class="relative flex items-center justify-between w-full px-4 min-h-[56px] bg-md-sys-surface hover:bg-md-sys-on-surface/8 transition-colors cursor-pointer group"
+      class="relative flex items-center justify-between w-full px-4 min-h-14 bg-md-sys-surface hover:bg-md-sys-on-surface/8 transition-colors cursor-pointer group"
       [class.min-h-[72px]]="supportingText()"
       [class.min-h-[88px]]="multiLineSupportingText()">
       
@@ -41,7 +41,7 @@ export class M3ListComponent {}
         
         <!-- Leading Icon / Avatar -->
         @if (leadingIcon()) {
-          <span class="material-symbols-rounded text-[24px] text-md-sys-on-surface-variant flex-shrink-0">
+          <span class="material-symbols-rounded text-[24px] text-md-sys-on-surface-variant shrink-0">
             {{ leadingIcon() }}
           </span>
         }
@@ -66,7 +66,7 @@ export class M3ListComponent {}
       </div>
 
       <!-- Trailing content -->
-      <div class="flex items-center gap-4 ml-4 flex-shrink-0">
+      <div class="flex items-center gap-4 ml-4 shrink-0">
         <ng-content select="[m3-list-trailing]"></ng-content>
       </div>
 

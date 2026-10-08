@@ -17,7 +17,7 @@ import {
   selector: 'm3-navigation-rail',
   standalone: true,
   template: `
-    <nav class="flex flex-col items-center w-[80px] h-full py-4 bg-md-sys-surface text-md-sys-on-surface">
+    <nav class="flex flex-col items-center w-20 h-full py-4 bg-md-sys-surface text-md-sys-on-surface">
       
       <!-- Top Section (FAB or Menu icon usually goes here) -->
       <div class="mb-8 flex flex-col items-center">
@@ -50,7 +50,7 @@ export class M3NavigationRailComponent {}
       type="button"
       [disabled]="disabled()"
       (click)="onClick()"
-      class="relative flex flex-col items-center justify-center w-full min-h-[56px] outline-none group disabled:opacity-38 disabled:pointer-events-none">
+      class="relative flex flex-col items-center justify-center w-full min-h-14 outline-none group disabled:opacity-38 disabled:pointer-events-none">
       
       <!-- Active Pill / Icon Container -->
       <div class="relative flex items-center justify-center w-14 h-8 rounded-full transition-colors duration-200"

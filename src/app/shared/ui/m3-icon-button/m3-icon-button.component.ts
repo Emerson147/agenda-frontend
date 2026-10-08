@@ -100,7 +100,7 @@ export class M3IconButtonComponent {
     return `${base} ${variantClasses[this.variant()]}`.trim();
   });
 
-  protected handleClick(event: MouseEvent): void {
+  protected handleClick(event: Event): void {
     if (this.disabled()) {
       event.preventDefault();
       event.stopPropagation();
@@ -109,6 +109,6 @@ export class M3IconButtonComponent {
     if (this.toggle()) {
       this.selectedChange.emit(!this.selected());
     }
-    this.btnClick.emit(event);
+    this.btnClick.emit(event as MouseEvent);
   }
 }

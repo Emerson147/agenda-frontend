@@ -1,12 +1,12 @@
- <div class="h-[100dvh] overflow-hidden w-full font-sans text-zen-text selection:bg-zen-accent/20 relative flex flex-col transition-colors duration-500"
+ <div class="h-dvh overflow-hidden w-full font-sans text-zen-text selection:bg-zen-accent/20 relative flex flex-col transition-colors duration-500"
      [class.bg-md-sys-surface-container-low]="layoutService.navigationStyle() === 'Guapa'"
      [class.bg-zen-bg]="layoutService.navigationStyle() !== 'Guapa'">
       
       <!-- MAIN ROUTER CONTENT (Dynamic padding based on navigation style) -->
-      <main class="flex-1 w-full h-[100dvh] relative transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col"
+      <main class="flex-1 w-full h-dvh relative transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col"
             [class.pl-64]="layoutService.navigationStyle() !== 'Dock' && layoutService.navigationStyle() !== 'Tasks' && layoutService.navigationStyle() !== 'Guapa'"
             [class.pl-24]="layoutService.navigationStyle() === 'Tasks'"
-            [ngClass]="layoutService.navigationStyle() === 'Guapa' ? 'pl-[17.5rem] pr-6 py-6' : ''">
+            [ngClass]="layoutService.navigationStyle() === 'Guapa' ? 'pl-70 pr-6 py-6' : ''">
         
         <div class="flex-1 w-full h-full relative transition-all duration-500"
              [ngClass]="layoutService.navigationStyle() === 'Guapa' ? 'bg-md-sys-surface rounded-[2.5rem] shadow-sm overflow-hidden' : ''">

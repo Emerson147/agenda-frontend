@@ -23,7 +23,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   standalone: true,
   template: `
     <div
-      class="relative flex items-center w-full h-[44px] group cursor-pointer"
+      class="relative flex items-center w-full h-11 group cursor-pointer"
       [class.opacity-38]="disabled()"
       [class.pointer-events-none]="disabled()">
       

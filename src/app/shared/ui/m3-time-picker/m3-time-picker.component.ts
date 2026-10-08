@@ -21,7 +21,7 @@ import {
     @if (open()) {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/32" (click)="onBackdropClick()">
         
-        <div class="bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-extra-large shadow-md-sys-elevation-3 flex flex-col w-full max-w-[328px] overflow-hidden p-6" (click)="$event.stopPropagation()">
+        <div class="bg-md-sys-surface-container-high text-md-sys-on-surface rounded-md-sys-corner-extra-large shadow-md-sys-elevation-3 flex flex-col w-full max-w-82 overflow-hidden p-6" (click)="$event.stopPropagation()">
           
           <!-- Header -->
           <div class="m3-label-medium text-md-sys-on-surface-variant mb-5">
@@ -49,7 +49,7 @@ import {
 
           <!-- Clock Dial Area (Scaffold) -->
           <div class="flex justify-center mb-6">
-            <div class="w-[256px] h-[256px] rounded-full bg-md-sys-surface-container-highest flex items-center justify-center text-md-sys-on-surface-variant">
+            <div class="w-[256px] h-64 rounded-full bg-md-sys-surface-container-highest flex items-center justify-center text-md-sys-on-surface-variant">
               Clock UI here
             </div>
           </div>

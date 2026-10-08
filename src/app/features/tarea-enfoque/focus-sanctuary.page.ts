@@ -182,7 +182,7 @@ type CycleMode = 'FOCUS' | 'SHORT_BREAK' | 'LONG_BREAK';
                       Descargue distracciones sin romper la inmersión. Desaparecen al cerrar el ciclo.
                     </p>
                     
-                    <div class="space-y-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div class="space-y-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
                       @for (note of ephemeralNotes(); track note; let i = $index) {
                         <div class="flex items-start gap-3 p-3 rounded-md-sys-corner-sm bg-md-sys-surface-container-lowest text-md-sys-on-surface m3-body-small transition-all border border-md-sys-outline/5 hover:border-md-sys-outline/20">
                           <span class="material-symbols-rounded text-[16px] text-md-sys-outline mt-0.5">remove</span>

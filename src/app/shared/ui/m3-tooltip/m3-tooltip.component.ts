@@ -24,7 +24,7 @@ import {
   standalone: true,
   template: `
     <div
-      class="fixed z-[100] px-2 py-1 bg-md-sys-inverse-surface text-md-sys-inverse-on-surface m3-body-small rounded-md-sys-corner-xs shadow-md-sys-elevation-2 pointer-events-none animate-in fade-in zoom-in-95 duration-150 whitespace-nowrap -translate-x-1/2"
+      class="fixed z-100 px-2 py-1 bg-md-sys-inverse-surface text-md-sys-inverse-on-surface m3-body-small rounded-md-sys-corner-xs shadow-md-sys-elevation-2 pointer-events-none animate-in fade-in zoom-in-95 duration-150 whitespace-nowrap -translate-x-1/2"
       [style.left.px]="left"
       [style.top.px]="top">
       {{ text }}
