@@ -4,6 +4,7 @@ import {
   output,
   computed,
   signal,
+  effect,
   ChangeDetectionStrategy,
   forwardRef,
 } from '@angular/core';
@@ -84,6 +85,12 @@ export class M3SwitchComponent implements ControlValueAccessor {
   private _internalChecked = signal<boolean>(false);
   private _onChange: (v: boolean) => void = () => {};
   private _onTouched: () => void = () => {};
+
+  constructor() {
+    // Sync the checked input signal → internal state so parent programmatic
+    // changes to [checked] are reflected visually without going through CVA.
+    effect(() => this._internalChecked.set(this.checked()));
+  }
 
   private resolvedChecked = computed(() => this._internalChecked());
 

@@ -5,19 +5,16 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-export type M3BadgeSize = 'dot' | 'small' | 'large';
-
 /**
  * Material Design 3 (M3) Badge Component
  * Specifications: https://m3.material.io/components/badges/specs
  *
- * Sizes:
- * - 'dot':   6x6dp – no label, just presence indicator
- * - 'small': 6x6dp – 1–9 (numbers ≤9)
- * - 'large': 16dp height – numbers > 9 (up to 999+)
+ * M3 defines exactly two physical sizes:
+ * - No label: 6x6dp dot — presence indicator only
+ * - With label: min-width 16dp, height 16dp — shows number or text (up to max+)
  *
  * Specs:
- * - Color: error-container by default (customizable)
+ * - Color: error / on-error
  * - Corner: full
  * - Label: Label Small (11sp)
  */
@@ -25,7 +22,7 @@ export type M3BadgeSize = 'dot' | 'small' | 'large';
   selector: 'm3-badge',
   standalone: true,
   template: `
-    @if (label()) {
+    @if (hasLabel()) {
       <span class="m3-label-small leading-none">{{ displayLabel() }}</span>
     }
   `,
@@ -40,11 +37,13 @@ export class M3BadgeComponent {
   /** Number or text to display. Leave empty for dot badge. */
   label = input<string | number>('');
 
-  /** Maximum number before showing "999+" truncation. Default: 999 */
+  /** Maximum number before showing "max+" truncation. Default: 999 */
   max = input<number>(999);
 
   /** Custom aria-label */
   ariaLabel = input<string>('');
+
+  protected hasLabel = computed(() => !!this.label());
 
   protected displayLabel = computed(() => {
     const val = this.label();
@@ -56,15 +55,6 @@ export class M3BadgeComponent {
     return String(val);
   });
 
-  protected badgeSize = computed<M3BadgeSize>(() => {
-    const val = this.label();
-    if (!val) return 'dot';
-    const num = typeof val === 'number' ? val : parseInt(String(val), 10);
-    if (!isNaN(num) && num > 9) return 'large';
-    if (val) return 'small';
-    return 'dot';
-  });
-
   protected hostClasses = computed(() => {
     const base = [
       'inline-flex items-center justify-center',
@@ -73,17 +63,15 @@ export class M3BadgeComponent {
       'select-none',
     ];
 
-    const size = this.badgeSize();
-
-    if (size === 'dot') {
+    if (!this.hasLabel()) {
+      // Dot badge: 6x6dp, no text
       base.push('w-1.5 h-1.5');
-    } else if (size === 'small') {
-      base.push('w-4 h-4 text-[11px] font-medium');
     } else {
-      // large
+      // Large badge: min-width 16dp, height 16dp, with label text
       base.push('min-w-[16px] h-4 px-1 text-[11px] font-medium');
     }
 
     return base.join(' ');
   });
 }
+

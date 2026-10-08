@@ -1,396 +1,373 @@
-<div class="w-full min-h-screen bg-md-sys-surface text-md-sys-on-surface font-sans px-6 sm:px-10 lg:px-16 py-8 pb-36 flex flex-col gap-8">
-    
-    <!-- TOP FLOATING BRAND & CONTEXT (Official M3 System Tokens) -->
-    <header class="flex items-center justify-between select-none">
-      <div class="flex items-center gap-3">
-        <!-- Brand Icon in Surface Container (M3 Shape corner-lg) -->
-        <div class="w-10 h-10 rounded-md-sys-corner-lg bg-md-sys-surface-container flex items-center justify-center">
-          <span class="material-symbols-rounded text-2xl icon-filled text-md-sys-tertiary">eco</span>
-        </div>
-        <div>
-          <h1 class="text-base font-semibold tracking-tight text-md-sys-on-surface leading-tight">Focus Sanctuary</h1>
-          <p class="text-[11px] uppercase tracking-wider text-md-sys-on-surface-variant font-medium">Mindful Timeboxing</p>
-        </div>
+<div
+  class="w-full h-full bg-md-sys-surface text-md-sys-on-surface font-sans px-4 sm:px-8 lg:px-12 py-6 pb-36 flex flex-col gap-6 max-w-7xl mx-auto">
+
+  <!-- TOP APP BAR / BRAND HEADER -->
+  <header class="flex items-center justify-between select-none">
+    <div class="flex items-center gap-3.5">
+      <!-- Brand Icon in Surface Container (M3 Corner-MD) -->
+      <div
+        class="w-10 h-10 rounded-md-sys-corner-md bg-md-sys-surface-container flex items-center justify-center border border-md-sys-outline/20">
+        <span class="material-symbols-rounded text-2xl icon-filled text-md-sys-tertiary">eco</span>
+      </div>
+      <div>
+        <h1 class="text-base font-semibold tracking-tight text-md-sys-on-surface leading-tight">Focus Sanctuary</h1>
+        <p class="text-[11px] uppercase tracking-wider text-md-sys-on-surface-variant font-medium">Mindful Timeboxing
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Actions Header -->
+    <div class="flex items-center gap-3">
+      <!-- Live Status Pill in Surface Container -->
+      <div
+        class="hidden sm:flex items-center gap-2 bg-md-sys-surface-container rounded-md-sys-corner-full px-3.5 py-1.5 text-xs font-medium text-md-sys-on-surface-variant border border-md-sys-outline/20">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>In Rhythm</span>
       </div>
 
-      <!-- Quick Context Action -->
-      <div class="flex items-center gap-3">
-        <!-- Live Status Pill in Surface Container (M3 Shape corner-full) -->
-        <div class="hidden sm:flex items-center gap-2 bg-md-sys-surface-container rounded-md-sys-corner-full px-3.5 py-1.5 text-xs font-medium text-md-sys-on-surface-variant">
-          <span class="w-2 h-2 rounded-md-sys-corner-full bg-emerald-500 animate-pulse"></span>
-          <span>In Rhythm</span>
-        </div>
-        
-        <!-- Primary Action FAB (M3 Shape corner-full, Primary Tonal Role, Emphasized Motion) -->
-        <button 
-          type="button"
-          (click)="enterSanctuary()"
-          class="w-10 h-10 rounded-md-sys-corner-full bg-md-sys-primary text-md-sys-on-primary flex items-center justify-center hover:scale-105 active:scale-95 transition-all ease-md-sys-emphasized duration-200 cursor-pointer shrink-0"
-          title="Enter Fullscreen Sanctuary">
-          <span class="material-symbols-rounded text-lg">timer</span>
-        </button>
-      </div>
-    </header>
+      <!-- Quick Sanctuary Launch Icon Button -->
+      <button m3-icon-button variant="tonal" (click)="enterSanctuary()"
+        title="Entrar al Santuario en pantalla completa">
+        timer
+      </button>
+    </div>
+  </header>
 
-    <!-- HERO METRIC CARD (Official M3 Component Suite) -->
-    <m3-card variant="filled" class="flex flex-col gap-6 m3-container-transform">
-      
-      <!-- Metrics Pills Row across the top (M3 Assist Chips) -->
-      <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
-        
+  <!-- BENTO GRID HERO (2 Columnas Asimétricas en Desktop) -->
+  <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 m3-fade-through-enter">
+
+    <!-- BENTO CARD 1: DAILY FOCUS PULSE (7 cols) -->
+    <div
+      class="lg:col-span-7 bg-md-sys-surface-container-low rounded-md-sys-corner-xl p-6 sm:p-7 flex flex-col justify-between gap-6 border border-md-sys-outline/15 shadow-2xs">
+
+      <!-- Card Top: Label & Streak Pill -->
+      <div class="flex items-center justify-between">
+        <span class="m3-label-small uppercase tracking-wider text-md-sys-on-surface-variant font-semibold">
+          Daily Focus Investment
+        </span>
+        <span
+          class="px-3 py-1 rounded-md-sys-corner-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-1.5">
+          <span class="material-symbols-rounded text-sm">local_fire_department</span>
+          5 días de racha
+        </span>
+      </div>
+
+      <!-- Protagonist Typography Scale Display -->
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-wrap items-baseline gap-3">
+          <span class="m3-display-small sm:m3-display-medium font-normal text-md-sys-on-surface tracking-tight">
+            {{ completedMinutes() }} min
+          </span>
+          <span class="m3-body-medium text-md-sys-on-surface-variant">
+            enfocados de {{ totalPlannedMinutes() }} min meta hoy
+          </span>
+        </div>
+
+        <!-- M3 Linear Progress Bar -->
+        <m3-linear-progress [value]="progressPercentage()"></m3-linear-progress>
+      </div>
+
+      <!-- Metrics Chips Row -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-md-sys-outline/10">
         <m3-chip variant="assist" icon="timelapse">
-          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Focus Time</span>
-          <span class="font-semibold text-md-sys-on-surface ml-1">{{ completedMinutes() / 60 | number:'1.1-1' }} / {{ totalPlannedMinutes() / 60 | number:'1.1-1' }}h</span>
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Tiempo:</span>
+          <span class="font-semibold text-md-sys-on-surface ml-1">{{ completedMinutes() / 60 | number:'1.1-1' }} / {{
+            totalPlannedMinutes() / 60 | number:'1.1-1' }}h</span>
         </m3-chip>
 
         <m3-chip variant="assist" icon="timer" [iconFilled]="true" iconColor="tertiary">
-          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Pomodoros</span>
-          <span class="font-semibold text-md-sys-on-surface ml-1">{{ completedMinutes() / 25 }} / {{ totalPlannedMinutes() / 25 }}</span>
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Pomodoros:</span>
+          <span class="font-semibold text-md-sys-on-surface ml-1">{{ completedMinutes() / 25 }} / {{
+            totalPlannedMinutes() / 25 }}</span>
         </m3-chip>
 
         <m3-chip variant="assist" icon="check_circle">
-          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Completion</span>
+          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Avance:</span>
           <span class="font-semibold text-md-sys-on-surface ml-1">{{ progressPercentage() }}%</span>
         </m3-chip>
-
-        <m3-chip variant="assist" icon="local_fire_department" [iconFilled]="true" iconColor="amber">
-          <span class="text-md-sys-on-surface-variant uppercase text-[10px]">Streak</span>
-          <span class="font-semibold text-md-sys-on-surface ml-1">5 days</span>
-        </m3-chip>
-
       </div>
 
-      <!-- Protagonist Large Typography Display (M3 Display Scale) -->
-      <div class="flex flex-col gap-1 pt-1">
-        <span class="m3-label-small uppercase text-md-sys-on-surface-variant font-medium">Daily Focus Investment</span>
-        <div class="flex flex-wrap items-baseline gap-3">
-          <span class="m3-display-small sm:m3-display-medium text-md-sys-on-surface font-normal tracking-tight">
-            {{ completedMinutes() }} min
-          </span>
-          <span class="m3-body-medium text-md-sys-on-surface-variant font-normal">
-            focused out of {{ totalPlannedMinutes() }} min planned today
-          </span>
+    </div>
+
+    <!-- BENTO CARD 2: NEXT FOCUS BLOCK / QUICK LAUNCH (5 cols) -->
+    <div
+      class="lg:col-span-5 bg-md-sys-surface-container rounded-md-sys-corner-xl p-6 sm:p-7 flex flex-col justify-between gap-5 border border-md-sys-outline/20 relative overflow-hidden">
+
+      <!-- Top Indicator -->
+      <div class="flex items-center justify-between">
+        <span
+          class="px-2.5 py-1 rounded-md-sys-corner-full bg-md-sys-tertiary-container text-md-sys-on-tertiary-container text-[11px] font-semibold tracking-wide uppercase flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-md-sys-tertiary animate-pulse"></span>
+          Próximo Bloque
+        </span>
+        <span class="text-xs text-md-sys-on-surface-variant font-medium">
+          {{ primaryActiveTask()?.timeSlot || 'Por iniciar' }}
+        </span>
+      </div>
+
+      <!-- Body: Task Details -->
+      <div class="flex flex-col gap-2">
+        <h3 class="m3-title-large text-md-sys-on-surface font-semibold line-clamp-2 leading-snug">
+          {{ primaryActiveTask()?.title || 'Todas las intenciones completadas' }}
+        </h3>
+        <div class="flex items-center gap-2 m3-body-small text-md-sys-on-surface-variant font-medium">
+          <span>{{ primaryActiveTask()?.tag }}</span>
+          <span>·</span>
+          <span>{{ primaryActiveTask()?.durationLabel }}</span>
+          <span>·</span>
+          <span>🍅 {{ primaryActiveTask()?.pomodorosCompleted }}/{{ primaryActiveTask()?.pomodoros }}</span>
         </div>
       </div>
 
-      <!-- M3 Linear Progress Indicator Component -->
-      <m3-linear-progress [value]="progressPercentage()"></m3-linear-progress>
+      <!-- Bottom Prominent Action Button -->
+      @if (primaryActiveTask(); as task) {
+      <button m3-button variant="filled" leadingIcon="play_arrow" (btnClick)="startFocusSession(task)"
+        class="w-full justify-center">
+        Iniciar Pomodoro ({{ task.durationLabel }})
+      </button>
+      } @else {
+      <button m3-button variant="tonal" (btnClick)="enterSanctuary()" class="w-full justify-center">
+        Abrir Santuario Libre
+      </button>
+      }
 
-    </m3-card>
+    </div>
 
-    <!-- CAPSULE INPUT BAR (Inspired by "Chatea conmigo" input bar + circular FAB) -->
-    <section class="flex items-center gap-3">
-      <div class="flex-1 flex items-center gap-3 bg-[#f4f3ef] hover:bg-[#edece6] rounded-full px-6 py-3.5 transition-colors focus-within:ring-2 focus-within:ring-stone-400/20">
-        <span class="material-symbols-rounded text-stone-400 text-xl select-none">edit_note</span>
-        <input 
-          type="text" 
-          [value]="newTaskTitle()"
-          (input)="onTitleInput($event)"
-          (keydown.enter)="addTask()"
-          placeholder="Añadir una nueva intención de foco..." 
-          class="flex-1 bg-transparent text-sm text-stone-900 placeholder-stone-400 focus:outline-none"
-        />
+  </section>
+
+  <!-- MOBILE SEGMENTED VIEW SWITCHER (Small screens only) -->
+  <div class="flex lg:hidden justify-center w-full m3-shared-axis-y-enter">
+    <m3-segmented-button>
+      <m3-segmented-button-segment [selected]="mobileTab() === 'intentions'" (click)="mobileTab.set('intentions')"
+        icon="task_alt">
+        Intenciones ({{ tasks().length }})
+      </m3-segmented-button-segment>
+      <m3-segmented-button-segment [selected]="mobileTab() === 'schedule'" (click)="mobileTab.set('schedule')"
+        icon="calendar_view_day">
+        Timeline
+      </m3-segmented-button-segment>
+    </m3-segmented-button>
+  </div>
+
+  <!-- MAIN WORKSPACE: INTENTIONS LEDGER & FLOW TIMELINE (Bento Column Layout) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+    <!-- LEFT COLUMN: FOCUS INTENTIONS (7 cols) -->
+    <div
+      class="col-span-12 lg:col-span-7 bg-md-sys-surface-container-low rounded-md-sys-corner-xl p-6 sm:p-7 flex flex-col gap-6 border border-md-sys-outline/15"
+      [ngClass]="mobileTab() === 'intentions' ? 'flex' : 'hidden lg:flex'">
+
+      <!-- Header & Segmented Filter Bar -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-md-sys-outline/10">
+        <div class="flex flex-col gap-0.5">
+          <span class="m3-label-small uppercase tracking-wider text-md-sys-on-surface-variant font-medium">Workspace
+            Queue</span>
+          <h2 class="m3-headline-small text-md-sys-on-surface font-medium">Today's Intentions</h2>
+        </div>
+
+        <!-- M3 Segmented Filter Bar -->
+        <m3-segmented-button class="overflow-x-auto pb-1 sm:pb-0">
+          <m3-segmented-button-segment [selected]="activeFilter() === 'all'" (click)="setFilter('all')">
+            All ({{ tasks().length }})
+          </m3-segmented-button-segment>
+          <m3-segmented-button-segment [selected]="activeFilter() === 'deep-work'" (click)="setFilter('deep-work')">
+            Deep Work
+          </m3-segmented-button-segment>
+          <m3-segmented-button-segment [selected]="activeFilter() === 'quick'" (click)="setFilter('quick')">
+            Quick (≤1🍅)
+          </m3-segmented-button-segment>
+          <m3-segmented-button-segment [selected]="activeFilter() === 'completed'" (click)="setFilter('completed')">
+            Done ({{ totalCompletedTasks() }})
+          </m3-segmented-button-segment>
+        </m3-segmented-button>
+      </div>
+
+      <!-- GOOGLE KEEP STYLE INTEGRATED INPUT CAPSULE -->
+      <div
+        class="flex items-center gap-2.5 bg-md-sys-surface-container-high rounded-full px-4 py-2 border border-md-sys-outline/30 focus-within:border-md-sys-primary focus-within:ring-2 focus-within:ring-md-sys-primary/10 transition-all">
+        <span class="material-symbols-rounded text-md-sys-on-surface-variant text-xl select-none">edit_note</span>
+        <input type="text" [value]="newTaskTitle()" (input)="onTitleInput($event)" (keydown.enter)="addTask()"
+          placeholder="Añadir nueva intención de foco..."
+          class="flex-1 bg-transparent text-sm text-md-sys-on-surface placeholder-md-sys-on-surface-variant focus:outline-none" />
 
         <!-- Pomodoro Selector Companion Capsule -->
-        <select 
-          [value]="newTaskPomodoros()"
-          (change)="onPomodorosChange($event)"
-          class="bg-white/95 border border-stone-200/80 rounded-full px-3.5 py-1.5 text-xs text-stone-700 font-medium cursor-pointer shadow-2xs focus:outline-none">
+        <select [value]="newTaskPomodoros()" (change)="onPomodorosChange($event)"
+          class="bg-md-sys-surface border border-md-sys-outline/40 rounded-full px-3 py-1 text-xs text-md-sys-on-surface font-medium cursor-pointer focus:outline-none">
           <option [value]="1">1🍅 25m</option>
           <option [value]="2">2🍅 50m</option>
           <option [value]="3">3🍅 75m</option>
           <option [value]="4">4🍅 100m</option>
         </select>
-      </div>
 
-      <!-- Action Circular FAB + Button -->
-      <button 
-        type="button"
-        (click)="addTask()"
-        [disabled]="!newTaskTitle().trim()"
-        class="w-12 h-12 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-105 active:scale-95 disabled:opacity-30 transition-all cursor-pointer shadow-xs shrink-0"
-        title="Crear intención">
-        <span class="material-symbols-rounded text-xl">add</span>
-      </button>
-    </section>
-
-    <!-- MOBILE SEGMENTED VIEW SWITCHER -->
-    <div class="flex lg:hidden justify-center w-full">
-      <div class="inline-flex p-1.5 rounded-full bg-[#f4f3ef] border border-stone-200/80 gap-1">
-        <button 
-          type="button"
-          (click)="mobileTab.set('intentions')"
-          [ngClass]="mobileTab() === 'intentions' ? 'bg-white text-stone-900 font-medium shadow-xs' : 'text-stone-500'"
-          class="flex items-center gap-2 px-6 py-2 rounded-full text-xs transition-all active:scale-95 cursor-pointer">
-          <span class="material-symbols-rounded text-base">task_alt</span>
-          <span>Intentions ({{ tasks().length }})</span>
-        </button>
-
-        <button 
-          type="button"
-          (click)="mobileTab.set('schedule')"
-          [ngClass]="mobileTab() === 'schedule' ? 'bg-white text-stone-900 font-medium shadow-xs' : 'text-stone-500'"
-          class="flex items-center gap-2 px-6 py-2 rounded-full text-xs transition-all active:scale-95 cursor-pointer">
-          <span class="material-symbols-rounded text-base">calendar_view_day</span>
-          <span>Timeline Schedule</span>
+        <!-- Submit Button -->
+        <button m3-icon-button variant="filled" (click)="addTask()" [disabled]="!newTaskTitle().trim()"
+          class="scale-90 shrink-0" title="Crear intención">
+          add
         </button>
       </div>
+
+      <!-- Intentions List -->
+      <div class="flex flex-col divide-y divide-md-sys-outline/10">
+        @for (task of filteredTasks(); track task.id) {
+        <div
+          class="group py-3.5 px-3 rounded-md-sys-corner-lg flex flex-col gap-2.5 transition-colors hover:bg-md-sys-surface-container"
+          [class.opacity-50]="task.completed">
+
+          <!-- Main Row -->
+          <div class="flex items-start justify-between gap-3">
+
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+              <!-- Checkbox Button -->
+              <button m3-icon-button [toggle]="true" [selected]="task.completed" (selectedChange)="toggleTask(task.id)"
+                variant="tonal" class="shrink-0 mt-0.5 scale-90">
+                @if (task.completed) {
+                check_circle
+                } @else {
+                radio_button_unchecked
+                }
+              </button>
+
+              <div class="flex-1 flex flex-col gap-1 min-w-0">
+                <h3 class="text-sm font-medium text-md-sys-on-surface leading-snug tracking-tight"
+                  [class.line-through]="task.completed" [class.text-md-sys-on-surface-variant]="task.completed">
+                  {{ task.title }}
+                </h3>
+
+                <!-- Metadata -->
+                <div class="flex flex-wrap items-center gap-2 text-xs text-md-sys-on-surface-variant">
+                  <span class="font-medium">{{ task.tag }}</span>
+                  @if (task.timeSlot) {
+                  <span>·</span>
+                  <span>{{ task.timeSlot }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Pomodoro Badge & Play Action -->
+            <div class="flex items-center gap-2 shrink-0">
+              <span
+                class="px-2.5 py-1 rounded-full bg-md-sys-surface-container-highest text-md-sys-on-surface-variant text-xs font-medium">
+                🍅 {{ task.pomodorosCompleted }}/{{ task.pomodoros }}
+              </span>
+
+              @if (!task.completed) {
+              <button m3-icon-button variant="filled" (click)="startFocusSession(task)"
+                class="opacity-70 group-hover:opacity-100 scale-75 origin-right"
+                title="Iniciar Pomodoro en esta intención">
+                play_arrow
+              </button>
+              }
+            </div>
+
+          </div>
+
+          <!-- Subtasks Checklist -->
+          @if (task.subtasks && task.subtasks.length > 0) {
+          <div class="pt-1.5 flex flex-col gap-1 pl-12 border-t border-md-sys-outline/5">
+            @for (subtask of task.subtasks; track subtask.id) {
+            <div (click)="toggleSubtask(task.id, subtask.id)"
+              class="flex items-center gap-2 text-xs cursor-pointer select-none group/sub py-0.5">
+              <m3-checkbox class="pointer-events-none scale-75" [checked]="subtask.completed">
+              </m3-checkbox>
+              <span class="transition-all" [ngClass]="subtask.completed 
+                        ? 'line-through text-md-sys-on-surface-variant opacity-70' 
+                        : 'text-md-sys-on-surface font-medium group-hover/sub:text-md-sys-primary'">
+                {{ subtask.title }}
+              </span>
+            </div>
+            }
+          </div>
+          }
+
+        </div>
+        }
+      </div>
+
     </div>
 
-    <!-- MAIN TWO-COLUMN WORKSPACE: INTENTIONS LEDGER & FLOW TIMELINE -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-4 border-t border-stone-100">
-      
-      <!-- LEFT COLUMN: FOCUS INTENTIONS (Ledger list format from your reference) (7 cols) -->
-      <div 
-        class="col-span-12 lg:col-span-7 flex-col gap-6"
-        [ngClass]="mobileTab() === 'intentions' ? 'flex' : 'hidden lg:flex'">
-        
-        <!-- Header & Segmented Filter Bar -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-          <div class="flex flex-col gap-0.5">
-            <span class="text-xs uppercase tracking-widest text-stone-400 font-medium">Workspace Queue</span>
-            <h2 class="text-2xl font-normal tracking-tight text-stone-900">Today's Intentions</h2>
-          </div>
+    <!-- RIGHT COLUMN: FLOW TIMELINE SCHEDULE (5 cols) -->
+    <div
+      class="col-span-12 lg:col-span-5 bg-md-sys-surface-container-low rounded-md-sys-corner-xl p-6 sm:p-7 flex flex-col gap-5 border border-md-sys-outline/15"
+      [ngClass]="mobileTab() === 'schedule' ? 'flex' : 'hidden lg:flex'">
 
-          <!-- M3 Segmented Pill Filter Bar -->
-          <div class="inline-flex p-1.5 rounded-full bg-[#f4f3ef] border border-stone-200/70 gap-1.5 overflow-x-auto select-none">
-            <button 
-              type="button"
-              (click)="setFilter('all')"
-              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
-              [ngClass]="activeFilter() === 'all' 
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
-                : 'border border-transparent text-stone-500 hover:text-stone-800'">
-              <span>All</span>
-              <span class="px-1.5 py-0.2 rounded-full text-[10px]"
-                [ngClass]="activeFilter() === 'all' ? 'bg-stone-100 text-stone-700 font-bold' : 'bg-stone-200/60 text-stone-500'">
-                {{ tasks().length }}
-              </span>
-            </button>
-            <button 
-              type="button"
-              (click)="setFilter('deep-work')"
-              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
-              [ngClass]="activeFilter() === 'deep-work' 
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
-                : 'border border-transparent text-stone-500 hover:text-stone-800'">
-              <span>Deep Work</span>
-            </button>
-            <button 
-              type="button"
-              (click)="setFilter('quick')"
-              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
-              [ngClass]="activeFilter() === 'quick' 
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
-                : 'border border-transparent text-stone-500 hover:text-stone-800'">
-              <span>Quick (≤1🍅)</span>
-            </button>
-            <button 
-              type="button"
-              (click)="setFilter('completed')"
-              class="px-4 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer flex items-center gap-1.5"
-              [ngClass]="activeFilter() === 'completed' 
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/90' 
-                : 'border border-transparent text-stone-500 hover:text-stone-800'">
-              <span>Done</span>
-              <span class="px-1.5 py-0.2 rounded-full text-[10px]"
-                [ngClass]="activeFilter() === 'completed' ? 'bg-stone-100 text-stone-700 font-bold' : 'bg-stone-200/60 text-stone-500'">
-                {{ totalCompletedTasks() }}
-              </span>
-            </button>
-          </div>
+      <!-- Timeline Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-md-sys-outline/10">
+        <div class="flex flex-col gap-0.5">
+          <span class="m3-label-small uppercase tracking-wider text-md-sys-on-surface-variant font-medium">Daily
+            Schedule</span>
+          <h2 class="m3-headline-small text-md-sys-on-surface font-medium">Flow Timeline</h2>
         </div>
-
-        <!-- Date Marker Header (like in your reference screenshot: "1 May 26") -->
-        <div class="text-xs text-stone-400 font-medium uppercase tracking-wider pt-2">
-          Sep 28, 2026
-        </div>
-
-        <!-- Ledger Intentions List (Clean rows, zero boxy clutter) -->
-        <div class="flex flex-col divide-y divide-stone-100">
-          @for (task of filteredTasks(); track task.id) {
-            <div 
-              class="group py-4 px-3 rounded-2xl flex flex-col gap-3 transition-colors hover:bg-stone-50/70"
-              [class.opacity-50]="task.completed">
-              
-              <!-- Ledger Main Row -->
-              <div class="flex items-start justify-between gap-4">
-                
-                <div class="flex items-start gap-3.5 flex-1 min-w-0">
-                  <!-- Circular Checkbox Container (Identical to your reference circular icon) -->
-                  <button 
-                    type="button"
-                    (click)="toggleTask(task.id)"
-                    class="w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 mt-0.5"
-                    [ngClass]="task.completed 
-                      ? 'bg-stone-900 text-white' 
-                      : 'bg-[#f4f3ef] hover:bg-stone-200 text-stone-400 hover:text-stone-700'">
-                    @if (task.completed) {
-                      <span class="material-symbols-rounded text-base font-bold">check</span>
-                    } @else {
-                      <span class="material-symbols-rounded text-base">radio_button_unchecked</span>
-                    }
-                  </button>
-
-                  <div class="flex-1 flex flex-col gap-1 min-w-0">
-                    <h3 
-                      class="text-sm font-medium text-stone-900 leading-snug tracking-tight"
-                      [class.line-through]="task.completed"
-                      [class.text-stone-400]="task.completed">
-                      {{ task.title }}
-                    </h3>
-
-                    <!-- Meta Tags (Soft muted text matching your reference subtitle) -->
-                    <div class="flex flex-wrap items-center gap-2 text-xs text-stone-400">
-                      <span class="text-stone-600 font-medium">{{ task.tag }}</span>
-                      @if (task.timeSlot) {
-                        <span>·</span>
-                        <span>{{ task.timeSlot }}</span>
-                      }
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Right Side: Duration Pill + Play FAB -->
-                <div class="flex items-center gap-2 shrink-0">
-                  <span class="px-3 py-1 rounded-full bg-[#f4f3ef] text-stone-700 text-xs font-medium">
-                    🍅 {{ task.pomodorosCompleted }}/{{ task.pomodoros }} ({{ task.durationLabel }})
-                  </span>
-
-                  @if (!task.completed) {
-                    <button 
-                      type="button"
-                      (click)="startFocusSession(task)"
-                      class="w-8 h-8 rounded-full bg-stone-900 text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs opacity-70 group-hover:opacity-100"
-                      title="Iniciar Pomodoro en esta intención">
-                      <span class="material-symbols-rounded text-sm">play_arrow</span>
-                    </button>
-                  }
-                </div>
-
-              </div>
-
-              <!-- Indented Subtasks Checklist -->
-              @if (task.subtasks && task.subtasks.length > 0) {
-                <div class="pt-2 flex flex-col gap-2 pl-14">
-                  @for (subtask of task.subtasks; track subtask.id) {
-                    <div 
-                      (click)="toggleSubtask(task.id, subtask.id)"
-                      class="flex items-center gap-2.5 text-xs cursor-pointer select-none group/sub">
-                      <button 
-                        type="button"
-                        class="w-4 h-4 rounded-full flex items-center justify-center transition-all shrink-0"
-                        [ngClass]="subtask.completed 
-                          ? 'bg-stone-900 text-white' 
-                          : 'bg-stone-100 border border-stone-300 group-hover/sub:border-stone-500'">
-                        @if (subtask.completed) {
-                          <span class="material-symbols-rounded text-[11px] font-bold">check</span>
-                        }
-                      </button>
-                      <span 
-                        class="transition-all"
-                        [ngClass]="subtask.completed 
-                          ? 'line-through text-stone-400' 
-                          : 'text-stone-700 font-medium group-hover/sub:text-stone-900'">
-                        {{ subtask.title }}
-                      </span>
-                    </div>
-                  }
-                </div>
-              }
-
-            </div>
-          }
-        </div>
-
+        <span
+          class="px-3 py-1 rounded-full bg-md-sys-surface-container text-md-sys-on-surface-variant text-xs font-medium flex items-center gap-2 border border-md-sys-outline/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Live Grid</span>
+        </span>
       </div>
 
-      <!-- RIGHT COLUMN: FLOW TIMELINE (5 cols) -->
-      <div 
-        class="col-span-12 lg:col-span-5 flex-col gap-6"
-        [ngClass]="mobileTab() === 'schedule' ? 'flex' : 'hidden lg:flex'">
-        
-        <!-- Timeline Header -->
-        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-          <div class="flex flex-col gap-0.5">
-            <span class="text-xs uppercase tracking-widest text-stone-400 font-medium">Daily Schedule</span>
-            <h2 class="text-2xl font-normal tracking-tight text-stone-900">Flow Timeline</h2>
-          </div>
-          <span class="px-3.5 py-1.5 rounded-full bg-[#f4f3ef] text-stone-700 text-xs font-medium flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Live Grid</span>
+      <!-- Vertical Timebox Grid (07:00 to 19:00) -->
+      <div class="relative w-full h-[832px] overflow-hidden select-none">
+
+        <!-- Background Hour Marker Lines -->
+        @for (hour of hours; track hour; let idx = $index) {
+        <div class="absolute left-0 right-0 flex items-center" [style.top.px]="idx * 64">
+          <span class="text-[11px] font-medium text-md-sys-on-surface-variant w-12 shrink-0 select-none">
+            {{ hour }}
+          </span>
+          <div class="flex-1 border-t border-dashed border-md-sys-outline/30"></div>
+        </div>
+        }
+
+        <!-- Current Time Indicator Line -->
+        <div class="absolute left-12 right-0 flex items-center z-20 pointer-events-none" style="top: 176px;">
+          <div class="w-3 h-3 rounded-full bg-md-sys-primary -ml-1.5"></div>
+          <div class="flex-1 h-0.5 bg-md-sys-primary"></div>
+          <span
+            class="text-[10px] font-semibold text-md-sys-on-primary bg-md-sys-primary px-2 py-0.5 rounded-full ml-1.5">
+            09:45
           </span>
         </div>
 
-        <!-- Vertical Timebox Grid (07:00 to 19:00) with Clean Zen Dashed Markers -->
-        <div class="relative w-full h-[832px] overflow-hidden select-none">
-          
-          <!-- Background Hour Marker Lines -->
-          @for (hour of hours; track hour; let idx = $index) {
-            <div 
-              class="absolute left-0 right-0 flex items-center"
-              [style.top.px]="idx * 64">
-              <span class="text-[11px] font-medium text-stone-400 w-12 shrink-0 select-none">
-                {{ hour }}
-              </span>
-              <div class="flex-1 border-t border-dashed border-stone-200/70"></div>
-            </div>
-          }
+        <!-- Positioned Timeblock Event Cards -->
+        <div class="absolute left-14 right-2 top-0 bottom-0 pointer-events-auto">
+          @for (block of timeBlocks(); track block.id) {
+          <div [ngStyle]="getBlockStyle(block)" [ngClass]="getCategoryContainerClasses(block.category)"
+            class="absolute left-0 right-0 rounded-md-sys-corner-md px-3.5 py-2 flex flex-col justify-between transition-all duration-200 cursor-pointer overflow-hidden group hover:scale-[1.01]">
 
-          <!-- Current Time Indicator -->
-          <div 
-            class="absolute left-12 right-0 flex items-center z-20 pointer-events-none"
-            style="top: 176px;">
-            <div class="w-3 h-3 rounded-full bg-stone-900 -ml-1.5"></div>
-            <div class="flex-1 h-0.5 bg-stone-900"></div>
-            <span class="text-[10px] font-semibold text-white bg-stone-900 px-2 py-0.5 rounded-full ml-1.5">
-              09:45
-            </span>
-          </div>
-
-          <!-- Positioned Timeblock Event Cards -->
-          <div class="absolute left-14 right-2 top-0 bottom-0 pointer-events-auto">
-            @for (block of timeBlocks(); track block.id) {
-              <div 
-                [ngStyle]="getBlockStyle(block)"
-                [ngClass]="getCategoryContainerClasses(block.category)"
-                class="absolute left-0 right-0 rounded-[1.25rem] px-4 py-2.5 flex flex-col justify-between transition-all duration-200 cursor-pointer overflow-hidden group hover:scale-[1.01]">
-                
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-5 h-5 rounded-full bg-white/70 flex items-center justify-center shrink-0 shadow-2xs">
-                      <span class="material-symbols-rounded text-xs">
-                        {{ getCategoryIcon(block.category) }}
-                      </span>
-                    </div>
-                    <span class="text-xs font-semibold tracking-tight truncate leading-tight">
-                      {{ block.title }}
-                    </span>
-                  </div>
-
-                  @if (block.category === 'deep-work') {
-                    <button 
-                      type="button"
-                      (click)="enterSanctuary()"
-                      class="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-stone-900 text-white flex items-center justify-center transition-opacity shrink-0 shadow-2xs hover:scale-105"
-                      title="Run in Sanctuary">
-                      <span class="material-symbols-rounded text-xs">play_arrow</span>
-                    </button>
-                  }
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <div
+                  class="w-5 h-5 rounded-md-sys-corner-full bg-white/40 dark:bg-black/30 text-inherit flex items-center justify-center shrink-0">
+                  <span class="material-symbols-rounded text-[13px]">
+                    {{ getCategoryIcon(block.category) }}
+                  </span>
                 </div>
-
-                <div class="flex items-center justify-between text-[11px] font-medium opacity-85 pt-1">
-                  <span>{{ block.startTime }} - {{ block.endTime }}</span>
-                  <span class="font-bold">{{ block.durationMinutes }}m</span>
-                </div>
+                <span class="text-xs font-semibold tracking-tight truncate leading-tight">
+                  {{ block.title }}
+                </span>
               </div>
-            }
-          </div>
 
+              @if (block.category === 'deep-work') {
+              <button m3-icon-button variant="filled" (click)="enterSanctuary()"
+                class="opacity-0 group-hover:opacity-100 scale-75 shrink-0" title="Entrar al Santuario">
+                play_arrow
+              </button>
+              }
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] font-medium opacity-85 pt-1">
+              <span>{{ block.startTime }} - {{ block.endTime }}</span>
+              <span class="font-bold">{{ block.durationMinutes }}m</span>
+            </div>
+          </div>
+          }
         </div>
 
       </div>
 
     </div>
+
+  </div>
 
 </div>

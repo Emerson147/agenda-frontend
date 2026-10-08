@@ -3,7 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TareaEnfoqueService } from '../../../../core/services/tarea-enfoque.service';
-import { M3CardComponent, M3ChipComponent, M3LinearProgressComponent } from '../../../../shared/ui';
+import {
+  M3ButtonComponent,
+  M3SegmentedButtonComponent,
+  M3SegmentedButtonSegmentComponent,
+  M3IconButtonComponent,
+  M3CheckboxComponent,
+  M3ChipComponent,
+  M3LinearProgressComponent
+} from '../../../../shared/ui';
 
 export interface SubTask {
   id: string;
@@ -40,12 +48,16 @@ export type FilterCategory = 'all' | 'deep-work' | 'quick' | 'completed';
   selector: 'app-dashboard-page',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
+    CommonModule,
+    FormsModule,
     RouterModule,
-    M3CardComponent,
     M3ChipComponent,
-    M3LinearProgressComponent
+    M3LinearProgressComponent,
+    M3ButtonComponent,
+    M3SegmentedButtonComponent,
+    M3SegmentedButtonSegmentComponent,
+    M3IconButtonComponent,
+    M3CheckboxComponent
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css'
@@ -64,6 +76,9 @@ export class DashboardPageComponent {
   newTaskTitle = signal<string>('');
   newTaskPomodoros = signal<number>(2);
   newTaskTag = signal<string>('deep-work');
+
+  // Primary active task for Quick Launch Bento Card
+  primaryActiveTask = computed<DashboardTask | undefined>(() => this.tasks().find(t => !t.completed) || this.tasks()[0]);
 
   // Pre-populated realistic tasks aligned with Material 3 & Zen sanctuary
   tasks = signal<DashboardTask[]>([
@@ -309,14 +324,14 @@ export class DashboardPageComponent {
   getCategoryContainerClasses(category: TimeBlock['category']): string {
     switch (category) {
       case 'deep-work':
-        return 'bg-emerald-50/90 text-emerald-950 border-l-4 border-l-emerald-600 border border-emerald-200/80 hover:bg-emerald-100/70 shadow-2xs';
+        return 'bg-md-sys-primary-container text-md-sys-on-primary-container hover:brightness-95 shadow-md-sys-elevation-1';
       case 'meeting':
-        return 'bg-amber-50/90 text-amber-950 border-l-4 border-l-amber-600 border border-amber-200/80 hover:bg-amber-100/70 shadow-2xs';
+        return 'bg-md-sys-tertiary-container text-md-sys-on-tertiary-container hover:brightness-95 shadow-md-sys-elevation-1';
       case 'break':
-        return 'bg-sky-50/90 text-sky-950 border-l-4 border-l-sky-600 border border-sky-200/80 hover:bg-sky-100/70 shadow-2xs';
+        return 'bg-md-sys-secondary-container text-md-sys-on-secondary-container hover:brightness-95 shadow-md-sys-elevation-1';
       case 'routine':
       default:
-        return 'bg-stone-100 text-stone-900 border-l-4 border-l-stone-500 border border-stone-200 hover:bg-stone-200/60 shadow-2xs';
+        return 'bg-md-sys-surface-container-highest text-md-sys-on-surface hover:brightness-95 shadow-md-sys-elevation-1';
     }
   }
 

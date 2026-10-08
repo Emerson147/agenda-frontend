@@ -152,7 +152,7 @@ export class GsapService {
   /**
    * FLIP: Capture element state before a layout/DOM mutation
    */
-  getFlipState(targets: AnimationTarget, vars?: Flip.GetStateVars): Flip.FlipState | null {
+  getFlipState(targets: AnimationTarget, vars?: any): Flip.FlipState | null {
     if (!this.isBrowser) return null;
     return Flip.getState(this.resolveTarget(targets), vars);
   }
@@ -162,7 +162,7 @@ export class GsapService {
    */
   fromFlip(
     state: Flip.FlipState,
-    vars: Flip.FromVars = {}
+    vars: any = {}
   ): gsap.core.Tween | gsap.core.Timeline | null {
     if (!this.isBrowser) return null;
 

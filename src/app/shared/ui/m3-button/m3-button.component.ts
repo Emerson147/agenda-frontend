@@ -76,7 +76,20 @@ export class M3ButtonComponent {
   btnClick = output<MouseEvent>();
 
   protected hostClasses = computed(() => {
-    const hasIcon = !!(this.leadingIcon() || this.trailingIcon());
+    const hasLeading = !!this.leadingIcon();
+    const hasTrailing = !!this.trailingIcon();
+
+    // M3 spec: 16dp on the icon side, 24dp on the label side
+    let padding: string;
+    if (hasLeading && hasTrailing) {
+      padding = 'px-4';
+    } else if (hasLeading) {
+      padding = 'pl-4 pr-6';
+    } else if (hasTrailing) {
+      padding = 'pl-6 pr-4';
+    } else {
+      padding = 'px-6';
+    }
 
     const base = [
       'inline-flex items-center justify-center gap-2',
@@ -87,8 +100,7 @@ export class M3ButtonComponent {
       'relative overflow-hidden',
       'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-md-sys-primary/60',
       'disabled:pointer-events-none disabled:opacity-38',
-      // Horizontal padding: 24dp, 16dp on icon side
-      hasIcon ? 'pl-4 pr-6' : 'px-6',
+      padding,
     ].join(' ');
 
     const variantClasses: Record<M3ButtonVariant, string> = {

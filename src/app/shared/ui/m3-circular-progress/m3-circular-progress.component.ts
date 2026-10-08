@@ -24,12 +24,20 @@ import { CommonModule } from '@angular/common';
       [attr.aria-valuenow]="indeterminate() ? null : value()"
       aria-valuemin="0"
       aria-valuemax="100"
-      [class]="containerClasses()">
-      
-      <svg class="w-full h-full transform -rotate-90" viewBox="22 22 44 44">
+      [class]="containerClasses()"
+      [style.width.px]="size()"
+      [style.height.px]="size()">
+
+      <!-- SVG rotates for indeterminate; static -rotate-90 for determinate start position -->
+      <svg
+        class="w-full h-full"
+        viewBox="22 22 44 44"
+        [class.-rotate-90]="!indeterminate()"
+        [class.animate-spin]="indeterminate()">
+
         <!-- Background Track -->
         <circle
-          class="text-md-sys-surface-container-highest transition-stroke duration-300 ease-md-sys-standard"
+          class="text-md-sys-surface-container-highest"
           cx="44"
           cy="44"
           r="20.2"
@@ -37,11 +45,10 @@ import { CommonModule } from '@angular/common';
           stroke-width="3.6"
           stroke="currentColor">
         </circle>
-        
+
         <!-- Active Indicator -->
         <circle
           class="text-md-sys-primary transition-all duration-300 ease-md-sys-standard"
-          [class.animate-spin]="indeterminate()"
           [style.stroke-dasharray]="indeterminate() ? '80, 200' : '126.92'"
           [style.stroke-dashoffset]="dashOffset()"
           cx="44"
@@ -68,10 +75,7 @@ export class M3CircularProgressComponent {
   size = input<number>(48);
 
   protected containerClasses = computed(() => {
-    return [
-      'inline-flex items-center justify-center',
-      this.indeterminate() ? 'animate-spin' : ''
-    ].join(' ');
+    return 'inline-flex items-center justify-center';
   });
 
   protected dashOffset = computed(() => {

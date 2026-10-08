@@ -4,162 +4,250 @@ import { FormsModule } from '@angular/forms';
 import { gsap } from 'gsap';
 
 import { TareaEnfoqueService } from '../../core/services/tarea-enfoque.service';
-import { UiButtonComponent } from '../../shared/ui/ui-button/ui-button.component';
-import { UiInputComponent } from '../../shared/ui/ui-input/ui-input.component';
-import { UiBadgeComponent } from '../../shared/ui/ui-badge/ui-badge.component';
+import { 
+  M3ButtonComponent, 
+  M3TextFieldComponent,
+  M3SegmentedButtonComponent,
+  M3SegmentedButtonSegmentComponent,
+  M3FabComponent,
+  M3ChipComponent,
+  M3IconButtonComponent
+} from '../../shared/ui';
 
 type CycleMode = 'FOCUS' | 'SHORT_BREAK' | 'LONG_BREAK';
 
 @Component({
   selector: 'app-focus-sanctuary',
   standalone: true,
-  imports: [CommonModule, FormsModule, UiButtonComponent, UiInputComponent, UiBadgeComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    M3ButtonComponent, 
+    M3TextFieldComponent,
+    M3SegmentedButtonComponent,
+    M3SegmentedButtonSegmentComponent,
+    M3FabComponent,
+    M3ChipComponent,
+    M3IconButtonComponent
+  ],
   template: `
-    <div class="flex flex-col items-center justify-center w-full h-full pt-8 pb-20">
-      
-      <!-- Selector de Modo en Cápsula (Focus / Short Break / Long Break) -->
-      <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-full mb-14 border border-stone-200/60 shadow-xs">
-        <button
-          (click)="setMode('FOCUS')"
-          [class.bg-white]="activeMode() === 'FOCUS'"
-          [class.shadow-xs]="activeMode() === 'FOCUS'"
-          [class.text-stone-900]="activeMode() === 'FOCUS'"
-          [class.text-stone-500]="activeMode() !== 'FOCUS'"
-          class="px-5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer">
-          Focus
-        </button>
-        <button
-          (click)="setMode('SHORT_BREAK')"
-          [class.bg-white]="activeMode() === 'SHORT_BREAK'"
-          [class.shadow-xs]="activeMode() === 'SHORT_BREAK'"
-          [class.text-stone-900]="activeMode() === 'SHORT_BREAK'"
-          [class.text-stone-500]="activeMode() !== 'SHORT_BREAK'"
-          class="px-5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer">
-          Short Break
-        </button>
-        <button
-          (click)="setMode('LONG_BREAK')"
-          [class.bg-white]="activeMode() === 'LONG_BREAK'"
-          [class.shadow-xs]="activeMode() === 'LONG_BREAK'"
-          [class.text-stone-900]="activeMode() === 'LONG_BREAK'"
-          [class.text-stone-500]="activeMode() !== 'LONG_BREAK'"
-          class="px-5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer">
-          Long Break
-        </button>
-      </div>
-
-      <!-- Tarea de Enfoque Único (Zen Input Atómico) -->
-      <div class="mb-14 flex flex-col items-center w-full px-4">
-        <ui-input
-          [value]="tituloTarea()"
-          (valueChange)="tituloTarea.set($event)"
-          (enterPressed)="handleStartStop()"
-          placeholder="What is your single focus?"
-          variant="zen-hero"
-          [disabled]="tareaService.isPomodoroActivo()"
-          [error]="tareaService.error()"
-        />
-
-        @if (tareaService.tareaActiva(); as activa) {
-          <div class="mt-3 flex items-center gap-2 text-xs text-stone-500 font-medium">
-            <span class="text-stone-400">Objetivo guardado:</span>
-            <span class="text-stone-700 bg-stone-100 px-2.5 py-0.5 rounded-full border border-stone-200/60">{{ activa.titulo }}</span>
-            <span class="text-stone-400">· Pomodoros completados: {{ activa.pomodorosCompletados || 0 }}</span>
-          </div>
-        }
-      </div>
-
-      <!-- Temporizador Circular (Organismo SVG con GSAP) -->
-      <div class="relative flex items-center justify-center w-85 h-85">
-        <svg class="absolute inset-0 w-full h-full -rotate-90">
-          <!-- Aro de fondo -->
-          <circle cx="170" cy="170" r="166" stroke="#EAE8E1" stroke-width="3.5" fill="none"></circle>
-          
-          <!-- Aro reactivo con animación GSAP -->
-          <circle
-            #progressCircle
-            cx="170" cy="170" r="166"
-            stroke="var(--color-zen-accent)"
-            stroke-width="4"
-            fill="none"
-            stroke-dasharray="1043"
-            stroke-dashoffset="1043"
-            stroke-linecap="round">
-          </circle>
-        </svg>
-
-        <!-- Display de tiempo -->
-        <div class="flex flex-col items-center z-10 mt-1 select-none">
-          <span class="text-7xl font-light text-stone-800 tracking-tighter font-sans">
-            {{ formatTime(timeLeft()) }}
-          </span>
-
-          <div class="mt-4">
-            <ui-badge [pulse]="tareaService.isPomodoroActivo()">
-              {{ activeMode() === 'FOCUS' ? 'Deep Work' : 'Resting' }}
-            </ui-badge>
-          </div>
-        </div>
-      </div>
-
-      <!-- Controles Inferiores Atómicos (Shadcn Zen) -->
-      <div class="flex items-center gap-12 mt-16">
+    <div class="bg-md-sys-background text-md-sys-on-surface antialiased h-full flex m3-fade-enter">
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col h-full">
         
-        <!-- Botón Reset -->
-        <button
-          ui-button
-          variant="icon"
-          (btnClick)="resetTimer()"
-          class="flex flex-col items-center gap-2 group text-stone-400 hover:text-stone-800 p-2">
-          <div class="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-stone-100 transition-colors">
-            <span class="material-symbols-rounded text-[22px]">restart_alt</span>
+        <header class="sticky top-0 h-16 bg-md-sys-surface/80 backdrop-blur-xl z-40 flex items-center justify-between px-6 lg:px-12 border-b border-md-sys-outline/5">
+          <div class="flex items-center gap-4 sm:gap-4">
+            <span class="m3-body-small text-md-sys-outline capitalize hidden sm:inline">lunes, 21 de octubre</span>
+            <span class="w-1 h-1 rounded-full bg-md-sys-outline-variant hidden sm:inline"></span>
+            <span class="m3-label-small text-md-sys-on-surface-variant">otoño • silencio matutino</span>
           </div>
-          <span class="text-[11px] font-medium tracking-wide">Reset</span>
-        </button>
+        </header>
 
-        <!-- Botón Start / Pause Principal -->
-        <button
-          ui-button
-          variant="icon"
-          [loading]="tareaService.isLoading()"
-          (btnClick)="handleStartStop()"
-          class="flex flex-col items-center gap-2 group text-stone-600 hover:text-stone-900 p-2">
-          <div class="w-14 h-14 rounded-full bg-stone-100 flex items-center justify-center group-hover:bg-zen-accent group-hover:text-white transition-all shadow-sm border border-stone-200 group-hover:border-transparent">
-            <span class="material-symbols-rounded text-[28px] ml-0.5">
-              {{ tareaService.isPomodoroActivo() ? 'pause' : 'play_arrow' }}
-            </span>
+        <main class="relative flex-1 bg-md-sys-surface px-4 sm:px-6 lg:px-12 max-w-5xl mx-auto w-full pt-8 pb-20">
+          <div class="flex flex-col w-full">
+            
+            <div class="relative w-full max-w-4xl mx-auto flex flex-col items-center">
+              
+              <!-- Mode Tabs -->
+              <div class="w-full flex justify-center py-2 sm:py-6">
+                <m3-segmented-button>
+                  <m3-segmented-button-segment 
+                    [selected]="activeMode() === 'FOCUS'" 
+                    (segmentClick)="setMode('FOCUS')"
+                    icon="psychology">
+                    Enfoque • 25m
+                  </m3-segmented-button-segment>
+                  <m3-segmented-button-segment 
+                    [selected]="activeMode() === 'SHORT_BREAK'" 
+                    (segmentClick)="setMode('SHORT_BREAK')"
+                    icon="coffee">
+                    Pausa Corta • 5m
+                  </m3-segmented-button-segment>
+                  <m3-segmented-button-segment 
+                    [selected]="activeMode() === 'LONG_BREAK'" 
+                    (segmentClick)="setMode('LONG_BREAK')"
+                    icon="bed">
+                    Pausa Larga • 15m
+                  </m3-segmented-button-segment>
+                </m3-segmented-button>
+              </div>
+
+              <!-- Circle Timer -->
+              <div class="relative my-10 flex flex-col items-center justify-center select-none m3-shared-axis-z-enter">
+                <div class="absolute w-80 h-80 rounded-full bg-md-sys-primary/10 blur-3xl pointer-events-none -z-10"></div>
+                
+                <div class="relative w-72 h-72 sm:w-88 sm:h-88 flex items-center justify-center">
+                  <svg aria-hidden="true" class="w-full h-full -rotate-90 transform drop-shadow-sm" viewBox="0 0 260 260">
+                    <circle class="text-md-sys-surface-container-highest" cx="130" cy="130" fill="none" r="118" stroke="currentColor" stroke-width="2.5"></circle>
+                    <circle 
+                      #progressCircle
+                      class="text-md-sys-primary" 
+                      cx="130" cy="130" fill="none" r="118" 
+                      stroke="currentColor" 
+                      stroke-dasharray="741.42" 
+                      stroke-dashoffset="0" 
+                      stroke-linecap="round" 
+                      stroke-width="4"></circle>
+                  </svg>
+                  
+                  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span class="m3-label-small uppercase tracking-widest text-md-sys-outline mb-2">respiración constante</span>
+                    <div class="text-[64px] sm:text-[84px] leading-none text-md-sys-on-surface font-light tracking-tighter tabular-nums">
+                      {{ formatTime(timeLeft()) }}
+                    </div>
+                    <div class="flex items-center gap-2 mt-4 text-md-sys-on-surface-variant">
+                      <span class="material-symbols-rounded text-sm text-md-sys-primary">spa</span>
+                      <span class="m3-label-small tracking-wider uppercase text-md-sys-outline">fase 03 de 04</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center gap-6 mt-10">
+                  <button m3-icon-button variant="standard" (click)="resetTimer()" title="Reiniciar sesión">
+                    restart_alt
+                  </button>
+                  
+                  <button m3-fab size="large" [color]="tareaService.isPomodoroActivo() ? 'secondary' : 'primary'" (fabClick)="handleStartStop()">
+                    {{ tareaService.isPomodoroActivo() ? 'pause' : 'play_arrow' }}
+                  </button>
+                  
+                  <button m3-button variant="tonal" (btnClick)="addFiveMinutes()" title="Ampliar 5 minutos">
+                    +5m
+                  </button>
+                </div>
+              </div>
+
+              <!-- Zen Composition Columns -->
+              <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
+                
+                <!-- Focus Task Column -->
+                <section class="lg:col-span-7 flex flex-col justify-between p-6 sm:p-8 rounded-md-sys-corner-xl bg-md-sys-surface-container-low border border-md-sys-outline/10 shadow-2xs">
+                  <div>
+                    <div class="flex items-center justify-between pb-4 mb-2">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-md-sys-primary animate-pulse"></span>
+                        <span class="m3-label-small uppercase tracking-widest text-md-sys-outline">foco único activo</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-md-sys-on-surface-variant">
+                        <span class="m3-label-small mr-1 text-md-sys-outline">ritmo</span>
+                        <span class="w-2 h-2 rounded-full bg-md-sys-primary"></span>
+                        <span class="w-2 h-2 rounded-full bg-md-sys-primary"></span>
+                        <span class="w-2 h-2 rounded-full bg-md-sys-primary"></span>
+                        <span class="w-2 h-2 rounded-full bg-md-sys-surface-container-highest"></span>
+                      </div>
+                    </div>
+                    
+                    <div class="mt-2 w-full">
+                      <m3-text-field
+                        [ngModel]="tituloTarea()"
+                        (ngModelChange)="tituloTarea.set($event)"
+                        (keyup.enter)="handleStartStop()"
+                        label="What is your single focus?"
+                        variant="filled"
+                        [disabled]="tareaService.isPomodoroActivo()"
+                        [errorText]="tareaService.error() || ''"
+                        class="w-full block"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div class="mt-8 pt-4 flex flex-wrap items-center justify-between gap-4 border-t border-md-sys-outline/5">
+                    <div class="flex items-center gap-2">
+                      <m3-chip variant="assist">Arquitectura</m3-chip>
+                      <m3-chip variant="assist">Caligrafía digital</m3-chip>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 bg-md-sys-surface-container-highest/50 px-4 py-2 rounded-full shadow-sm border border-md-sys-outline/10">
+                      <span class="material-symbols-rounded text-[16px] text-md-sys-primary">eco</span>
+                      <span class="m3-label-small text-md-sys-on-surface">Viento en bambú</span>
+                      <div class="w-12 h-1 bg-md-sys-surface-container-highest rounded-full overflow-hidden flex items-center">
+                        <div class="h-full w-2/5 bg-md-sys-primary rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Ephemeral Thoughts -->
+                <section class="lg:col-span-5 flex flex-col p-6 sm:p-8 rounded-md-sys-corner-xl bg-md-sys-surface-container-low border border-md-sys-outline/10 shadow-2xs justify-between">
+                  <div>
+                    <div class="flex items-center justify-between pb-3 mb-2">
+                      <div class="flex items-center gap-2">
+                        <span class="material-symbols-rounded text-[16px] text-md-sys-outline">history_edu</span>
+                        <h3 class="m3-label-small uppercase tracking-widest text-md-sys-outline">pensamientos fugaces</h3>
+                      </div>
+                      <span class="m3-label-small text-md-sys-outline">depósito efímero</span>
+                    </div>
+                    <p class="m3-body-small text-md-sys-on-surface-variant mb-5 font-light">
+                      Descargue distracciones sin romper la inmersión. Desaparecen al cerrar el ciclo.
+                    </p>
+                    
+                    <div class="space-y-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
+                      @for (note of ephemeralNotes(); track note; let i = $index) {
+                        <div class="flex items-start gap-3 p-3 rounded-md-sys-corner-sm bg-md-sys-surface-container-lowest text-md-sys-on-surface m3-body-small transition-all border border-md-sys-outline/5 hover:border-md-sys-outline/20">
+                          <span class="material-symbols-rounded text-[16px] text-md-sys-outline mt-0.5">remove</span>
+                          <span class="flex-1 font-light leading-relaxed">{{ note }}</span>
+                          <button m3-icon-button variant="standard" (click)="removeEphemeralNote(i)" class="scale-75 -mt-1 -mr-1 opacity-60 hover:opacity-100" title="Descartar">
+                            done
+                          </button>
+                        </div>
+                      }
+                      @if (ephemeralNotes().length === 0) {
+                        <div class="text-center py-6 text-md-sys-on-surface-variant m3-body-small font-light italic opacity-70">
+                          Mente despejada...
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  
+                  <div class="mt-6 pt-4 flex items-center gap-3 border-t border-md-sys-outline/5 w-full">
+                    <div class="flex-1 min-w-0">
+                      <m3-text-field
+                        [ngModel]="newNote()"
+                        (ngModelChange)="newNote.set($event)"
+                        (keyup.enter)="addEphemeralNote()"
+                        placeholder="Anotar idea y soltar..."
+                        variant="filled"
+                        class="w-full block"
+                      />
+                    </div>
+                    <button m3-fab size="small" color="secondary" (fabClick)="addEphemeralNote()" [disabled]="!newNote().trim()">
+                      arrow_upward
+                    </button>
+                  </div>
+                </section>
+              </div>
+
+              <!-- Footer -->
+              <footer class="w-full mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-md-sys-outline m3-body-small gap-4 border-t border-md-sys-outline/10">
+                <div class="flex items-center gap-3">
+                  <span class="w-1.5 h-1.5 rounded-full bg-md-sys-primary/50"></span>
+                  <span class="font-light italic">“La calma exterior cultiva la profundidad del pensamiento.”</span>
+                </div>
+                <div class="flex items-center gap-6 m3-label-small uppercase tracking-widest">
+                  <span>total hoy • 1h 45m</span>
+                  <span>té • sencha</span>
+                </div>
+              </footer>
+
+            </div>
           </div>
-          <span class="text-[11px] font-medium tracking-wide">
-            {{ tareaService.isPomodoroActivo() ? 'Pause' : 'Start' }}
-          </span>
-        </button>
-
-        <!-- Botón Soundscape -->
-        <button
-          ui-button
-          variant="icon"
-          class="flex flex-col items-center gap-2 group text-stone-400 hover:text-stone-800 p-2">
-          <div class="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-stone-100 transition-colors">
-            <span class="material-symbols-rounded text-[22px]">music_note</span>
-          </div>
-          <span class="text-[11px] font-medium tracking-wide">Soundscape</span>
-        </button>
-
+        </main>
       </div>
-
-      <!-- Indicador sutil de Modo de Datos (Mock vs Backend) -->
-      <div class="mt-14 flex items-center gap-2 text-[11px] text-stone-400">
-        <span class="w-2 h-2 rounded-full" [class.bg-emerald-500]="tareaService.isMockMode()" [class.bg-blue-500]="!tareaService.isMockMode()"></span>
-        <span>Modo Front: {{ tareaService.isMockMode() ? 'In-Memory (Sin Backend)' : 'Conectado a Spring' }}</span>
-        <button
-          (click)="tareaService.setMockMode(!tareaService.isMockMode())"
-          class="underline hover:text-stone-600 ml-1 cursor-pointer">
-          (cambiar a {{ tareaService.isMockMode() ? 'Spring HTTP' : 'Mock' }})
-        </button>
-      </div>
-
     </div>
-  `
+  `,
+  styles: [`
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: var(--color-md-sys-outline-variant);
+      border-radius: 4px;
+    }
+  `]
 })
 export class FocusSanctuaryPage implements OnInit, OnDestroy {
   public readonly tareaService = inject(TareaEnfoqueService);
@@ -167,12 +255,18 @@ export class FocusSanctuaryPage implements OnInit, OnDestroy {
   @ViewChild('progressCircle', { static: true }) progressCircle!: ElementRef<SVGCircleElement>;
 
   activeMode = signal<CycleMode>('FOCUS');
-  timeLeft = signal<number>(45 * 60);
-  maxTime = signal<number>(45 * 60);
+  timeLeft = signal<number>(25 * 60);
+  maxTime = signal<number>(25 * 60);
   tituloTarea = signal<string>('');
+  
+  ephemeralNotes = signal<string[]>([
+    'Comprobar muestra de tipografía en monitor mate',
+    'Escribir agradecimiento a Kengo por el prólogo'
+  ]);
+  newNote = signal<string>('');
 
   private timerInterval: any;
-  private readonly CIRCUMFERENCE = 1043;
+  private readonly CIRCUMFERENCE = 741.42;
   private readonly MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 
   constructor() {
@@ -186,7 +280,7 @@ export class FocusSanctuaryPage implements OnInit, OnDestroy {
         gsap.to(this.progressCircle.nativeElement, {
           strokeDashoffset: offset,
           duration: 1,
-          ease: 'linear'
+          ease: 'power3.out' // M3 Zen feeling
         });
       }
     });
@@ -214,7 +308,7 @@ export class FocusSanctuaryPage implements OnInit, OnDestroy {
     if (this.tareaService.isPomodoroActivo()) return;
 
     this.activeMode.set(mode);
-    let duration = 45 * 60;
+    let duration = 25 * 60; // Default FOCUS time 25m as per HTML
     if (mode === 'SHORT_BREAK') duration = 5 * 60;
     if (mode === 'LONG_BREAK') duration = 15 * 60;
 
@@ -287,6 +381,27 @@ export class FocusSanctuaryPage implements OnInit, OnDestroy {
     this.stopLocalTimer();
     this.tareaService.pausarCicloLocal();
     this.timeLeft.set(this.maxTime());
+  }
+  
+  addFiveMinutes() {
+    this.timeLeft.update(t => t + 5 * 60);
+    this.maxTime.update(t => t + 5 * 60);
+  }
+  
+  addEphemeralNote() {
+    const note = this.newNote().trim();
+    if (note) {
+      this.ephemeralNotes.update(notes => [note, ...notes]);
+      this.newNote.set('');
+    }
+  }
+
+  removeEphemeralNote(index: number) {
+    this.ephemeralNotes.update(notes => {
+      const copy = [...notes];
+      copy.splice(index, 1);
+      return copy;
+    });
   }
 
   formatTime(seconds: number): string {

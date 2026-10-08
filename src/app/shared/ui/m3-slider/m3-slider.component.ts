@@ -13,8 +13,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
  * Specifications: https://m3.material.io/components/sliders/specs
  *
  * Specs:
- * - Active track: primary, 16dp height
- * - Inactive track: surface-variant, 16dp height
+ * - Active track: primary, 4dp height
+ * - Inactive track: surface-variant, 4dp height
  * - Handle: primary, 44x44dp touch target (visible handle 20x20dp)
  * - State layer: primary/8 (hover) or /12 (pressed), 40x40dp
  */
@@ -37,10 +37,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         [disabled]="disabled()"
         (input)="onInput($event)"
         class="absolute inset-0 w-full h-full opacity-0 z-20 cursor-pointer"
-        aria-label="Slider" />
+        [attr.aria-label]="ariaLabel()" />
 
       <!-- Inactive Track -->
-      <div class="absolute left-0 right-0 h-4 bg-md-sys-surface-variant rounded-md-sys-corner-full overflow-hidden">
+      <div class="absolute left-0 right-0 h-1 bg-md-sys-surface-variant rounded-md-sys-corner-full overflow-hidden">
         <!-- Active Track -->
         <div
           class="absolute left-0 top-0 bottom-0 bg-md-sys-primary transition-all duration-75"
@@ -77,6 +77,7 @@ export class M3SliderComponent implements ControlValueAccessor {
   max = input<number>(100);
   step = input<number>(1);
   disabled = input<boolean>(false);
+  ariaLabel = input<string>('Slider');
 
   value = input<number>(0);
   change = output<number>();

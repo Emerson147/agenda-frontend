@@ -4,6 +4,7 @@ import {
   output,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 /**
  * Material Design 3 (M3) Date Picker Component Scaffold
@@ -17,6 +18,7 @@ import {
 @Component({
   selector: 'm3-date-picker',
   standalone: true,
+  imports: [DatePipe],
   template: `
     @if (open()) {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/32" (click)="onBackdropClick()">

@@ -9,8 +9,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   selector: 'app-login-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css']
+  templateUrl: './login-page.component.html'
 })
 export class LoginPageComponent implements AfterViewInit {
   @ViewChild('formContainer') formContainer!: ElementRef<HTMLDivElement>;

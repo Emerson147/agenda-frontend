@@ -41,19 +41,13 @@ export class M3SegmentedButtonComponent {}
       [class.text-md-sys-on-secondary-container]="selected()"
       [class.bg-transparent]="!selected()"
       [class.text-md-sys-on-surface]="!selected()">
-      
-      <!-- State Layer -->
-      <div class="absolute inset-0 opacity-0 transition-opacity"
-           [class.group-hover:bg-md-sys-on-secondary-container]="selected()"
-           [class.group-active:bg-md-sys-on-secondary-container]="selected()"
-           [class.peer-focus-visible:bg-md-sys-on-secondary-container]="selected()"
-           [class.group-hover:bg-md-sys-on-surface]="!selected()"
-           [class.group-active:bg-md-sys-on-surface]="!selected()"
-           [class.peer-focus-visible:bg-md-sys-on-surface]="!selected()"
-           [class.group-hover:opacity-8]="true"
-           [class.group-active:opacity-12]="true"
-           [class.peer-focus-visible:opacity-12]="true">
-      </div>
+
+      <!-- State Layer — static classes so Tailwind generates them at build time -->
+      @if (selected()) {
+        <div class="absolute inset-0 opacity-0 transition-opacity bg-md-sys-on-secondary-container group-hover:opacity-8 group-active:opacity-12 focus-visible:opacity-12"></div>
+      } @else {
+        <div class="absolute inset-0 opacity-0 transition-opacity bg-md-sys-on-surface group-hover:opacity-8 group-active:opacity-12 focus-visible:opacity-12"></div>
+      }
 
       <!-- Checked Icon Container (Animating) -->
       @if (selected()) {
@@ -71,7 +65,7 @@ export class M3SegmentedButtonComponent {}
 
       <!-- Label -->
       <span class="z-10"><ng-content></ng-content></span>
-      
+
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
