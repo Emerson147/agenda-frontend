@@ -1,0 +1,278 @@
+@if (layoutService.navigationStyle() === 'Dock') {
+<!-- Dock Wrapper -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 w-max">
+
+    <!-- Dock Navigation -->
+    <nav aria-label="Floating Navigation Dock"
+        class="flex items-center p-2 gap-1 bg-md-sys-surface rounded-full shadow-2xl select-none border border-md-sys-outline/10">
+
+        @for (item of navItems; track item.label) {
+        @if (item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active-dock-item"
+            [routerLinkActiveOptions]="{ exact: !!item.exact }" #rla="routerLinkActive"
+            class="group relative flex items-center justify-center h-12 transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer rounded-full"
+            [ngClass]="getDockItemClass(rla.isActive)" [title]="item.label">
+            <span
+                class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)"
+                [class.icon-filled]="rla.isActive">
+                {{ item.icon }}
+            </span>
+
+            <!-- Badge si el pomodoro está activo -->
+            @if (item.isSanctuary && tareaService.isPomodoroActivo()) {
+            <span class="absolute top-2 right-2 flex h-2 w-2">
+                <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            }
+        </a>
+        } @else {
+        <!-- Item de acción / botón futuro -->
+        <button type="button"
+            class="group flex items-center justify-center h-12 w-12 hover:w-16 rounded-full text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container-highest transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer"
+            [title]="item.label">
+            <span
+                class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)">
+                {{ item.icon }}
+            </span>
+        </button>
+        }
+        }
+
+    </nav>
+
+    <!-- Separate Options FAB -->
+    <div class="relative">
+        <button type="button" (click)="toggleOptionsMenu()" [attr.aria-expanded]="isOptionsOpen()" aria-label="Opciones"
+            class="flex items-center justify-center w-14 h-14 rounded-[1.25rem] shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer focus:outline-none"
+            [ngClass]="{
+          'bg-md-sys-primary text-md-sys-on-primary': !isOptionsOpen(),
+          'bg-md-sys-surface-container-high text-md-sys-on-surface border border-md-sys-outline/20': isOptionsOpen()
+        }" title="Opciones">
+            <span
+                class="material-symbols-rounded text-[24px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)"
+                [class.rotate-90]="isOptionsOpen()" [class.icon-filled]="isOptionsOpen()">
+                {{ isOptionsOpen() ? 'close' : 'apps' }}
+            </span>
+        </button>
+
+        <!-- Options Popover -->
+        @if (isOptionsOpen() && !isAppearanceOpen()) {
+        <ng-container *ngTemplateOutlet="optionsMenu; context: { positionClass: 'right-0' }"></ng-container>
+        }
+
+        <!-- Appearance Sub-Popover -->
+        @if (isOptionsOpen() && isAppearanceOpen()) {
+        <ng-container
+            *ngTemplateOutlet="appearancePopover; context: { positionClass: 'right-0 origin-bottom-right' }"></ng-container>
+        }
+    </div>
+</div>
+} @else {
+<aside [class]="sidebarContainerClass">
+    <!-- Header / Logo -->
+    <div [class]="headerClass">
+        <span class="text-xl font-bold text-md-sys-on-surface flex items-center justify-center gap-2">
+            <span
+                class="material-symbols-rounded text-2xl text-md-sys-primary transition-transform hover:rotate-12 duration-(--duration-md-sys-medium-1)">auto_awesome</span>
+            @if (showLabels) {
+            <span class="whitespace-nowrap transition-opacity duration-(--duration-md-sys-medium-1)">Pomodoro App</span>
+            }
+        </span>
+    </div>
+
+    <!-- Navigation Links Dinámicos -->
+    <nav [class]="navContainerClass">
+        @for (item of navItems; track item.label; let i = $index) {
+
+        <!-- Si tiene ruta: enlace <a> -->
+        @if (item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active-sidebar-item"
+            [routerLinkActiveOptions]="{ exact: !!item.exact }" #rla="routerLinkActive"
+            [class]="getItemClass(rla.isActive)" [class.active-item-custom]="rla.isActive" class="relative">
+
+            @if (!hideIcons) {
+            <span
+                class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)"
+                [class.icon-filled]="rla.isActive">
+                {{ item.icon }}
+            </span>
+            }
+
+            @if (showLabels) {
+            <span>{{ item.label }}</span>
+            }
+
+            <!-- Badge del Pomodoro activo -->
+            @if (item.isSanctuary && tareaService.isPomodoroActivo()) {
+            <span class="absolute flex h-2 w-2" [ngClass]="showLabels ? 'top-3 right-4' : 'top-1 right-1'">
+                <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            }
+        </a>
+        } @else {
+        <!-- Si no tiene ruta: botón interactivo -->
+        <button type="button" [class]="getItemClass(false)">
+            @if (!hideIcons) {
+            <span
+                class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)">
+                {{ item.icon }}
+            </span>
+            }
+            @if (showLabels) {
+            <span>{{ item.label }}</span>
+            }
+        </button>
+        }
+
+        <!-- Divisor M3 después de las secciones principales (entre Sanctuary y los demás) -->
+        @if (i === 1 && !isTasksStyle) {
+        <m3-divider inset="middle" class="my-2" [class.hidden]="hideDividers" />
+        }
+        }
+    </nav>
+
+    <!-- Footer / Options -->
+    <div [class]="footerClass">
+        <button type="button" (click)="toggleOptionsMenu()" [attr.aria-expanded]="isOptionsOpen()" aria-label="Opciones"
+            [class]="getItemClass(isOptionsOpen())">
+            <div class="flex items-center gap-3">
+                @if (!hideIcons) {
+                <span
+                    class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)"
+                    [class.icon-filled]="isOptionsOpen()">category</span>
+                }
+                @if (showLabels) { <span>Opciones</span> }
+            </div>
+            @if (showLabels) {
+            <span class="material-symbols-rounded text-sm transition-transform duration-(--duration-md-sys-medium-1)"
+                [class.rotate-180]="isOptionsOpen()">expand_more</span>
+            }
+        </button>
+
+        <!-- Options Popover -->
+        @if (isOptionsOpen() && !isAppearanceOpen()) {
+        <ng-container *ngTemplateOutlet="optionsMenu; context: { positionClass: 'left-4' }"></ng-container>
+        }
+
+        <!-- Appearance Sub-Popover -->
+        @if (isOptionsOpen() && isAppearanceOpen()) {
+        <ng-container
+            *ngTemplateOutlet="appearancePopover; context: { positionClass: 'left-4 origin-bottom-left' }"></ng-container>
+        }
+    </div>
+</aside>
+}
+
+<!-- MOLDE REUTILIZABLE DE NAVEGACIÓN -->
+<ng-template #optionsMenu let-positionClass="positionClass">
+    <m3-menu [class]="'absolute bottom-18 w-56 m3-shared-axis-y-enter z-50 ' + positionClass">
+        <div class="px-3 py-2 mb-1">
+            <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider">Opciones</span>
+        </div>
+
+        <m3-menu-item leadingIcon="add">Crear transferencia</m3-menu-item>
+        <m3-menu-item leadingIcon="view_column">Campos adicionales</m3-menu-item>
+        <m3-menu-item leadingIcon="settings">Configuración</m3-menu-item>
+        <m3-menu-item leadingIcon="refresh">Recargar App</m3-menu-item>
+        <m3-menu-item leadingIcon="palette" (itemClick)="openAppearance()">Apariencia</m3-menu-item>
+        <m3-menu-item leadingIcon="feedback">Enviar Feedback</m3-menu-item>
+        <m3-menu-item leadingIcon="logout" (itemClick)="logout()">Cerrar Sesión</m3-menu-item>
+    </m3-menu>
+</ng-template>
+
+
+<!-- MOLDE REUTILIZABLE DE APARIENCIA -->
+<ng-template #appearancePopover let-positionClass="positionClass">
+    <div class="absolute bottom-18 w-88 bg-md-sys-surface-container-high rounded-[2rem] p-5 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 zoom-in-95 z-50"
+        [ngClass]="positionClass">
+
+        <!-- 1. Header con botón volver -->
+        <div class="flex items-center gap-3">
+            <button (click)="closeAppearance()" aria-label="Volver a opciones"
+                class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-md-sys-surface-container-highest text-md-sys-on-surface-variant transition-colors cursor-pointer">
+                <span class="material-symbols-rounded text-[22px]">arrow_back</span>
+            </button>
+            <span class="text-lg font-bold text-md-sys-on-surface flex items-center gap-2">
+                Apariencia
+            </span>
+        </div>
+
+        <!-- 2. Tema (Modo Oscuro con Sliding Pill) -->
+        <div class="relative flex p-1 bg-md-sys-surface-container-highest rounded-2xl h-12 select-none">
+            <div class="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-md-sys-surface rounded-xl shadow-sm transition-transform duration-300 ease-(--ease-md-sys-emphasized)"
+                [class.translate-x-0]="!layoutService.isDarkMode()"
+                [class.translate-x-[calc(100%+8px)]]="layoutService.isDarkMode()">
+            </div>
+
+            <button type="button" (click)="layoutService.setDarkMode(false)" aria-label="Modo claro"
+                class="relative z-10 flex-1 flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition-colors duration-200 cursor-pointer"
+                [class.text-md-sys-on-surface]="!layoutService.isDarkMode()"
+                [class.text-md-sys-on-surface-variant]="layoutService.isDarkMode()">
+                <span class="material-symbols-rounded text-[20px] transition-transform duration-300"
+                    [class.rotate-90]="layoutService.isDarkMode()" [class.icon-filled]="!layoutService.isDarkMode()">
+                    light_mode
+                </span>
+                Claro
+            </button>
+
+            <button type="button" (click)="layoutService.setDarkMode(true)" aria-label="Modo oscuro"
+                class="relative z-10 flex-1 flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition-colors duration-200 cursor-pointer"
+                [class.text-md-sys-on-surface]="layoutService.isDarkMode()"
+                [class.text-md-sys-on-surface-variant]="!layoutService.isDarkMode()">
+                <span class="material-symbols-rounded text-[20px] transition-transform duration-300"
+                    [class.-rotate-12]="!layoutService.isDarkMode()" [class.icon-filled]="layoutService.isDarkMode()">
+                    dark_mode
+                </span>
+                Oscuro
+            </button>
+        </div>
+
+        <!-- 3. Acento (Colores) -->
+        <div class="flex flex-col gap-3">
+            <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Acento</span>
+            <div class="grid grid-cols-5 gap-3">
+                @for (color of colors; track color.id) {
+                <button (click)="layoutService.setThemeColor(color.id)"
+                    [attr.aria-label]="'Color de acento ' + color.id"
+                    class="relative w-11 h-11 transition-all duration-(--duration-md-sys-medium-1) hover:scale-110 hover:rounded-2xl focus:outline-none flex items-center justify-center shadow-sm mx-auto cursor-pointer"
+                    [class.rounded-[50%]]="layoutService.themeColor() !== color.id"
+                    [class.rounded-2xl]="layoutService.themeColor() === color.id"
+                    [class.scale-110]="layoutService.themeColor() === color.id" [style.background]="color.bg">
+                    @if (layoutService.themeColor() === color.id) {
+                    <span
+                        class="material-symbols-rounded text-white text-[22px] drop-shadow-md animate-in zoom-in duration-(--duration-md-sys-medium-1)">check</span>
+                    }
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- 4. Navegación (Estilos de Sidebar) -->
+        <div class="flex flex-col gap-3">
+            <span
+                class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Navegación</span>
+            <div class="grid grid-cols-3 gap-2">
+                @for (style of navStyles; track style) {
+                <button (click)="layoutService.setNavigationStyle(style)"
+                    [attr.aria-pressed]="layoutService.navigationStyle() === style"
+                    class="flex items-center justify-center py-3 px-2 hover:px-4 text-sm font-medium rounded-2xl transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 border-2 cursor-pointer"
+                    [class.col-span-3]="style === 'Tunnel'"
+                    [class.border-md-sys-primary]="layoutService.navigationStyle() === style"
+                    [class.bg-md-sys-primary-container]="layoutService.navigationStyle() === style"
+                    [class.text-md-sys-on-primary-container]="layoutService.navigationStyle() === style"
+                    [class.border-transparent]="layoutService.navigationStyle() !== style"
+                    [class.bg-md-sys-surface-container-highest]="layoutService.navigationStyle() !== style"
+                    [class.text-md-sys-on-surface-variant]="layoutService.navigationStyle() !== style"
+                    [class.hover:brightness-110]="layoutService.navigationStyle() !== style">
+                    {{ style }}
+                </button>
+                }
+            </div>
+        </div>
+
+    </div>
+</ng-template>

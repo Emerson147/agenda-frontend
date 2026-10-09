@@ -18,14 +18,17 @@ import {
 @Component({
   selector: 'm3-menu',
   standalone: true,
+  host: {
+    class: 'block'
+  },
   template: `
-    <div class="flex flex-col py-2 bg-md-sys-surface-container text-md-sys-on-surface rounded-md-sys-corner-xs shadow-md-sys-elevation-2 min-w-28 max-w-70">
+    <div class="flex flex-col py-2 bg-md-sys-surface-container text-md-sys-on-surface rounded-md-sys-corner-xl border border-md-sys-outline/20 shadow-2xl overflow-hidden min-w-28 max-w-70">
       <ng-content></ng-content>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class M3MenuComponent {}
+export class M3MenuComponent { }
 
 /**
  * M3 Menu Item Component
@@ -33,6 +36,9 @@ export class M3MenuComponent {}
 @Component({
   selector: 'm3-menu-item',
   standalone: true,
+  host: {
+    class: 'block w-full'
+  },
   template: `
     <button
       type="button"
@@ -41,7 +47,7 @@ export class M3MenuComponent {}
       class="relative flex items-center justify-between w-full h-12 px-3 outline-none group disabled:opacity-38 disabled:pointer-events-none cursor-pointer bg-transparent">
       
       <!-- State Layer -->
-      <div class="absolute inset-0 opacity-0 group-hover:bg-md-sys-on-surface/8 group-active:bg-md-sys-on-surface/12 peer-focus-visible:bg-md-sys-on-surface/12 transition-opacity"></div>
+      <div class="absolute inset-0 opacity-0 group-hover:bg-md-sys-on-surface/8 group-active:bg-md-sys-on-surface/12 transition-opacity"></div>
 
       <!-- Leading section (Icon + Text) -->
       <div class="flex items-center z-10">

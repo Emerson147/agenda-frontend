@@ -37,15 +37,15 @@ export class M3DividerComponent {
   protected hostClasses = computed(() => {
     const isHorizontal = this.orientation() === 'horizontal';
 
-    const base = isHorizontal
-      ? 'block w-full h-px bg-md-sys-outline-variant shrink-0'
-      : 'block w-px h-full bg-md-sys-outline-variant shrink-0 self-stretch';
-
     const insetClasses: Record<string, string> = {
-      none: '',
-      inset: isHorizontal ? 'ml-4' : 'mt-4',
-      middle: isHorizontal ? 'mx-4' : 'my-4',
+      none: 'w-full',
+      inset: isHorizontal ? 'ml-4 w-auto' : 'mt-4',
+      middle: isHorizontal ? 'mx-4 w-auto' : 'my-4',
     };
+
+    const base = isHorizontal
+      ? 'block h-px bg-md-sys-outline-variant shrink-0'
+      : 'block w-px h-full bg-md-sys-outline-variant shrink-0 self-stretch';
 
     return `${base} ${insetClasses[this.inset()]}`.trim();
   });

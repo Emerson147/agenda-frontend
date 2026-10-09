@@ -1,483 +1,52 @@
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { TareaEnfoqueService } from '../../../core/services/tarea-enfoque.service';
-import { LayoutService, NavigationStyle } from '../../../core/services/layout.service';
+import { LayoutService, NavigationStyle, ThemeColor } from '../../../core/services/layout.service';
+import { M3MenuComponent, M3MenuItemComponent } from '../../../shared/ui/m3-menu/m3-menu.component';
+import { M3DividerComponent } from '../../../shared/ui/m3-divider/m3-divider.component';
+
+export interface NavItem {
+  readonly label: string;
+  readonly icon: string;
+  readonly path?: string;
+  readonly exact?: boolean;
+  readonly isSanctuary?: boolean;
+}
 
 @Component({
   selector: 'app-layout-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
-    @if (layoutService.navigationStyle() === 'Dock') {
-      <!-- Dock Wrapper -->
-      <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 w-max">
-        
-        <!-- Dock Navigation -->
-        <nav 
-          aria-label="Floating Navigation Dock"
-          class="flex items-center p-2 gap-1 bg-md-sys-surface rounded-full shadow-2xl select-none border border-md-sys-outline/10">
-          
-          <!-- 1. Home / Dashboard -->
-          <a 
-            routerLink="/"
-            routerLinkActive="active-dock-item"
-            [routerLinkActiveOptions]="{ exact: true }"
-            #rlaDockHome="routerLinkActive"
-            class="group flex items-center justify-center h-12 transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer rounded-full"
-            [class.w-20]="rlaDockHome.isActive"
-            [class.w-12]="!rlaDockHome.isActive"
-            [class.hover:w-16]="!rlaDockHome.isActive"
-            [class.bg-md-sys-primary]="rlaDockHome.isActive"
-            [class.text-md-sys-on-primary]="rlaDockHome.isActive"
-            [class.text-md-sys-on-surface-variant]="!rlaDockHome.isActive"
-            [class.hover:bg-md-sys-surface-container-highest]="!rlaDockHome.isActive"
-            [class.hover:text-md-sys-on-surface]="!rlaDockHome.isActive"
-            title="Dashboard">
-            <span class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)" [class.icon-filled]="rlaDockHome.isActive">home</span>
-          </a>
-
-          <!-- 2. Sanctuary -->
-          <a 
-            routerLink="/sanctuary"
-            routerLinkActive="active-dock-item"
-            #rlaDockSanct="routerLinkActive"
-            class="group relative flex items-center justify-center h-12 transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer rounded-full"
-            [class.w-20]="rlaDockSanct.isActive"
-            [class.w-12]="!rlaDockSanct.isActive"
-            [class.hover:w-16]="!rlaDockSanct.isActive"
-            [class.bg-md-sys-primary]="rlaDockSanct.isActive"
-            [class.text-md-sys-on-primary]="rlaDockSanct.isActive"
-            [class.text-md-sys-on-surface-variant]="!rlaDockSanct.isActive"
-            [class.hover:bg-md-sys-surface-container-highest]="!rlaDockSanct.isActive"
-            [class.hover:text-md-sys-on-surface]="!rlaDockSanct.isActive"
-            title="Sanctuary">
-            <span class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)" [class.icon-filled]="rlaDockSanct.isActive">timer</span>
-            @if (tareaService.isPomodoroActivo()) {
-              <span class="absolute top-2 right-2 flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-            }
-          </a>
-
-          <!-- 3. Focus Intentions -->
-          <button 
-            type="button"
-            class="group flex items-center justify-center h-12 w-12 hover:w-16 rounded-full text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container-highest transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer"
-            title="Focus Intentions">
-            <span class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)">task_alt</span>
-          </button>
-
-          <!-- 4. Analytics -->
-          <button 
-            type="button"
-            class="group flex items-center justify-center h-12 w-12 hover:w-16 rounded-full text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container-highest transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer"
-            title="Metrics & Insights">
-            <span class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)">analytics</span>
-          </button>
-
-          <!-- 5. Soundscapes -->
-          <button 
-            type="button"
-            class="group flex items-center justify-center h-12 w-12 hover:w-16 rounded-full text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container-highest transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer"
-            title="Soundscapes">
-            <span class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)">graphic_eq</span>
-          </button>
-
-          <!-- 6. Weekly Review -->
-          <button 
-            type="button"
-            class="group flex items-center justify-center h-12 w-12 hover:w-16 rounded-full text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container-highest transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer"
-            title="Weekly Review">
-            <span class="material-symbols-rounded text-[22px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)">event_note</span>
-          </button>
-        </nav>
-
-        <!-- Separate Options FAB -->
-        <div class="relative">
-          <button 
-            type="button"
-            (click)="toggleOptionsMenu()"
-            class="flex items-center justify-center w-14 h-14 rounded-[1.25rem] shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer focus:outline-none"
-            [ngClass]="{
-              'bg-blue-600 text-white': !isOptionsOpen,
-              'bg-md-sys-surface-container-high text-md-sys-on-surface border border-md-sys-outline/20': isOptionsOpen
-            }"
-            title="Opciones">
-            <span class="material-symbols-rounded text-[24px] transition-transform duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized)" [class.rotate-90]="isOptionsOpen" [class.icon-filled]="isOptionsOpen">
-              {{ isOptionsOpen ? 'close' : 'apps' }}
-            </span>
-          </button>
-
-          <!-- Options Popover -->
-          @if (isOptionsOpen && !isAppearanceOpen) {
-            <div class="absolute bottom-18 right-0 w-56 bg-md-sys-surface-container-high rounded-3xl p-3 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-1 animate-in fade-in slide-in-from-bottom-2 zoom-in-95 origin-bottom-right">
-              <div class="px-3 py-2 mb-1">
-                <span class="text-lg font-semibold text-md-sys-on-surface border-2 border-md-sys-outline/30 rounded px-1">Opciones</span>
-              </div>
-              
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">add</span>
-                Crear transferencia
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">view_column</span>
-                Campos adicionales
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">settings</span>
-                Configuración
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">refresh</span>
-                Recargar App
-              </button>
-              <button (click)="openAppearance()" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">palette</span>
-                Apariencia
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">feedback</span>
-                Dar Feedback
-              </button>
-              <button (click)="logout()" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-error-container hover:text-md-sys-error rounded-xl transition-colors mt-1">
-                <span class="material-symbols-rounded text-[18px]">logout</span>
-                Cerrar Sesión
-              </button>
-            </div>
-          }
-
-          <!-- Appearance Sub-Popover -->
-          @if (isOptionsOpen && isAppearanceOpen) {
-            <div class="absolute bottom-18 right-0 w-88 bg-md-sys-surface-container-high rounded-[2rem] p-5 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 zoom-in-95 origin-bottom-right">
-              <div class="flex items-center gap-3">
-                <button (click)="closeAppearance()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-md-sys-surface-container-highest text-md-sys-on-surface-variant transition-colors">
-                  <span class="material-symbols-rounded text-[22px]">arrow_back</span>
-                </button>
-                <span class="text-lg font-bold text-md-sys-on-surface flex items-center gap-2">
-                  Apariencia
-                </span>
-              </div>
-
-              <!-- Tema (Modo Oscuro) -->
-              <div class="flex flex-col gap-3">
-                <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Tema</span>
-                <div class="flex p-1 bg-md-sys-surface-container-highest rounded-2xl">
-                  <button 
-                    (click)="layoutService.setDarkMode(false)"
-                    class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all"
-                    [class.bg-md-sys-surface]="!layoutService.isDarkMode()"
-                    [class.shadow-sm]="!layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface]="!layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface-variant]="layoutService.isDarkMode()">
-                    <span class="material-symbols-rounded text-[20px]" [class.icon-filled]="!layoutService.isDarkMode()">light_mode</span>
-                    Claro
-                  </button>
-                  <button 
-                    (click)="layoutService.setDarkMode(true)"
-                    class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all"
-                    [class.bg-md-sys-surface]="layoutService.isDarkMode()"
-                    [class.shadow-sm]="layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface]="layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface-variant]="!layoutService.isDarkMode()">
-                    <span class="material-symbols-rounded text-[20px]" [class.icon-filled]="layoutService.isDarkMode()">dark_mode</span>
-                    Oscuro
-                  </button>
-                </div>
-              </div>
-
-              <!-- Acento (Colores) -->
-              <div class="flex flex-col gap-3">
-                <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Acento</span>
-                <div class="grid grid-cols-5 gap-3">
-                  @for (color of colors; track color.id) {
-                    <button 
-                      (click)="layoutService.setThemeColor(color.id)"
-                      class="relative w-11 h-11 transition-all duration-(--duration-md-sys-medium-1) hover:scale-110 hover:rounded-2xl focus:outline-none flex items-center justify-center shadow-sm mx-auto"
-                      [class.rounded-full]="layoutService.themeColor() !== color.id"
-                      [class.rounded-2xl]="layoutService.themeColor() === color.id"
-                      [class.scale-110]="layoutService.themeColor() === color.id"
-                      [style.background]="color.bg">
-                      @if (layoutService.themeColor() === color.id) {
-                        <span class="material-symbols-rounded text-white text-[22px] drop-shadow-md animate-in zoom-in duration-(--duration-md-sys-medium-1)">check</span>
-                      }
-                    </button>
-                  }
-                </div>
-              </div>
-
-              <!-- Navegación -->
-              <div class="flex flex-col gap-3">
-                <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Navegación</span>
-                <div class="grid grid-cols-3 gap-2">
-                  @for (style of navStyles; track style) {
-                    <button 
-                      (click)="layoutService.setNavigationStyle(style)"
-                      class="flex items-center justify-center py-3 px-2 hover:px-4 text-sm font-medium rounded-2xl transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 border-2"
-                      [class.col-span-3]="style === 'Tunnel'"
-                      [class.border-md-sys-primary]="layoutService.navigationStyle() === style"
-                      [class.bg-md-sys-primary-container]="layoutService.navigationStyle() === style"
-                      [class.text-md-sys-on-primary-container]="layoutService.navigationStyle() === style"
-                      [class.border-transparent]="layoutService.navigationStyle() !== style"
-                      [class.bg-md-sys-surface-container-highest]="layoutService.navigationStyle() !== style"
-                      [class.text-md-sys-on-surface-variant]="layoutService.navigationStyle() !== style"
-                      [class.hover:brightness-110]="layoutService.navigationStyle() !== style">
-                      {{ style }}
-                    </button>
-                  }
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      </div>
-    } @else {
-      <aside [class]="sidebarContainerClass">
-        <!-- Header / Logo -->
-        <div [class]="headerClass">
-          <span class="text-xl font-bold text-md-sys-on-surface flex items-center justify-center gap-2">
-            <span class="material-symbols-rounded text-2xl text-primary transition-transform hover:rotate-12 duration-(--duration-md-sys-medium-1)">auto_awesome</span>
-            @if (showLabels) {
-              <span class="whitespace-nowrap transition-opacity duration-(--duration-md-sys-medium-1)">Pomodoro App</span>
-            }
-          </span>
-        </div>
-
-        <!-- Navigation Links -->
-        <nav [class]="navContainerClass">
-          
-          <!-- Dashboard -->
-          <a 
-            routerLink="/"
-            routerLinkActive="active-sidebar-item"
-            [routerLinkActiveOptions]="{ exact: true }"
-            #rlaDockHome="routerLinkActive"
-            [class]="getItemClass(rlaDockHome.isActive)"
-            [class.active-item-custom]="rlaDockHome.isActive">
-            @if (!hideIcons) {
-              <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)" [class.icon-filled]="rlaDockHome.isActive">home</span>
-            }
-            @if (showLabels) { <span>Dashboard</span> }
-          </a>
-
-          <!-- Sanctuary -->
-          <a 
-            routerLink="/sanctuary"
-            routerLinkActive="active-sidebar-item"
-            #rlaDockSanct="routerLinkActive"
-            [class]="getItemClass(rlaDockSanct.isActive)"
-            [class.active-item-custom]="rlaDockSanct.isActive"
-            class="relative">
-            @if (!hideIcons) {
-              <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)" [class.icon-filled]="rlaDockSanct.isActive">timer</span>
-            }
-            @if (showLabels) { <span>Sanctuary</span> }
-            
-            @if (tareaService.isPomodoroActivo()) {
-              <span class="absolute flex h-2 w-2" [ngClass]="showLabels ? 'top-3 right-4' : 'top-1 right-1'">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-            }
-          </a>
-
-          @if (!isTasksStyle) {
-            <div class="h-px bg-md-sys-outline/20 mx-2 my-2 shrink-0" [class.hidden]="hideDividers"></div>
-          }
-
-          <!-- Focus Intentions -->
-          <button type="button" [class]="getItemClass(false)">
-            @if (!hideIcons) {
-              <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)">task_alt</span>
-            }
-            @if (showLabels) { <span>Intentions</span> }
-          </button>
-
-          <!-- Analytics -->
-          <button type="button" [class]="getItemClass(false)">
-            @if (!hideIcons) {
-              <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)">analytics</span>
-            }
-            @if (showLabels) { <span>Analytics</span> }
-          </button>
-
-          <!-- Soundscapes -->
-          <button type="button" [class]="getItemClass(false)">
-            @if (!hideIcons) {
-              <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)">graphic_eq</span>
-            }
-            @if (showLabels) { <span>Soundscapes</span> }
-          </button>
-
-          <!-- Weekly Review -->
-          <button type="button" [class]="getItemClass(false)">
-            @if (!hideIcons) {
-              <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)">event_note</span>
-            }
-            @if (showLabels) { <span>Review</span> }
-          </button>
-        </nav>
-
-        <!-- Footer / Options -->
-        <div [class]="footerClass">
-          <button 
-            type="button"
-            (click)="toggleOptionsMenu()"
-            [class]="getItemClass(isOptionsOpen)">
-            <div class="flex items-center gap-3">
-              @if (!hideIcons) {
-                <span class="material-symbols-rounded text-xl group-hover:scale-110 transition-transform duration-(--duration-md-sys-medium-1)" [class.icon-filled]="isOptionsOpen">category</span>
-              }
-              @if (showLabels) { <span>Opciones</span> }
-            </div>
-            @if (showLabels) {
-              <span class="material-symbols-rounded text-sm transition-transform duration-(--duration-md-sys-medium-1)" [class.rotate-180]="isOptionsOpen">expand_more</span>
-            }
-          </button>
-
-          <!-- Options Popover -->
-          @if (isOptionsOpen && !isAppearanceOpen) {
-            <div class="absolute bottom-18 left-4 bg-md-sys-surface-container-high rounded-3xl p-3 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-1 animate-in fade-in slide-in-from-bottom-2 zoom-in-95 origin-bottom-left" [class.w-64]="showLabels" [class.w-56]="!showLabels">
-              <div class="px-3 py-2 mb-1">
-                <span class="text-lg font-semibold text-md-sys-on-surface border-2 border-md-sys-outline/30 rounded px-1">Opciones</span>
-              </div>
-              
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">add</span>
-                Crear transferencia
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">view_column</span>
-                Campos adicionales
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">settings</span>
-                Configuración
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">refresh</span>
-                Recargar App
-              </button>
-              <button (click)="openAppearance()" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">palette</span>
-                Apariencia
-              </button>
-              <button class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface rounded-xl transition-colors">
-                <span class="material-symbols-rounded text-[18px]">feedback</span>
-                Dar Feedback
-              </button>
-              <button (click)="logout()" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-md-sys-on-surface-variant hover:bg-md-sys-error-container hover:text-md-sys-error rounded-xl transition-colors mt-1">
-                <span class="material-symbols-rounded text-[18px]">logout</span>
-                Cerrar Sesión
-              </button>
-            </div>
-          }
-
-          <!-- Appearance Sub-Popover -->
-          @if (isOptionsOpen && isAppearanceOpen) {
-            <div class="absolute bottom-18 left-4 w-88 bg-md-sys-surface-container-high rounded-[2rem] p-5 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 zoom-in-95 origin-bottom-left">
-              <div class="flex items-center gap-3">
-                <button (click)="closeAppearance()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-md-sys-surface-container-highest text-md-sys-on-surface-variant transition-colors">
-                  <span class="material-symbols-rounded text-[22px]">arrow_back</span>
-                </button>
-                <span class="text-lg font-bold text-md-sys-on-surface flex items-center gap-2">
-                  Apariencia
-                </span>
-              </div>
-
-              <!-- Tema (Modo Oscuro) -->
-              <div class="flex flex-col gap-3">
-                <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Tema</span>
-                <div class="flex p-1 bg-md-sys-surface-container-highest rounded-2xl">
-                  <button 
-                    (click)="layoutService.setDarkMode(false)"
-                    class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all"
-                    [class.bg-md-sys-surface]="!layoutService.isDarkMode()"
-                    [class.shadow-sm]="!layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface]="!layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface-variant]="layoutService.isDarkMode()">
-                    <span class="material-symbols-rounded text-[20px]" [class.icon-filled]="!layoutService.isDarkMode()">light_mode</span>
-                    Claro
-                  </button>
-                  <button 
-                    (click)="layoutService.setDarkMode(true)"
-                    class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all"
-                    [class.bg-md-sys-surface]="layoutService.isDarkMode()"
-                    [class.shadow-sm]="layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface]="layoutService.isDarkMode()"
-                    [class.text-md-sys-on-surface-variant]="!layoutService.isDarkMode()">
-                    <span class="material-symbols-rounded text-[20px]" [class.icon-filled]="layoutService.isDarkMode()">dark_mode</span>
-                    Oscuro
-                  </button>
-                </div>
-              </div>
-
-              <!-- Acento (Colores) -->
-              <div class="flex flex-col gap-3">
-                <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Acento</span>
-                <div class="grid grid-cols-5 gap-3">
-                  @for (color of colors; track color.id) {
-                    <button 
-                      (click)="layoutService.setThemeColor(color.id)"
-                      class="relative w-11 h-11 transition-all duration-(--duration-md-sys-medium-1) hover:scale-110 hover:rounded-2xl focus:outline-none flex items-center justify-center shadow-sm mx-auto"
-                      [class.rounded-full]="layoutService.themeColor() !== color.id"
-                      [class.rounded-2xl]="layoutService.themeColor() === color.id"
-                      [class.scale-110]="layoutService.themeColor() === color.id"
-                      [style.background]="color.bg">
-                      @if (layoutService.themeColor() === color.id) {
-                        <span class="material-symbols-rounded text-white text-[22px] drop-shadow-md animate-in zoom-in duration-(--duration-md-sys-medium-1)">check</span>
-                      }
-                    </button>
-                  }
-                </div>
-              </div>
-
-              <!-- Navegación -->
-              <div class="flex flex-col gap-3">
-                <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider ml-1">Navegación</span>
-                <div class="grid grid-cols-3 gap-2">
-                  @for (style of navStyles; track style) {
-                    <button 
-                      (click)="layoutService.setNavigationStyle(style)"
-                      class="flex items-center justify-center py-3 px-2 hover:px-4 text-sm font-medium rounded-2xl transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 border-2"
-                      [class.col-span-3]="style === 'Tunnel'"
-                      [class.border-md-sys-primary]="layoutService.navigationStyle() === style"
-                      [class.bg-md-sys-primary-container]="layoutService.navigationStyle() === style"
-                      [class.text-md-sys-on-primary-container]="layoutService.navigationStyle() === style"
-                      [class.border-transparent]="layoutService.navigationStyle() !== style"
-                      [class.bg-md-sys-surface-container-highest]="layoutService.navigationStyle() !== style"
-                      [class.text-md-sys-on-surface-variant]="layoutService.navigationStyle() !== style"
-                      [class.hover:brightness-110]="layoutService.navigationStyle() !== style">
-                      {{ style }}
-                    </button>
-                  }
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      </aside>
-    }
-  `,
-  styles: [`
-    .active-item-custom.bg-primary-solid {
-      background: var(--md-sys-color-primary, #f97316); /* using orange from the image roughly */
-      color: var(--md-sys-color-on-primary, #ffffff);
-    }
-  `]
+  imports: [
+    CommonModule,
+    RouterModule,
+    M3MenuComponent,
+    M3MenuItemComponent,
+    M3DividerComponent,
+  ],
+  templateUrl: './layout-sidebar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutSidebarComponent {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  public tareaService = inject(TareaEnfoqueService);
-  public layoutService = inject(LayoutService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  public readonly tareaService = inject(TareaEnfoqueService);
+  public readonly layoutService = inject(LayoutService);
 
-  isOptionsOpen = false;
-  isAppearanceOpen = false;
+  readonly isOptionsOpen = signal(false);
+  readonly isAppearanceOpen = signal(false);
 
-  colors: { id: any, bg: string }[] = [
+  readonly navItems: ReadonlyArray<NavItem> = [
+    { path: '/', icon: 'home', label: 'Dashboard', exact: true },
+    { path: '/sanctuary', icon: 'timer', label: 'Sanctuary', isSanctuary: true },
+    { icon: 'task_alt', label: 'Focus Intentions' },
+    { icon: 'analytics', label: 'Metrics & Insights' },
+    { icon: 'graphic_eq', label: 'Soundscapes' },
+    { icon: 'event_note', label: 'Weekly Review' },
+  ];
+
+  readonly colors: ReadonlyArray<{ id: ThemeColor; bg: string }> = [
     { id: 'gray', bg: 'linear-gradient(135deg, #e5e7eb, #9ca3af)' },
     { id: 'black', bg: 'linear-gradient(135deg, #374151, #111827)' },
     { id: 'red', bg: 'linear-gradient(135deg, #f87171, #ef4444)' },
@@ -490,7 +59,7 @@ export class LayoutSidebarComponent {
     { id: 'pink', bg: 'linear-gradient(135deg, #f472b6, #ec4899)' },
   ];
 
-  navStyles: NavigationStyle[] = ['Clásica', 'Bonita', 'Dock', 'Guapa', 'Tasks', 'Melon', 'Tunnel'];
+  readonly navStyles: ReadonlyArray<NavigationStyle> = ['Clásica', 'Bonita', 'Dock', 'Guapa', 'Tasks', 'Melon', 'Tunnel'];
 
   get isTasksStyle(): boolean {
     return this.layoutService.navigationStyle() === 'Tasks';
@@ -529,7 +98,7 @@ export class LayoutSidebarComponent {
 
   get headerClass(): string {
     const style = this.layoutService.navigationStyle();
-    
+
     // Hide header entirely in Bonita
     if (style === 'Bonita') {
       return 'hidden';
@@ -548,8 +117,8 @@ export class LayoutSidebarComponent {
 
   get navContainerClass(): string {
     const style = this.layoutService.navigationStyle();
-    let base = "flex-1 overflow-y-auto flex flex-col transition-all duration-(--duration-md-sys-medium-1) ";
-    
+    let base = "flex-1 overflow-y-auto overflow-x-hidden flex flex-col transition-all duration-(--duration-md-sys-medium-1) ";
+
     if (style === 'Guapa' || style === 'Tasks') {
       base += "scrollbar-none ";
     } else {
@@ -586,10 +155,16 @@ export class LayoutSidebarComponent {
     }
   }
 
+  getDockItemClass(isActive: boolean): string {
+    return isActive
+      ? 'w-20 bg-md-sys-primary text-md-sys-on-primary'
+      : 'w-12 hover:w-16 text-md-sys-on-surface-variant hover:bg-md-sys-surface-container-highest hover:text-md-sys-on-surface';
+  }
+
   getItemClass(isActive: boolean): string {
     const style = this.layoutService.navigationStyle();
     const base = "group flex items-center transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer font-medium ";
-    
+
     let shapeAndLayout = "";
     let activeState = "";
     let inactiveState = "text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container ";
@@ -597,7 +172,7 @@ export class LayoutSidebarComponent {
     switch (style) {
       case 'Tasks':
         shapeAndLayout = "justify-center h-12 rounded-2xl text-sm ";
-        activeState = "bg-primary-solid shadow-md w-16 "; 
+        activeState = "bg-md-sys-primary text-md-sys-on-primary shadow-md w-16 ";
         inactiveState = "w-12 hover:w-16 text-md-sys-on-surface-variant hover:text-md-sys-on-surface bg-md-sys-surface-container-low hover:bg-md-sys-surface-container-high shadow-sm ";
         break;
       case 'Bonita':
@@ -607,7 +182,7 @@ export class LayoutSidebarComponent {
         break;
       case 'Guapa':
         shapeAndLayout = "gap-3 py-3 rounded-2xl w-full text-sm ";
-        activeState = "text-md-sys-primary font-bold px-6 "; 
+        activeState = "text-md-sys-primary font-bold px-6 ";
         inactiveState = "px-4 hover:px-6 text-md-sys-on-surface-variant hover:text-md-sys-on-surface hover:bg-md-sys-surface-container-low ";
         break;
       case 'Melon':
@@ -635,22 +210,22 @@ export class LayoutSidebarComponent {
     }
   }
 
-  toggleOptionsMenu() {
-    this.isOptionsOpen = !this.isOptionsOpen;
-    if (!this.isOptionsOpen) {
-      this.isAppearanceOpen = false;
+  toggleOptionsMenu(): void {
+    this.isOptionsOpen.update((open) => !open);
+    if (!this.isOptionsOpen()) {
+      this.isAppearanceOpen.set(false);
     }
   }
 
-  openAppearance() {
-    this.isAppearanceOpen = true;
+  openAppearance(): void {
+    this.isAppearanceOpen.set(true);
   }
 
-  closeAppearance() {
-    this.isAppearanceOpen = false;
+  closeAppearance(): void {
+    this.isAppearanceOpen.set(false);
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
