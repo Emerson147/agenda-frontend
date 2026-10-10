@@ -22,8 +22,8 @@ import {
     class: 'block'
   },
   template: `
-    <div class="flex flex-col py-2 bg-md-sys-surface-container text-md-sys-on-surface rounded-md-sys-corner-xl border border-md-sys-outline/20 shadow-2xl overflow-hidden min-w-28 max-w-70">
-      <ng-content></ng-content>
+  <div class="flex flex-col py-2 bg-md-sys-surface-container text-md-sys-on-surface rounded-md-sys-corner-xl border border-md-sys-outline/20 shadow-2xl overflow-hidden min-w-28 max-w-70">
+    <ng-content></ng-content>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -113,6 +113,7 @@
   --ease-md-sys-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-md-sys-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
   --ease-md-sys-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ease-md-sys-spring: linear(0, .24 7%, .62 15%, .9 25%, 1.03 36%, 1.02 48%, .995 62%, 1);
 
   /* Durations (Slowed down for breathing Zen feeling) */
   --duration-md-sys-short-1: 100ms;
@@ -620,19 +621,25 @@
 
 /* ==========================================================================
    THEME VIEW TRANSITION (Silky smooth Dark/Light mode crossfade)
+   Scoped to theme-transitioning so component transitions don't flash the background
    ========================================================================== */
-::view-transition-old(root),
-::view-transition-new(root) {
+html.theme-transitioning::view-transition-old(root),
+html.theme-transitioning::view-transition-new(root) {
   animation-duration: 350ms;
   animation-timing-function: var(--ease-md-sys-emphasized, cubic-bezier(0.2, 0, 0, 1));
 }
 
-::view-transition-old(root) {
+html.theme-transitioning::view-transition-old(root) {
   animation-name: m3ThemeFadeOut;
 }
 
-::view-transition-new(root) {
+html.theme-transitioning::view-transition-new(root) {
   animation-name: m3ThemeFadeIn;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
 }
 
 @keyframes m3ThemeFadeOut {
@@ -652,5 +659,53 @@
 
   to {
     opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   M3 CONTAINER TRANSFORM (Options FAB/Button <-> Popover <-> Appearance)
+   Official M3 Motion Spec: https://m3.material.io/styles/motion/transitions
+   ========================================================================== */
+::view-transition-group(options-container) {
+  animation-duration: var(--duration-md-sys-long-1, 500ms);
+  animation-timing-function: var(--ease-md-sys-spring, cubic-bezier(0.2, 0, 0, 1));
+  overflow: clip;
+  border-radius: var(--radius-md-sys-corner-xl, 28px);
+}
+
+::view-transition-old(options-container),
+::view-transition-new(options-container) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(options-container) {
+  animation: m3ContainerFadeOut 90ms linear both;
+}
+
+::view-transition-new(options-container) {
+  animation: m3ContainerFadeIn 210ms 90ms linear both;
+}
+
+@keyframes m3ContainerFadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes m3ContainerFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(options-container),
+  ::view-transition-old(options-container),
+  ::view-transition-new(options-container) {
+    animation: none !important;
   }
 }

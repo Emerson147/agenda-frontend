@@ -20,7 +20,11 @@ export class LayoutService {
     };
 
     if ('startViewTransition' in document) {
-      (document as any).startViewTransition(performToggle);
+      document.documentElement.classList.add('theme-transitioning');
+      const transition = (document as any).startViewTransition(performToggle);
+      transition.finished.finally(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+      });
     } else {
       performToggle();
     }
@@ -40,7 +44,11 @@ export class LayoutService {
     };
 
     if ('startViewTransition' in document) {
-      (document as any).startViewTransition(performToggle);
+      document.documentElement.classList.add('theme-transitioning');
+      const transition = (document as any).startViewTransition(performToggle);
+      transition.finished.finally(() => {
+        document.documentElement.classList.remove('theme-transitioning');
+      });
     } else {
       performToggle();
     }

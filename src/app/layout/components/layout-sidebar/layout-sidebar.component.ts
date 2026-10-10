@@ -210,19 +210,65 @@ export class LayoutSidebarComponent {
     }
   }
 
-  toggleOptionsMenu(): void {
-    this.isOptionsOpen.update((open) => !open);
-    if (!this.isOptionsOpen()) {
-      this.isAppearanceOpen.set(false);
+  private getButtonRadius(): string {
+    const style = this.layoutService.navigationStyle();
+    if (style === 'Dock') return '20px';
+    if (style === 'Bonita') return '24px';
+    return '16px';
+  }
+
+  private withViewTransition(action: () => void, radiusPair?: [string, string]): void {
+    const doc = typeof document !== 'undefined' ? (document as any) : null;
+    const win = typeof window !== 'undefined' ? window : null;
+    const prefersReducedMotion = win?.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
+
+    if (doc && typeof doc.startViewTransition === 'function' && !prefersReducedMotion) {
+      const vt = doc.startViewTransition(() => {
+        action();
+      });
+
+      if (radiusPair) {
+        vt.ready.then(() => {
+          doc.documentElement.animate(
+            { borderRadius: radiusPair },
+            {
+              duration: 500,
+              easing: 'linear(0, .24 7%, .62 15%, .9 25%, 1.03 36%, 1.02 48%, .995 62%, 1)',
+              pseudoElement: '::view-transition-group(options-container)',
+            }
+          );
+        }).catch(() => {});
+      }
+    } else {
+      action();
     }
   }
 
+  toggleOptionsMenu(): void {
+    const btnRadius = this.getButtonRadius();
+    const willOpen = !this.isOptionsOpen();
+    const radiusPair: [string, string] = willOpen
+      ? [btnRadius, '28px']
+      : [this.isAppearanceOpen() ? '32px' : '28px', btnRadius];
+
+    this.withViewTransition(() => {
+      this.isOptionsOpen.set(willOpen);
+      if (!willOpen) {
+        this.isAppearanceOpen.set(false);
+      }
+    }, radiusPair);
+  }
+
   openAppearance(): void {
-    this.isAppearanceOpen.set(true);
+    this.withViewTransition(() => {
+      this.isAppearanceOpen.set(true);
+    }, ['28px', '32px']);
   }
 
   closeAppearance(): void {
-    this.isAppearanceOpen.set(false);
+    this.withViewTransition(() => {
+      this.isAppearanceOpen.set(false);
+    }, ['32px', '28px']);
   }
 
   logout(): void {

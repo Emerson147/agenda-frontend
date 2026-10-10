@@ -46,6 +46,7 @@
     <div class="relative">
         <button type="button" (click)="toggleOptionsMenu()" [attr.aria-expanded]="isOptionsOpen()" aria-label="Opciones"
             class="flex items-center justify-center w-14 h-14 rounded-[1.25rem] shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-(--duration-md-sys-medium-1) ease-(--ease-md-sys-emphasized) active:scale-95 cursor-pointer focus:outline-none"
+            [style.view-transition-name]="!isOptionsOpen() ? 'options-container' : 'none'"
             [ngClass]="{
           'bg-md-sys-primary text-md-sys-on-primary': !isOptionsOpen(),
           'bg-md-sys-surface-container-high text-md-sys-on-surface border border-md-sys-outline/20': isOptionsOpen()
@@ -138,7 +139,8 @@
     <!-- Footer / Options -->
     <div [class]="footerClass">
         <button type="button" (click)="toggleOptionsMenu()" [attr.aria-expanded]="isOptionsOpen()" aria-label="Opciones"
-            [class]="getItemClass(isOptionsOpen())">
+            [class]="getItemClass(isOptionsOpen())"
+            [style.view-transition-name]="!isOptionsOpen() ? 'options-container' : 'none'">
             <div class="flex items-center gap-3">
                 @if (!hideIcons) {
                 <span
@@ -169,7 +171,9 @@
 
 <!-- MOLDE REUTILIZABLE DE NAVEGACIÓN -->
 <ng-template #optionsMenu let-positionClass="positionClass">
-    <m3-menu [class]="'absolute bottom-18 w-56 m3-shared-axis-y-enter z-50 ' + positionClass">
+    <m3-menu
+        [class]="'absolute bottom-18 w-56 z-50 rounded-[1.75rem] overflow-hidden ' + positionClass"
+        style="view-transition-name: options-container;">
         <div class="px-3 py-2 mb-1">
             <span class="text-xs font-bold text-md-sys-on-surface-variant uppercase tracking-wider">Opciones</span>
         </div>
@@ -187,7 +191,8 @@
 
 <!-- MOLDE REUTILIZABLE DE APARIENCIA -->
 <ng-template #appearancePopover let-positionClass="positionClass">
-    <div class="absolute bottom-18 w-88 bg-md-sys-surface-container-high rounded-[2rem] p-5 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 zoom-in-95 z-50"
+    <div class="absolute bottom-18 w-88 bg-md-sys-surface-container-high rounded-[2rem] p-5 shadow-2xl border border-md-sys-outline/20 flex flex-col gap-6 z-50 overflow-hidden"
+        style="view-transition-name: options-container;"
         [ngClass]="positionClass">
 
         <!-- 1. Header con botón volver -->
